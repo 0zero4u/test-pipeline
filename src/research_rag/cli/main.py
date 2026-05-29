@@ -1,5 +1,6 @@
 """CLI entry point for Research RAG."""
 
+import json
 import sys
 from pathlib import Path
 
@@ -9,8 +10,12 @@ from rich.table import Table
 
 from research_rag import __version__
 from research_rag.config import load_settings
+from research_rag.embeddings import EmbeddingService
 from research_rag.ingestion.pipeline import IngestionPipeline
 from research_rag.logging import setup_logging
+from research_rag.models import Chunk, DocumentMetadata, ChunkFlags
+from research_rag.retrieval import Retriever
+from research_rag.storage.chroma import ChromaStore
 
 console = Console()
 
@@ -24,7 +29,6 @@ def main(ctx: click.Context, config: str | None, debug: bool) -> None:
     """Research RAG - Citation-grounded research assistance."""
     ctx.ensure_object(dict)
 
-    # Load settings
     config_path = Path(config) if config else None
     settings = load_settings(config_path)
 
@@ -32,10 +36,7 @@ def main(ctx: click.Context, config: str | None, debug: bool) -> None:
         settings.debug = True
         settings.log_level = "DEBUG"
 
-    # Setup logging
     setup_logging(level=settings.log_level)
-
-    # Store in context
     ctx.obj["settings"] = settings
 
 
@@ -82,21 +83,156 @@ def ingest(ctx: click.Context, input_dir: str, output: str) -> None:
 
 
 @main.command()
-@click.argument("query")
+@click.argument("query_str")
 @click.option("--top-k", "-k", type=int, default=5, help="Number of results")
+@click.option("--where", "-w", type=str, default=None, help="Metadata filter as JSON (e.g. '{\"year\": 2024}')")
 @click.pass_context
-def query(ctx: click.Context, query: str, top_k: int) -> None:
-    """Query the research database."""
+def query(ctx: click.Context, query_str: str, top_k: int, where: str | None) -> None:
+    """Semantic search across ingested documents."""
     settings = ctx.obj["settings"]
-    console.print(f"[bold blue]Query: {query}[/]")
+    console.print(f"[bold blue]Query:[/] {query_str}")
 
-    # TODO: Implement query pipeline
-    console.print("[yellow]Query pipeline not yet implemented[/]")
+    where_filter = None
+    if where:
+        try:
+            where_filter = json.loads(where)
+        except json.JSONDecodeError:
+            console.print("[red]Invalid --where JSON. Use format: '{\"key\": \"value\"}'[/]")
+            sys.exit(1)
+
+    embed_service = EmbeddingService(
+        api_key=settings.openrouter_api_key,
+    )
+    store = ChromaStore(
+        persist_directory=settings.storage.chroma_path,
+        embedding_service=embed_service,
+    )
+    retriever = Retriever(
+        store=store,
+        top_k=top_k,
+    )
+
+    results = retriever.search(query=query_str, where=where_filter)
+
+    if not results:
+        console.print("[yellow]No results found. Try a different query.[/]")
+        return
+
+    console.print(f"\n[bold]Top {len(results)} results:[/]\n")
+
+    for i, r in enumerate(results, 1):
+        title_display = r.title[:60] if r.title else r.document_id[:60]
+        console.print(f"[cyan][{i}][/] [bold]{title_display}[/]")
+        console.print(f"    [dim]Section:[/] {r.section_title or '(unknown)'}")
+        console.print(
+            f"    [dim]Pages:[/] {r.page_start}-{r.page_end}  "
+            f"[dim]Relevance:[/] {r.score:.3f}"
+        )
+        if r.text:
+            excerpt = r.text[:250].replace("\n", " ")
+            if len(r.text) > 250:
+                excerpt += "..."
+            console.print(f"    [dim]Excerpt:[/] {excerpt}")
+        console.print("")
 
 
 @main.command()
+@click.argument("input_dir", type=click.Path(exists=True))
+@click.option("--output", "-o", type=click.Path(), default="./data", help="Ingestion output directory")
 @click.pass_context
-def status(ctx: click.Context) -> None:
+def ingest_and_store(ctx: click.Context, input_dir: str, output: str) -> None:
+    """Ingest PDFs and store chunks in Chroma."""
+    settings = ctx.obj["settings"]
+    input_path = Path(input_dir)
+    output_path = Path(output)
+
+    console.print(f"[bold green]Ingesting PDFs from {input_dir}[/]")
+
+    # Step 1: Run ingestion pipeline
+    pipeline = IngestionPipeline(
+        config=settings.ingestion,
+        output_dir=output_path,
+    )
+    results = pipeline.process_directory(input_path)
+
+    success = sum(1 for r in results if r.success)
+    total_chunks = sum(r.chunks_created for r in results)
+
+    table = Table(title="Ingestion Results")
+    table.add_column("Document", style="cyan")
+    table.add_column("Status", style="green")
+    table.add_column("Chunks", justify="right")
+    table.add_column("Confidence", justify="right")
+
+    for r in results:
+        status = "[green]OK[/]" if r.success else "[red]FAIL[/]"
+        table.add_row(
+            r.title[:50],
+            status,
+            str(r.chunks_created),
+            f"{r.metadata_confidence:.2f}",
+        )
+
+    console.print(table)
+
+    if success == 0:
+        console.print("[red]No PDFs were successfully ingested. Aborting.[/]")
+        return
+
+    # Step 2: Load chunks from output and store in Chroma
+    chunks_dir = output_path / "chunks"
+    metadata_dir = output_path / "metadata"
+
+    if not chunks_dir.exists():
+        console.print(f"[red]No chunks directory found at {chunks_dir}[/]")
+        return
+
+    embed_service = EmbeddingService(
+        api_key=settings.openrouter_api_key,
+    )
+    store = ChromaStore(
+        persist_directory=settings.storage.chroma_path,
+        embedding_service=embed_service,
+    )
+
+    all_chunks: list[Chunk] = []
+    for chunk_file in sorted(chunks_dir.glob("*.json")):
+        doc_id = chunk_file.stem
+        meta_file = metadata_dir / f"{doc_id}.json"
+
+        doc_meta = None
+        if meta_file.exists():
+            with open(meta_file) as f:
+                doc_meta = DocumentMetadata(**json.load(f))
+
+        with open(chunk_file) as f:
+            chunk_data_list = json.load(f)
+
+        for cd in chunk_data_list:
+            chunk = Chunk(
+                chunk_id=cd["chunk_id"],
+                document_id=cd.get("document_id", doc_id),
+                section_title=cd.get("section_title", ""),
+                page_start=cd.get("page_start", 1),
+                page_end=cd.get("page_end", 1),
+                text=cd.get("text", ""),
+                token_count=cd.get("token_count", 0),
+                metadata=doc_meta,
+                flags=ChunkFlags(
+                    quoted_text=cd.get("flags", {}).get("quoted_text", False),
+                    has_citations=cd.get("flags", {}).get("has_citations", False),
+                ),
+            )
+            all_chunks.append(chunk)
+
+    stored = store.upsert_chunks(all_chunks)
+    console.print(f"\n[bold green]Stored {stored} chunks in Chroma ({store.count()} total)[/]")
+
+
+@main.command()
+@click.option("--reset", is_flag=True, help="Reset the vector store")
+@click.pass_context
+def status(ctx: click.Context, reset: bool) -> None:
     """Show system status."""
     settings = ctx.obj["settings"]
 
@@ -107,7 +243,29 @@ def status(ctx: click.Context) -> None:
 
     table.add_row("Config", "OK", f"Log level: {settings.log_level}")
     table.add_row("Storage", "OK", f"Chroma: {settings.storage.chroma_path}")
-    table.add_row("API Keys", "Check", "Set OPENROUTER_API_KEY and EMBEDDING_API_KEY")
+
+    api_status = "[green]Set[/]" if settings.openrouter_api_key else "[yellow]Not set[/]"
+    table.add_row("API Key (OpenRouter)", api_status,
+                  "Set OPENROUTER_API_KEY env var" if not settings.openrouter_api_key else "Configured")
+
+    try:
+        embed_service = EmbeddingService(
+            api_key=settings.openrouter_api_key,
+        )
+        store = ChromaStore(
+            persist_directory=settings.storage.chroma_path,
+            embedding_service=embed_service,
+        )
+        chunk_count = store.count()
+        doc_count = len(store.list_documents())
+        table.add_row("Chroma Collection", "[green]OK[/]",
+                      f"{chunk_count} chunks from {doc_count} documents")
+
+        if reset and chunk_count > 0:
+            store.reset()
+            console.print("[yellow]Vector store reset.[/]")
+    except Exception as e:
+        table.add_row("Chroma Collection", "[red]Error[/]", str(e)[:50])
 
     console.print(table)
 

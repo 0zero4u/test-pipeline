@@ -141,26 +141,29 @@ src/research_rag/
 
 ---
 
-## Phase 3: Vector Storage & Retrieval
+## Phase 3: Vector Storage & Retrieval ✓ COMPLETE
 
 **Goal**: Embed chunks, store in Chroma, retrieve by query  
-**Deliverable**: Query returns relevant chunks
+**Deliverable**: Query returns relevant chunks  
+**Completed**: 2026-05-29
 
 ### Tasks
 
-| Task | Priority | Effort | Notes |
-|------|----------|--------|-------|
-| Integrate embedding API | High | 3h | BGE-base-en-v1.5 |
-| Set up Chroma collection | High | 3h | Schema, indexing |
-| Implement upsert logic | High | 4h | Avoid duplicates |
-| Build retrieval function | High | 4h | top-k semantic search |
-| Add metadata filtering | Medium | 3h | Filter by author, year, etc. |
-| Create query CLI | Medium | 2h | `query.py "search term"` |
-| Test retrieval quality | High | 3h | Manual relevance check |
+| Task | Priority | Effort | Status | Notes |
+|------|----------|--------|--------|-------|
+| Integrate embedding service | High | 3h | ✓ | OpenRouter GTE-Large, local BGE-small fallback |
+| Set up Chroma collection | High | 3h | ✓ | Cosine HNSW, chunk schema, dedup |
+| Implement upsert logic | High | 4h | ✓ | Dedup by chunk_id, supports both API + local embeddings |
+| Build retrieval function | High | 4h | ✓ | top-k semantic search with metadata filtering |
+| Add metadata filtering | Medium | 3h | ✓ | Filter by author, year, section, document_id |
+| Create query CLI | Medium | 2h | ✓ | `research-rag query "search term"` |
+| Test retrieval quality | High | 3h | ✓ | 90 tests, verified on real arXiv PDF |
 
 ### Key Decisions
 
-1. **Chroma Configuration**
+1. **Embedding Model**: GTE-Large (`thenlper/gte-large`) via OpenRouter API (1024-dim), with local `BAAI/bge-small-en-v1.5` fallback when no API key is set.
+
+2. **Chroma Configuration**
    ```python
    collection = client.create_collection(
        name="research_chunks",
@@ -173,15 +176,23 @@ src/research_rag/
    )
    ```
 
-2. **Retrieval Parameters**
+3. **Retrieval Parameters**
    - Default top-k: 5
-   - Similarity threshold: 0.7
+   - Similarity threshold: 0.0 (no min filter by default)
    - Include metadata: Yes
+   - Score: 1.0 - cosine_distance (converted to similarity)
 
-3. **Embedding Pipeline**
+4. **Embedding Pipeline**
    ```
-   Clean text → API call → Store vector + metadata
+   Local: Clean text → sentence-transformers → Store vector + metadata
+   API:   Clean text → OpenRouter /embeddings endpoint → Store vector + metadata
    ```
+
+5. **New CLI Commands**
+   - `research-rag query "query" -k 5` → semantic search across stored chunks
+   - `research-rag query "query" -w '{"year": 2024}'` → with metadata filter
+   - `research-rag ingest-and-store ./pdfs/` → ingest + auto-store in Chroma
+   - `research-rag status --reset` → show status / reset vector store
 
 ### Deliverables
 
@@ -189,24 +200,23 @@ src/research_rag/
 src/research_rag/
 ├── embeddings/
 │   ├── __init__.py
-│   └── api.py             # Embedding API client
+│   └── api.py             # Embedding service (OpenRouter + local fallback)
 ├── storage/
 │   ├── __init__.py
-│   ├── chroma.py          # Chroma operations
-│   └── metadata.py        # Local metadata store
+│   └── chroma.py          # Chroma store (upsert, delete, query, filter)
 ├── retrieval/
 │   ├── __init__.py
-│   └── search.py          # Semantic search
+│   └── search.py          # Semantic retriever (search, format, filter)
 └── cli/
-    └── query.py           # Query CLI
+    └── main.py            # Updated with query, ingest-and-store, status commands
 ```
 
 ### Exit Criteria
 
-- [ ] All chunks embedded and stored
-- [ ] Query returns top-5 relevant chunks
-- [ ] Relevance is >80% on test queries
-- [ ] Metadata filtering works
+- [x] All chunks embedded and stored
+- [x] Query returns top-5 relevant chunks
+- [x] Relevance is >80% on test queries
+- [x] Metadata filtering works
 
 ---
 
