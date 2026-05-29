@@ -325,6 +325,18 @@ Build a retrieval-augmented generation (RAG) system optimized for humanities res
 
 ---
 
+## Known Issues
+
+### Metadata Extraction (HIGH PRIORITY)
+The regex-based metadata extraction (`ingestion/metadata.py`) extracts incorrect author names:
+- `rag_pdf1`: Returns `["Khushwant Singh"]` — that's the novel's author, not the paper author
+- `rag_pdf2`: Returns `["Key  Words"]` — completely wrong
+
+**Impact**: Works Cited shows "Unknown Author" because metadata is wrong.  
+**Fix**: Improve `_extract_authors()` with position heuristics, validation, and LLM fallback.
+
+---
+
 ## Data Schemas
 
 ### Document Metadata
