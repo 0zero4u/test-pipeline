@@ -6,6 +6,8 @@ from typing import Optional
 
 import numpy as np
 
+from research_rag.utils import APIError, RateLimitError, ServerError, retry
+
 logger = logging.getLogger(__name__)
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
@@ -90,6 +92,7 @@ class EmbeddingService:
         embeddings = ef(texts)
         return np.array(embeddings, dtype=np.float32)
 
+    @retry(retryable_exceptions=(APIError, RateLimitError, ServerError, ConnectionError, TimeoutError))
     def _embed_api(self, texts: list[str]) -> np.ndarray:
         """Embed using OpenRouter API (OpenAI-compatible)."""
         from openai import OpenAI

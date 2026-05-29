@@ -6,6 +6,8 @@ from typing import Optional
 
 from openai import OpenAI
 
+from research_rag.utils import APIError, RateLimitError, ServerError, retry
+
 logger = logging.getLogger(__name__)
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
@@ -40,6 +42,7 @@ class SynthesisClient:
             )
         return self._client
 
+    @retry(retryable_exceptions=(APIError, RateLimitError, ServerError, ConnectionError, TimeoutError))
     def generate(
         self,
         messages: list[dict[str, str]],
