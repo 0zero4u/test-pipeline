@@ -9,6 +9,7 @@ from rich.table import Table
 
 from research_rag import __version__
 from research_rag.config import load_settings
+from research_rag.ingestion.pipeline import IngestionPipeline
 from research_rag.logging import setup_logging
 
 console = Console()
@@ -45,10 +46,39 @@ def main(ctx: click.Context, config: str | None, debug: bool) -> None:
 def ingest(ctx: click.Context, input_dir: str, output: str) -> None:
     """Ingest PDFs from directory."""
     settings = ctx.obj["settings"]
-    console.print(f"[bold green]Ingesting PDFs from {input_dir}[/]")
+    input_path = Path(input_dir)
+    output_path = Path(output)
 
-    # TODO: Implement ingestion pipeline
-    console.print("[yellow]Ingestion pipeline not yet implemented[/]")
+    console.print(f"[bold green]Ingesting PDFs from {input_dir}[/]")
+    console.print(f"[bold]Config:[/] chunk_size={settings.ingestion.chunk_size_min}-{settings.ingestion.chunk_size_max}, overlap={settings.ingestion.chunk_overlap}")
+
+    pipeline = IngestionPipeline(
+        config=settings.ingestion,
+        output_dir=output_path,
+    )
+
+    results = pipeline.process_directory(input_path)
+
+    success = sum(1 for r in results if r.success)
+    total_chunks = sum(r.chunks_created for r in results)
+
+    table = Table(title="Ingestion Results")
+    table.add_column("Document", style="cyan")
+    table.add_column("Status", style="green")
+    table.add_column("Chunks", justify="right")
+    table.add_column("Confidence", justify="right")
+
+    for r in results:
+        status = "[green]OK[/]" if r.success else "[red]FAIL[/]"
+        table.add_row(
+            r.title[:50],
+            status,
+            str(r.chunks_created),
+            f"{r.metadata_confidence:.2f}",
+        )
+
+    console.print(table)
+    console.print(f"\n[bold]Summary:[/] {success}/{len(results)} PDFs processed, {total_chunks} chunks created")
 
 
 @main.command()
