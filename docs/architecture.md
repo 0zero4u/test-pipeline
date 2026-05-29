@@ -2,7 +2,8 @@
 
 > **Purpose**: Citation-grounded research assistance for humanities/literary analysis  
 > **Design Philosophy**: Automatic where stable, inference where ambiguous  
-> **Last Updated**: 2026-05-29
+> **Last Updated**: 2026-05-29  
+> **Status**: Phase 1 Complete (Foundation), Phase 2 Next (Ingestion)
 
 ---
 

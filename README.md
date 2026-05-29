@@ -2,6 +2,10 @@
 
 Citation-grounded research assistance for humanities/literary analysis.
 
+## Status
+
+**Phase 1: Foundation** — Complete ✓
+
 ## Overview
 
 A RAG system optimized for humanities research that ingests academic PDFs and provides citation-grounded answers to research queries.
@@ -16,13 +20,37 @@ Query → Embedding → Chroma Retrieval → Qwen3 32B (synthesis) → Citation-
 
 ## Stack
 
-| Component | Technology | Purpose |
-|-----------|------------|---------|
-| PDF Parser | Docling | Parse PDFs to structured markdown |
-| Entity Extraction | Qwen3 8B via OpenRouter | Extract people, works, themes |
-| Embeddings | BGE-base-en-v1.5 via API | Generate semantic vectors |
-| Vector DB | Chroma | Store embeddings + metadata |
-| Synthesis | Qwen3 32B via OpenRouter | Cross-paper reasoning |
+| Component | Technology | Purpose | Status |
+|-----------|------------|---------|--------|
+| Config | Pydantic + YAML | Settings with env overrides | ✓ |
+| Models | Pydantic v2 | Data schemas (Chunk, Citation, etc.) | ✓ |
+| Logging | Python logging | Structured JSON + console | ✓ |
+| CLI | Click + Rich | Command-line interface | ✓ |
+| PDF Parser | Docling | Parse PDFs to structured markdown | Phase 2 |
+| Entity Extraction | Qwen3 8B via OpenRouter | Extract people, works, themes | Phase 2 |
+| Embeddings | BGE-base-en-v1.5 via API | Generate semantic vectors | Phase 3 |
+| Vector DB | Chroma | Store embeddings + metadata | Phase 3 |
+| Synthesis | Qwen3 32B via OpenRouter | Cross-paper reasoning | Phase 4 |
+
+## Project Structure
+
+```
+research-rag/
+├── pyproject.toml              # Project config, dependencies
+├── config.yaml                 # Default settings
+├── src/research_rag/
+│   ├── __init__.py
+│   ├── config.py               # Settings (YAML + env overrides)
+│   ├── models.py               # Pydantic schemas
+│   ├── logging.py              # Structured logging
+│   └── cli/
+│       ├── __init__.py
+│       └── main.py             # CLI entry point
+└── tests/
+    ├── test_config.py          # 4 tests
+    ├── test_models.py          # 5 tests
+    └── test_logging.py         # 4 tests
+```
 
 ## Hardware Requirements
 
@@ -34,18 +62,38 @@ Query → Embedding → Chroma Retrieval → Qwen3 32B (synthesis) → Citation-
 ## Quick Start
 
 ```bash
+# Create virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install CPU-only PyTorch
+pip install --index-url https://download.pytorch.org/whl/cpu torch
+
 # Install dependencies
-pip install -e .
+pip install -e ".[dev]"
 
 # Set API keys
 export OPENROUTER_API_KEY="..."
 export EMBEDDING_API_KEY="..."
 
-# Ingest PDFs
-python -m research_rag ingest --input ./pdfs/
+# Run tests
+pytest tests/ -v
 
-# Query
-python -m research_rag query "How does Singh portray Partition violence?"
+# Check status
+research-rag status
+```
+
+## Commands
+
+```bash
+# Ingest PDFs (Phase 2)
+research-rag ingest ./pdfs/
+
+# Query (Phase 4)
+research-rag query "How does Singh portray Partition violence?"
+
+# Check status
+research-rag status
 ```
 
 ## Documentation
