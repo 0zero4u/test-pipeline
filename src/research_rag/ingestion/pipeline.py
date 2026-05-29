@@ -2,6 +2,7 @@
 
 import json
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Optional
 
@@ -16,6 +17,8 @@ from research_rag.models import Chunk, DocumentMetadata, IngestionResult
 
 logger = get_logger("ingestion.pipeline")
 
+DEFAULT_MAX_WORKERS = 4
+
 
 class IngestionPipeline:
     """Orchestrates the PDF ingestion pipeline: parse → metadata → chunk."""
@@ -24,9 +27,11 @@ class IngestionPipeline:
         self,
         config: Optional[IngestionConfig] = None,
         output_dir: Optional[Path] = None,
+        max_workers: int = DEFAULT_MAX_WORKERS,
     ) -> None:
         self.config = config or IngestionConfig()
         self.output_dir = output_dir or Path("./data")
+        self.max_workers = max_workers
 
     def _save_chunks(
         self, chunks: list[Chunk], metadata: DocumentMetadata
@@ -71,30 +76,52 @@ class IngestionPipeline:
         Returns:
             List of IngestionResult for each PDF.
         """
-        results: list[IngestionResult] = []
+        if not pdf_files:
+            return []
 
-        iterator = tqdm(pdf_files, desc="Ingesting PDFs", unit="pdf") if show_progress else pdf_files
-
-        for file_path in iterator:
+        if len(pdf_files) == 1:
             try:
-                result = self._process_single_pdf(file_path)
-                results.append(result)
+                return [self._process_single_pdf(pdf_files[0])]
             except Exception as exc:
-                logger.error("Failed to process %s: %s", file_path.name, exc)
-                results.append(
+                logger.error("Failed to process %s: %s", pdf_files[0].name, exc)
+                return [
                     IngestionResult(
-                        document_id=file_path.stem,
-                        title=file_path.stem,
+                        document_id=pdf_files[0].stem,
+                        title=pdf_files[0].stem,
                         chunks_created=0,
                         metadata_confidence=0.0,
                         success=False,
                         error=str(exc),
                     )
-                )
+                ]
 
-        # Summary
-        successful = sum(1 for r in results if r.success)
-        total_chunks = sum(r.chunks_created for r in results)
+        results: list[IngestionResult] = [None] * len(pdf_files)  # type: ignore
+
+        with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+            future_to_idx = {
+                executor.submit(self._process_single_pdf, fp): i
+                for i, fp in enumerate(pdf_files)
+            }
+
+            with tqdm(total=len(pdf_files), desc="Ingesting PDFs", unit="pdf") as pbar:
+                for future in as_completed(future_to_idx):
+                    idx = future_to_idx[future]
+                    try:
+                        results[idx] = future.result()
+                    except Exception as exc:
+                        logger.error("Failed to process %s: %s", pdf_files[idx].name, exc)
+                        results[idx] = IngestionResult(
+                            document_id=pdf_files[idx].stem,
+                            title=pdf_files[idx].stem,
+                            chunks_created=0,
+                            metadata_confidence=0.0,
+                            success=False,
+                            error=str(exc),
+                        )
+                    pbar.update(1)
+
+        successful = sum(1 for r in results if r and r.success)
+        total_chunks = sum(r.chunks_created for r in results if r)
         logger.info(
             "Ingestion complete: %d/%d PDFs processed, %d chunks created",
             successful,
@@ -102,7 +129,7 @@ class IngestionPipeline:
             total_chunks,
         )
 
-        return results
+        return results  # type: ignore
 
     def _process_single_pdf(self, file_path: Path) -> IngestionResult:
         """Process a single PDF file."""
