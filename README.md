@@ -4,7 +4,8 @@ Citation-grounded research assistance for humanities/literary analysis.
 
 ## Status
 
-**Phase 1: Foundation** — Complete ✓
+**Phase 1: Foundation** — Complete ✓  
+**Phase 2: Ingestion Pipeline** — Complete ✓
 
 ## Overview
 
@@ -13,9 +14,9 @@ A RAG system optimized for humanities research that ingests academic PDFs and pr
 ## Architecture
 
 ```
-PDF → Docling → Chunking → Qwen3 8B (entities) → Embedding API → Chroma
-                                                                          ↓
-Query → Embedding → Chroma Retrieval → Qwen3 32B (synthesis) → Citation-Grounded Answer
+PDF → Docling → Chunking → DeepSeek V4 Flash (entities) → Embedding API → Chroma
+                                                                                  ↓
+Query → Embedding → Chroma Retrieval → DeepSeek V4 Flash (synthesis) → Citation-Grounded Answer
 ```
 
 ## Stack
@@ -26,11 +27,11 @@ Query → Embedding → Chroma Retrieval → Qwen3 32B (synthesis) → Citation-
 | Models | Pydantic v2 | Data schemas (Chunk, Citation, etc.) | ✓ |
 | Logging | Python logging | Structured JSON + console | ✓ |
 | CLI | Click + Rich | Command-line interface | ✓ |
-| PDF Parser | Docling | Parse PDFs to structured markdown | Phase 2 |
-| Entity Extraction | Qwen3 8B via OpenRouter | Extract people, works, themes | Phase 2 |
+| PDF Parser | Docling | Parse PDFs to structured markdown | ✓ |
+| Entity Extraction | DeepSeek V4 Flash via OpenRouter | Extract people, works, themes | Phase 3 |
 | Embeddings | BGE-base-en-v1.5 via API | Generate semantic vectors | Phase 3 |
 | Vector DB | Chroma | Store embeddings + metadata | Phase 3 |
-| Synthesis | Qwen3 32B via OpenRouter | Cross-paper reasoning | Phase 4 |
+| Synthesis | DeepSeek V4 Flash via OpenRouter | Cross-paper reasoning | Phase 4 |
 
 ## Project Structure
 

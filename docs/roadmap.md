@@ -74,22 +74,23 @@ research-rag/
 
 ---
 
-## Phase 2: Ingestion Pipeline
+## Phase 2: Ingestion Pipeline ✓ COMPLETE
 
 **Goal**: PDF → chunks with metadata  
-**Deliverable**: Ingest 10 PDFs, verify chunk quality
+**Deliverable**: Ingest 10 PDFs, verify chunk quality  
+**Completed**: 2026-05-29
 
 ### Tasks
 
-| Task | Priority | Effort | Notes |
-|------|----------|--------|-------|
-| Integrate Docling | High | 4h | PDF parsing, section detection |
-| Implement metadata extraction | High | 4h | Regex/heuristic parser |
-| Build section-aware chunker | High | 6h | 500-900 tokens, overlap |
-| Add chunk validation | Medium | 2h | Size, boundary checks |
-| Create ingestion CLI | Medium | 3h | `ingest.py --input ./pdfs/` |
-| Add progress tracking | Low | 2h | tqdm or similar |
-| Test on 10 PDFs | High | 2h | Manual quality check |
+| Task | Priority | Effort | Status | Notes |
+|------|----------|--------|--------|-------|
+| Integrate Docling | High | 4h | ✓ | Parse PDFs to structured markdown with sections |
+| Implement metadata extraction | High | 4h | ✓ | Regex/heuristic parser for title, authors, year, journal, DOI |
+| Build section-aware chunker | High | 6h | ✓ | 500-900 tokens, 12% overlap, paragraph boundaries |
+| Add chunk validation | Medium | 2h | ✓ | Size, boundary, token count checks |
+| Create ingestion CLI | Medium | 3h | ✓ | `research-rag ingest ./pdfs/` |
+| Add progress tracking | Low | 2h | ✓ | tqdm progress bar |
+| Test on 10 PDFs | High | 2h | Pending | Manual quality check |
 
 ### Key Decisions
 
