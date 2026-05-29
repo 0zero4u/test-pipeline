@@ -21,11 +21,12 @@ from research_rag.retrieval import Retriever
 from research_rag.storage.chroma import ChromaStore
 from research_rag.synthesis import AnswerGenerator
 from research_rag.utils import ResearchRAGError
+from research_rag.writing import ChapterWriter, ChapterOutline, DissertationState
 
 console = Console()
 
 HISTORY_FILE = Path.home() / ".research_rag_history"
-COMMANDS = ["ask", "ingest", "query", "status", "help", "history", "exit", "quit"]
+COMMANDS = ["ask", "ingest", "query", "write", "status", "help", "history", "exit", "quit"]
 
 
 class ReplCompleter:
@@ -114,6 +115,7 @@ def _print_help() -> None:
     table.add_row("ask", "Ask a research question", 'ask "What is X?" -k 5')
     table.add_row("ingest", "Ingest PDFs from a directory", "ingest ./pdfs/")
     table.add_row("query", "Semantic search", 'query "machine learning" -k 5')
+    table.add_row("write", "Write a chapter from outline", 'write 3 "Chapter Title" --context "arg"')
     table.add_row("status", "Show system status", "status")
     table.add_row("history", "Show query history", "history")
     table.add_row("help / ?", "Show this help message", "help")
@@ -360,6 +362,65 @@ def _cmd_status(store: ChromaStore, settings: Settings) -> None:
     console.print(table)
 
 
+def _cmd_write(
+    args: list[str],
+    kwargs: dict[str, Any],
+    writer: ChapterWriter,
+    state: DissertationState,
+) -> None:
+    """Handle the 'write' command — generate a chapter from outline."""
+    if not args:
+        console.print(
+            "[red]Usage: write <chapter_number> \"<title>\" [--sections <json>] [--context <text>][/red]"
+        )
+        console.print("[dim]Example: write 3 \"Partition and Violence\" --context \"Comparative study\"[/]")
+        return
+
+    try:
+        chapter_num = int(args[0])
+    except ValueError:
+        console.print("[red]Chapter number must be an integer.[/]")
+        return
+
+    title = args[1] if len(args) > 1 else f"Chapter {chapter_num}"
+    context = kwargs.get("context", "")
+
+    sections_raw = kwargs.get("sections", None)
+    if sections_raw:
+        import json as _json
+        try:
+            sections_data = _json.loads(sections_raw)
+        except _json.JSONDecodeError:
+            console.print("[red]Invalid --sections JSON.[/]")
+            return
+    else:
+        sections_data = [
+            {"title": f"{chapter_num}.1 Introduction", "description": "Introduce the chapter topic."},
+            {"title": f"{chapter_num}.2 Main Analysis", "description": "Core analysis with evidence."},
+            {"title": f"{chapter_num}.3 Conclusion", "description": "Summarize and transition."},
+        ]
+
+    outline = ChapterOutline(chapter_num, title)
+    for sec in sections_data:
+        outline.add_section(sec["title"], sec["description"])
+
+    console.print(f"[bold blue]Writing Chapter {chapter_num}: {title}[/]")
+    console.print(f"[dim]{outline.section_count} sections, ~{outline.total_target_words} words target[/]")
+
+    with console.status("[bold green]Generating chapter (this may take a minute)...[/]"):
+        result = writer.write_chapter(outline, chapter_context=context)
+
+    console.print(f"\n[bold]Chapter {chapter_num} complete![/] ({result['word_count']} words)\n")
+    console.print(result["chapter_text"][:2000])
+    if result["word_count"] > 2000:
+        console.print("[dim]... (truncated, full text in output)[/]")
+
+    if result["citations"]:
+        console.print(f"\n[bold]Citations used:[/] {len(result['citations'])}")
+        for cit in result["citations"][:10]:
+            console.print(f"  [{cit['number']}] {cit.get('author', '?')} ({cit.get('year', 'n.d.')})")
+
+
 def _cmd_history(history: list[dict[str, Any]]) -> None:
     """Handle the 'history' command."""
     if not history:
@@ -406,6 +467,8 @@ def repl(settings: Settings) -> None:
         retriever=retriever,
         top_k=settings.retrieval.top_k,
     )
+    state = DissertationState()
+    writer = ChapterWriter(retriever=retriever, state=state)
 
     conversation_history: list[dict[str, Any]] = []
 
@@ -441,6 +504,11 @@ def repl(settings: Settings) -> None:
         elif command == "query":
             try:
                 _cmd_query(args, kwargs, retriever)
+            except ResearchRAGError as e:
+                console.print(f"[red]Error:[/] {e}", style="red")
+        elif command == "write":
+            try:
+                _cmd_write(args, kwargs, writer, state)
             except ResearchRAGError as e:
                 console.print(f"[red]Error:[/] {e}", style="red")
         elif command == "status":
