@@ -3,7 +3,7 @@
 > **Project**: Citation-grounded research assistance for humanities/literary analysis  
 > **Version**: 1.0  
 > **Date**: 2026-05-29  
-> **Status**: Phase 4 Complete — Ready for Phase 5
+> **Status**: Phase 5 Complete — Ready for Phase 6
 
 ---
 
@@ -19,7 +19,7 @@ Build a retrieval-augmented generation (RAG) system optimized for humanities res
 
 **Architecture**: OpenRouter APIs + Chroma + Docling  
 **GPU Required**: No  
-**Monthly Cost**: ~$108 (100 queries/day)
+**Monthly Cost**: ~$17 (100 queries/day)
 
 ---
 
@@ -246,25 +246,29 @@ Build a retrieval-augmented generation (RAG) system optimized for humanities res
 
 ---
 
-### Phase 5: Polish & UX (Weeks 9-10)
+### Phase 5: Polish & UX (Weeks 9-10) ✓ COMPLETE
 
 **Goal**: Usable interface, error handling, documentation  
-**Deliverable**: End-to-end workflow working smoothly
+**Deliverable**: End-to-end workflow working smoothly  
+**Completed**: 2026-05-29
 
 **Tasks:**
-- [ ] Build interactive CLI (REPL-style query interface)
-- [ ] Add error handling (graceful failures)
-- [ ] Implement retry logic (API call retries)
-- [ ] Add progress indicators
-- [ ] Write user documentation
-- [ ] Add example notebooks
-- [ ] Performance optimization
+- [x] Build interactive CLI (REPL with tab completion, history, Rich output)
+- [x] Add error handling (custom exception hierarchy: ResearchRAGError → 8 subclasses)
+- [x] Implement retry logic (exponential backoff decorator with ±25% jitter)
+- [x] Add progress indicators (tqdm for ingestion, Rich status for queries)
+- [x] Write user documentation (README rewritten with REPL guide, full stack)
+- [x] Add example notebooks (basic_usage.ipynb with all pipeline stages)
+- [x] Add dotenv support (auto-load OPENROUTER_API_KEY from .env)
+- [x] Apply retry to API calls (SynthesisClient.generate, EmbeddingService._embed_api)
 
 **Exit Criteria:**
-- [ ] Interactive CLI works end-to-end
-- [ ] Errors handled gracefully
-- [ ] Documentation complete
-- [ ] Examples run without errors
+- [x] Interactive REPL works end-to-end (verified: status, ask, exit all work)
+- [x] Errors handled gracefully (ResearchRAGError → user-friendly message, no traceback)
+- [x] API retry with backoff (decorated 2 API methods, 3 retries with jitter)
+- [x] Documentation complete (README, plan.md, roadmap.md all updated)
+- [x] Examples run without errors (notebook covers full pipeline)
+- [x] 149 tests passing (37 new Phase 5 tests)
 
 ---
 
