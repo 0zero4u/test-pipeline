@@ -4,6 +4,7 @@ import logging
 import re
 from typing import Optional
 
+from research_rag.cache import QueryCache
 from research_rag.citations.parser import CitationParser, Citation
 from research_rag.citations.validator import CitationValidator
 from research_rag.retrieval import Retriever, SearchResult
@@ -26,6 +27,7 @@ class AnswerGenerator:
         top_k: int = 5,
         citation_parser: Optional[CitationParser] = None,
         citation_validator: Optional[CitationValidator] = None,
+        cache: Optional[QueryCache] = None,
     ):
         self.retriever = retriever
         self.synthesis_client = synthesis_client or SynthesisClient(
@@ -34,6 +36,7 @@ class AnswerGenerator:
         self.top_k = top_k
         self.citation_parser = citation_parser or CitationParser()
         self.citation_validator = citation_validator or CitationValidator()
+        self.cache = cache
 
     def answer(
         self,
@@ -54,6 +57,12 @@ class AnswerGenerator:
             Dict with keys: query, answer, citations, confidence.
         """
         k = top_k or self.top_k
+
+        # Check cache first
+        if self.cache:
+            cached = self.cache.get(query, k)
+            if cached:
+                return cached
 
         # Step 1: Retrieve relevant chunks
         results = self.retriever.search(query=query, top_k=k, where=where)
@@ -111,6 +120,10 @@ class AnswerGenerator:
                     for r in results
                 ],
             }
+
+        # Cache the result
+        if self.cache:
+            self.cache.set(query, k, response)
 
         return response
 
