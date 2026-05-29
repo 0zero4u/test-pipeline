@@ -2,11 +2,13 @@
 
 import logging
 import re
+import time
 from typing import Optional
 
 from research_rag.cache import QueryCache
 from research_rag.citations.parser import CitationParser, Citation
 from research_rag.citations.validator import CitationValidator
+from research_rag.metrics import Metrics
 from research_rag.retrieval import Retriever, SearchResult
 from research_rag.synthesis.client import SynthesisClient
 from research_rag.synthesis.prompts import build_synthesis_messages
@@ -57,12 +59,16 @@ class AnswerGenerator:
             Dict with keys: query, answer, citations, confidence.
         """
         k = top_k or self.top_k
+        metrics = Metrics()
+        start = time.monotonic()
 
         # Check cache first
         if self.cache:
             cached = self.cache.get(query, k)
             if cached:
+                metrics.record_cache_hit()
                 return cached
+            metrics.record_cache_miss()
 
         # Step 1: Retrieve relevant chunks
         results = self.retriever.search(query=query, top_k=k, where=where)
@@ -125,6 +131,7 @@ class AnswerGenerator:
         if self.cache:
             self.cache.set(query, k, response)
 
+        metrics.record_query(time.monotonic() - start)
         return response
 
     def _build_metadata_map(self, results: list[SearchResult]) -> dict[str, dict]:
