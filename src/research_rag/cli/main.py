@@ -17,6 +17,7 @@ from research_rag.models import Chunk, DocumentMetadata, ChunkFlags
 from research_rag.retrieval import Retriever
 from research_rag.storage.chroma import ChromaStore
 from research_rag.synthesis import AnswerGenerator
+from research_rag.cli.repl import repl
 
 console = Console()
 
@@ -41,7 +42,7 @@ def main(ctx: click.Context, config: str | None, debug: bool) -> None:
     ctx.obj["settings"] = settings
 
 
-@main.command()
+@main.command(help="Ingest PDFs from a directory.")
 @click.argument("input_dir", type=click.Path(exists=True))
 @click.option("--output", "-o", type=click.Path(), default="./data", help="Output directory")
 @click.pass_context
@@ -83,7 +84,7 @@ def ingest(ctx: click.Context, input_dir: str, output: str) -> None:
     console.print(f"\n[bold]Summary:[/] {success}/{len(results)} PDFs processed, {total_chunks} chunks created")
 
 
-@main.command()
+@main.command(help="Semantic search across ingested documents.")
 @click.argument("query_str")
 @click.option("--top-k", "-k", type=int, default=5, help="Number of results")
 @click.option("--where", "-w", type=str, default=None, help="Metadata filter as JSON (e.g. '{\"year\": 2024}')")
@@ -137,7 +138,7 @@ def query(ctx: click.Context, query_str: str, top_k: int, where: str | None) -> 
         console.print("")
 
 
-@main.command()
+@main.command(help="Ask a research question and get a citation-grounded answer.")
 @click.argument("question")
 @click.option("--top-k", "-k", type=int, default=5, help="Number of evidence chunks")
 @click.option("--reasoning", is_flag=True, help="Show reasoning trace")
@@ -209,7 +210,7 @@ def ask(ctx: click.Context, question: str, top_k: int, reasoning: bool) -> None:
         console.print(f"\n[dim]Evidence count: {response['reasoning_trace']['evidence_count']}[/]")
 
 
-@main.command()
+@main.command(help="Ingest PDFs and store chunks in Chroma.")
 @click.argument("input_dir", type=click.Path(exists=True))
 @click.option("--output", "-o", type=click.Path(), default="./data", help="Ingestion output directory")
 @click.pass_context
@@ -302,7 +303,7 @@ def ingest_and_store(ctx: click.Context, input_dir: str, output: str) -> None:
     console.print(f"\n[bold green]Stored {stored} chunks in Chroma ({store.count()} total)[/]")
 
 
-@main.command()
+@main.command(help="Show system status.")
 @click.option("--reset", is_flag=True, help="Reset the vector store")
 @click.pass_context
 def status(ctx: click.Context, reset: bool) -> None:
@@ -341,6 +342,14 @@ def status(ctx: click.Context, reset: bool) -> None:
         table.add_row("Chroma Collection", "[red]Error[/]", str(e)[:50])
 
     console.print(table)
+
+
+@main.command(help="Start the interactive Research RAG REPL.")
+@click.pass_context
+def repl_cmd(ctx: click.Context) -> None:
+    """Start the interactive Research RAG REPL."""
+    settings = ctx.obj["settings"]
+    repl(settings)
 
 
 if __name__ == "__main__":
