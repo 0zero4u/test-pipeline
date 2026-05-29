@@ -21,12 +21,12 @@ from research_rag.retrieval import Retriever
 from research_rag.storage.chroma import ChromaStore
 from research_rag.synthesis import AnswerGenerator
 from research_rag.utils import ResearchRAGError
-from research_rag.writing import ChapterWriter, ChapterOutline, DissertationState
+from research_rag.writing import ChapterWriter, ChapterOutline, DissertationState, DissertationWriter
 
 console = Console()
 
 HISTORY_FILE = Path.home() / ".research_rag_history"
-COMMANDS = ["ask", "ingest", "query", "write", "status", "help", "history", "exit", "quit"]
+COMMANDS = ["ask", "ingest", "query", "write", "dissertation", "status", "help", "history", "exit", "quit"]
 
 
 class ReplCompleter:
@@ -116,6 +116,7 @@ def _print_help() -> None:
     table.add_row("ingest", "Ingest PDFs from a directory", "ingest ./pdfs/")
     table.add_row("query", "Semantic search", 'query "machine learning" -k 5')
     table.add_row("write", "Write a chapter from outline", 'write 3 "Chapter Title" --context "arg"')
+    table.add_row("dissertation", "Write full dissertation from plan file", 'dissertation ./chapter_plan.md --title "My Thesis"')
     table.add_row("status", "Show system status", "status")
     table.add_row("history", "Show query history", "history")
     table.add_row("help / ?", "Show this help message", "help")
@@ -445,6 +446,74 @@ def _cmd_history(history: list[dict[str, Any]]) -> None:
     console.print(table)
 
 
+def _cmd_dissertation(
+    args: list[str],
+    kwargs: dict[str, Any],
+    dissertation_writer: DissertationWriter,
+) -> None:
+    """Handle the 'dissertation' command — write full dissertation from plan file."""
+    if not args:
+        console.print(
+            "[red]Usage: dissertation <plan_file> [--title \"Title\"] [--thesis \"Thesis statement\"][/red]"
+        )
+        console.print("[dim]Example: dissertation ./chapter_plan.md --title \"Partition Literature\"[/]")
+        return
+
+    plan_file = Path(args[0])
+    if not plan_file.exists():
+        console.print(f"[red]Plan file not found: {plan_file}[/]")
+        return
+
+    title = kwargs.get("title", "")
+    thesis = kwargs.get("thesis", "")
+
+    try:
+        plan_text = plan_file.read_text()
+    except Exception as e:
+        console.print(f"[red]Error reading plan file: {e}[/]")
+        return
+
+    console.print(f"[bold blue]Writing dissertation from {plan_file.name}[/]")
+    console.print("[dim]This will take several minutes...[/]")
+
+    def chapter_callback(chapter_num: int, total: int, result: dict):
+        console.print(
+            f"[green]✓[/] Chapter {chapter_num}/{total} complete "
+            f"({result['word_count']} words, {len(result['citations'])} citations)"
+        )
+
+    try:
+        with console.status("[bold green]Generating dissertation...[/]"):
+            result = dissertation_writer.write_dissertation(
+                plan_text=plan_text,
+                title=title,
+                thesis=thesis,
+                chapter_callback=chapter_callback,
+            )
+    except Exception as e:
+        console.print(f"[red]Error writing dissertation: {e}[/]")
+        return
+
+    console.print(f"\n[bold green]Dissertation complete![/]")
+    console.print(f"  Chapters: {result['chapter_count']}")
+    console.print(f"  Total words: {result['word_count']:,}")
+    console.print(f"  Total citations: {len(result['citations'])}")
+
+    if result["works_cited"]:
+        console.print(f"\n[bold]Works Cited:[/]")
+        console.print(result["works_cited"][:2000])
+        if len(result["works_cited"]) > 2000:
+            console.print("[dim]... (truncated)[/]")
+
+    output_file = kwargs.get("output", "dissertation_output.md")
+    try:
+        output_path = Path(output_file)
+        output_path.write_text(result["full_text"])
+        console.print(f"\n[dim]Saved to {output_path}[/]")
+    except Exception as e:
+        console.print(f"[yellow]Could not save output: {e}[/]")
+
+
 def repl(settings: Settings) -> None:
     """Run the interactive Research RAG REPL.
 
@@ -469,6 +538,7 @@ def repl(settings: Settings) -> None:
     )
     state = DissertationState()
     writer = ChapterWriter(retriever=retriever, state=state)
+    dissertation_writer = DissertationWriter(retriever=retriever, state=state)
 
     conversation_history: list[dict[str, Any]] = []
 
@@ -509,6 +579,11 @@ def repl(settings: Settings) -> None:
         elif command == "write":
             try:
                 _cmd_write(args, kwargs, writer, state)
+            except ResearchRAGError as e:
+                console.print(f"[red]Error:[/] {e}", style="red")
+        elif command == "dissertation":
+            try:
+                _cmd_dissertation(args, kwargs, dissertation_writer)
             except ResearchRAGError as e:
                 console.print(f"[red]Error:[/] {e}", style="red")
         elif command == "status":

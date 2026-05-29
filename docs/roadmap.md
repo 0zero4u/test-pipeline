@@ -20,6 +20,10 @@ Phase 4: Synthesis (Weeks 7-8)
 Phase 5: Polish (Weeks 9-10) ✓ COMPLETE
     ↓
 Phase 6: Scale (Weeks 11-12) ✓ COMPLETE
+    ↓
+Phase 7: Chapter Writing Assistance ✓ COMPLETE
+    ↓
+Phase 8: MLA Citation Support ✓ COMPLETE
 ```
 
 ---
@@ -572,6 +576,81 @@ Output: Complete MLA-formatted chapter
 - 8-16GB RAM
 - 4-8 CPU cores
 - Internet access (for APIs)
+
+---
+
+## Phase 7: Chapter Writing Assistance ✓ COMPLETE
+
+**Goal**: Generate dissertation chapters with section-by-section generation  
+**Deliverable**: ChapterWriter + MLAFormatter + DissertationState  
+**Completed**: 2026-05-29
+
+### Tasks
+
+| Task | Priority | Status | Notes |
+|------|----------|--------|-------|
+| ChapterWriter | High | ✓ | Section-by-section generation with retrieval |
+| MLAFormatter | High | ✓ | MLA 9th Edition inline citations + Works Cited |
+| ChapterOutline | High | ✓ | Skeleton generation from chapter plan |
+| DissertationState | Medium | ✓ | Cross-chapter state and citation tracking |
+| Academic prose prompts | Medium | ✓ | Formal dissertation writing style |
+| REPL 'write' command | Medium | ✓ | Interactive chapter generation |
+| Tests | High | ✓ | 20 writing module tests |
+
+### Deliverables
+
+```
+src/research_rag/writing/
+├── __init__.py
+├── chapter_writer.py      # Section-by-section generation
+├── mla_formatter.py       # MLA 9th Edition citations
+├── outline.py             # Chapter outline parsing
+├── prompts.py             # Academic prose prompts
+└── state.py               # Cross-chapter state tracking
+```
+
+### Exit Criteria
+
+- ChapterWriter generates sections with retrieval and citations
+- MLAFormatter converts [N] to (Author Page) inline format
+- Works Cited page generated from accumulated citations
+- DissertationState tracks chapters, sections, and word counts
+- REPL 'write' command works end-to-end
+
+---
+
+## Phase 8: MLA Citation Support ✓ COMPLETE
+
+**Goal**: Extend MLA formatting to support all source types  
+**Deliverable**: Film, edited volume, book citation support + DissertationWriter  
+**Completed**: 2026-05-29
+
+### Tasks
+
+| Task | Priority | Status | Notes |
+|------|----------|--------|-------|
+| Film citations | High | ✓ | MLA format: *Title*. Directed by Name, Production Co., Year |
+| Edited volume chapter | High | ✓ | MLA format: "Chapter." *Book*, edited by Editor, Publisher |
+| Book citations | High | ✓ | MLA format: *Title*. Edition, Publisher, Year |
+| DissertationWriter | High | ✓ | Full dissertation orchestration from chapter_plan.md |
+| REPL 'dissertation' command | Medium | ✓ | Interactive dissertation generation |
+| Tests | High | ✓ | 25 MLA tests + 11 dissertation tests |
+
+### Deliverables
+
+```
+src/research_rag/writing/
+├── dissertation_writer.py  # Full dissertation orchestration
+└── mla_formatter.py        # Extended with film/edited volume/book support
+```
+
+### Exit Criteria
+
+- MLAFormatter supports journal, book, film, edited volume citations
+- DissertationWriter parses chapter_plan.md and writes full dissertation
+- Works Cited page includes "Works Cited" header
+- REPL 'dissertation' command works end-to-end
+- All 79 tests passing
 
 ---
 

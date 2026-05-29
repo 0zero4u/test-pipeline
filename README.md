@@ -9,7 +9,9 @@ Citation-grounded research assistance for humanities/literary analysis.
 **Phase 3: Vector Storage & Retrieval** — Complete ✓  
 **Phase 4: Synthesis & Citation** — Complete ✓  
 **Phase 5: Polish & UX** — Complete ✓  
-**Phase 6: Scale & Optimize** — Complete ✓
+**Phase 6: Scale & Optimize** — Complete ✓  
+**Phase 7: Chapter Writing Assistance** — Complete ✓  
+**Phase 8: MLA Citation Support** — Complete ✓
 
 ## Overview
 
@@ -60,6 +62,8 @@ Available commands:
   ask "question" -k N     Ask a research question
   ingest ./path/          Ingest PDFs into Chroma
   query "search" -k N     Semantic search
+  write N "Title"         Write a chapter from outline
+  dissertation ./plan.md  Write full dissertation from plan
   status                  Show system status
   history                 Show query history
   help                    Show this help
@@ -103,6 +107,12 @@ research-rag status --reset
 
 # Start interactive REPL
 research-rag repl
+
+# Write a chapter from outline
+research-rag write 3 "Partition and Violence" --context "Comparative study"
+
+# Write full dissertation from chapter plan
+research-rag dissertation ./chapter_plan.md --title "My Thesis" --output dissertation.md
 ```
 
 ## Stack
@@ -119,6 +129,8 @@ research-rag repl
 | Vector DB | Chroma (persistent, cosine HNSW) | Store + search embeddings |
 | Synthesis | deepseek/deepseek-v4-flash (OpenRouter) | Citation-grounded answers |
 | Citation Validation | Validator + metadata lookup | Author/year enrichment, hallucination detection |
+| MLA Formatting | Custom MLA 9th Edition | Journal, book, film, edited volume citations |
+| Chapter Writing | DissertationWriter + ChapterWriter | Section-by-section academic generation |
 | Caching | LRU with disk persistence | Query result caching |
 | Batch Ingestion | ThreadPoolExecutor (4 workers) | Parallel PDF processing |
 | Incremental Updates | SHA-256 manifest | Only re-ingest changed PDFs |
@@ -163,25 +175,26 @@ research-rag/
 │   │   ├── prompts.py             # Synthesis prompt templates
 │   │   └── generator.py           # Answer generation pipeline
 │   ├── citations/
-│   │   └── parser.py              # Inline citation extraction
+│   │   ├── parser.py              # Inline citation extraction
+│   │   └── validator.py           # Citation validation
+│   ├── writing/
+│   │   ├── chapter_writer.py      # Section-by-section chapter generation
+│   │   ├── dissertation_writer.py # Full dissertation orchestration
+│   │   ├── mla_formatter.py       # MLA 9th Edition citations
+│   │   ├── outline.py             # Chapter outline parsing
+│   │   ├── prompts.py             # Academic prose prompts
+│   │   └── state.py               # Cross-chapter state tracking
 │   └── utils/
 │       ├── errors.py              # Custom exception hierarchy
 │       └── retry.py               # Exponential backoff decorator
-├── tests/                         # 149+ tests
+├── tests/                         # 79+ tests
 │   ├── test_config.py
 │   ├── test_models.py
-│   ├── test_logging.py
-│   ├── test_parser.py
 │   ├── test_metadata.py
-│   ├── test_chunker.py
-│   ├── test_pipeline.py
-│   ├── test_embeddings.py
-│   ├── test_storage.py
-│   ├── test_retrieval.py
+│   ├── test_mla_formatter.py
+│   ├── test_dissertation_writer.py
 │   ├── test_citations.py
-│   ├── test_synthesis.py
-│   ├── test_utils.py
-│   └── test_repl.py
+│   └── ...
 └── examples/
     └── basic_usage.ipynb          # Jupyter notebook
 ```
@@ -189,6 +202,9 @@ research-rag/
 ## Key Features
 
 - **Citation-grounded answers**: LLM can only use provided evidence. Inline citations [1], [2] with source attribution. No hallucination — says "no direct evidence" when insufficient.
+- **Chapter writing**: Generate dissertation chapters section-by-section with retrieval and citations.
+- **MLA 9th Edition formatting**: Inline citations (Author Page) + Works Cited page. Supports journal articles, books, films, edited volumes.
+- **Dissertation orchestration**: Parse `chapter_plan.md` and write full dissertation with cross-chapter state tracking.
 - **Interactive REPL**: Multi-turn Q&A with command history, tab completion, Rich-formatted output.
 - **Graceful fallback**: Works without API keys (local embeddings via BGE-small, retrieval-only mode without synthesis).
 - **Retry with backoff**: Exponential backoff ±25% jitter on API calls. Structured exception hierarchy.

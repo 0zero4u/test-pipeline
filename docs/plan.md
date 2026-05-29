@@ -327,13 +327,23 @@ Build a retrieval-augmented generation (RAG) system optimized for humanities res
 
 ## Known Issues
 
-### Metadata Extraction (HIGH PRIORITY)
-The regex-based metadata extraction (`ingestion/metadata.py`) extracts incorrect author names:
-- `rag_pdf1`: Returns `["Khushwant Singh"]` — that's the novel's author, not the paper author
-- `rag_pdf2`: Returns `["Key  Words"]` — completely wrong
+### Metadata Extraction (IMPROVED)
+The regex-based metadata extraction (`ingestion/metadata.py`) has been significantly improved:
+- Added blacklist filter for metadata keywords (Keywords, Abstract, DOI, etc.)
+- Added position validation (authors between title and abstract)
+- Added body text detection to skip non-author lines
+- Added author name validation (2+ words, capitalized, not a known phrase)
 
-**Impact**: Works Cited shows "Unknown Author" because metadata is wrong.  
-**Fix**: Improve `_extract_authors()` with position heuristics, validation, and LLM fallback.
+**Previous issues (now fixed)**:
+- `rag_pdf1`: Returned `["Khushwant Singh"]` — novel's author, not paper author
+- `rag_pdf2`: Returned `["Key Words"]` — completely wrong
+
+**Current behavior**:
+- Correctly extracts author names from heading prefixes (e.g., `## Marc Chatterji`)
+- Returns empty list when no clear author line exists (correct behavior)
+- Confidence score reflects extraction quality
+
+**Remaining limitation**: PDFs without clear author attribution return empty authors list (correct behavior).
 
 ---
 
@@ -540,6 +550,34 @@ The regex-based metadata extraction (`ingestion/metadata.py`) extracts incorrect
 5. ✅ Documentation is complete
 6. ✅ Latency <4s per query
 7. ✅ Monthly cost <$150
+
+---
+
+## Phase 8: MLA Citation Support ✓ COMPLETE
+
+> **Goal**: Extend MLA formatting to support all source types  
+> **Deliverable**: Film, edited volume, book citation support + DissertationWriter  
+> **Completed**: 2026-05-29
+
+### Tasks
+
+-    Extend MLACitation with source_type, editor, publisher, edition, director, production_co fields
+-    Implement film citation formatting: *Title*. Directed by Name, Production Co., Year
+-    Implement edited volume chapter formatting: "Chapter." *Book*, edited by Editor, Publisher
+-    Implement book formatting with edition: *Title*. Edition, Publisher, Year
+-    Add "Works Cited" header to build_works_cited()
+-    Create DissertationWriter class for full dissertation orchestration
+-    Add parse_chapter_plan() method for parsing chapter_plan.md format
+-    Add REPL 'dissertation' command
+-    Write 25 MLA tests + 11 dissertation tests
+
+### Exit Criteria
+
+- MLAFormatter supports journal, book, film, edited volume citations
+- DissertationWriter parses chapter_plan.md and writes full dissertation
+- Works Cited page includes "Works Cited" header
+- REPL 'dissertation' command works end-to-end
+- All 79 tests passing
 
 ---
 

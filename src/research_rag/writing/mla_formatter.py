@@ -5,6 +5,8 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
+SOURCE_TYPES = ("journal", "book", "film", "edited_volume", "chapter")
+
 
 class MLACitation:
     """A single MLA-formatted citation."""
@@ -20,6 +22,12 @@ class MLACitation:
         page: str = "",
         doi: str = "",
         source_file: str = "",
+        source_type: str = "journal",
+        editor: str = "",
+        publisher: str = "",
+        edition: str = "",
+        director: str = "",
+        production_co: str = "",
     ):
         self.author = author
         self.title = title
@@ -30,6 +38,12 @@ class MLACitation:
         self.page = page
         self.doi = doi
         self.source_file = source_file
+        self.source_type = source_type
+        self.editor = editor
+        self.publisher = publisher
+        self.edition = edition
+        self.director = director
+        self.production_co = production_co
 
     def format_author(self) -> str:
         """Format author name as 'Last, First'."""
@@ -48,30 +62,68 @@ class MLACitation:
         return f"({author})"
 
     def format_works_cited(self) -> str:
-        """Format full Works Cited entry."""
+        """Format full Works Cited entry based on source_type."""
+        if self.source_type == "film":
+            return self._format_film()
+        elif self.source_type == "edited_volume":
+            return self._format_edited_volume_chapter()
+        elif self.source_type == "book":
+            return self._format_book()
+        elif self.source_type == "chapter":
+            return self._format_chapter_in_book()
+        return self._format_journal()
+
+    def _format_journal(self) -> str:
+        """Format journal article: Author. 'Title.' Journal, vol. X, no. Y (Year), pp. X-Y."""
         author = self.format_author()
-
-        if self.title:
-            if self.journal:
-                title_fmt = f'"{self.title}."'
-            else:
-                title_fmt = f"*{self.title}*."
-        else:
-            title_fmt = "Untitled."
-
-        journal_part = ""
-        if self.journal:
-            journal_part = f" *{self.journal}*"
-            if self.volume:
-                journal_part += f", vol. {self.volume}"
-            if self.issue:
-                journal_part += f", no. {self.issue}"
-
+        title = f'"{self.title}."' if self.title else '"Untitled."'
+        journal_part = f" *{self.journal}*" if self.journal else ""
+        if self.volume:
+            journal_part += f", vol. {self.volume}"
+        if self.issue:
+            journal_part += f", no. {self.issue}"
         year_part = f" ({self.year})" if self.year else " (n.d.)"
         page_part = f", pp. {self.page}" if self.page else ""
         doi_part = f". DOI: {self.doi}" if self.doi else ""
+        return f"{author}. {title}{journal_part}{year_part}{page_part}{doi_part}."
 
-        return f"{author}. {title_fmt}{journal_part}{year_part}{page_part}{doi_part}."
+    def _format_book(self) -> str:
+        """Format book: Author. *Title*. Edition, Publisher, Year."""
+        author = self.format_author()
+        title = f"*{self.title}*." if self.title else "*Untitled*."
+        edition_part = f" {self.edition}," if self.edition else ""
+        publisher_part = f" {self.publisher}," if self.publisher else ""
+        year_part = f" {self.year}." if self.year else " n.d."
+        return f"{author}. {title}{edition_part}{publisher_part}{year_part}"
+
+    def _format_film(self) -> str:
+        """Format film: *Title*. Directed by Director, Production Co., Year."""
+        title = f"*{self.title}*." if self.title else "*Untitled*."
+        director_part = f" Directed by {self.director}," if self.director else ""
+        production_part = f" {self.production_co}," if self.production_co else ""
+        year_part = f" {self.year}." if self.year else " n.d."
+        return f"{title}{director_part}{production_part}{year_part}"
+
+    def _format_edited_volume_chapter(self) -> str:
+        """Format chapter in edited volume: 'Chapter.' *Book*, edited by Editor, Publisher, Year, pp. X-Y."""
+        title = f'"{self.title}."' if self.title else '"Untitled."'
+        book_title = f" *{self.journal}*," if self.journal else ""
+        editor_part = f" edited by {self.editor}," if self.editor else ""
+        publisher_part = f" {self.publisher}," if self.publisher else ""
+        year_part = f" {self.year}," if self.year else " n.d.,"
+        page_part = f" pp. {self.page}" if self.page else ""
+        return f"{title}{book_title}{editor_part}{publisher_part}{year_part}{page_part}."
+
+    def _format_chapter_in_book(self) -> str:
+        """Format chapter in book: Author. 'Chapter.' *Book*, edited by Editor, Publisher, Year, pp. X-Y."""
+        author = self.format_author()
+        title = f'"{self.title}."' if self.title else '"Untitled."'
+        book_title = f" *{self.journal}*," if self.journal else ""
+        editor_part = f" edited by {self.editor}," if self.editor else ""
+        publisher_part = f" {self.publisher}," if self.publisher else ""
+        year_part = f" {self.year}," if self.year else " n.d.,"
+        page_part = f" pp. {self.page}" if self.page else ""
+        return f"{author}. {title}{book_title}{editor_part}{publisher_part}{year_part}{page_part}."
 
 
 class MLAFormatter:
@@ -93,6 +145,12 @@ class MLAFormatter:
         page: str = "",
         doi: str = "",
         source_file: str = "",
+        source_type: str = "journal",
+        editor: str = "",
+        publisher: str = "",
+        edition: str = "",
+        director: str = "",
+        production_co: str = "",
     ) -> MLACitation:
         """Add a citation to the formatter."""
         citation = MLACitation(
@@ -105,6 +163,12 @@ class MLAFormatter:
             page=page,
             doi=doi,
             source_file=source_file,
+            source_type=source_type,
+            editor=editor,
+            publisher=publisher,
+            edition=edition,
+            director=director,
+            production_co=production_co,
         )
         self._citation_map[str(citation_number)] = citation
         return citation
@@ -135,7 +199,8 @@ class MLAFormatter:
         )
 
         entries = [cit.format_works_cited() for cit in sorted_citations]
-        return "\n\n".join(entries)
+        header = "Works Cited\n" + "=" * 13 + "\n\n"
+        return header + "\n\n".join(entries)
 
     def get_citation_details(self, number: int) -> Optional[dict]:
         """Get citation details for bibliography building."""
@@ -152,6 +217,12 @@ class MLAFormatter:
             "page": citation.page,
             "doi": citation.doi,
             "source_file": citation.source_file,
+            "source_type": citation.source_type,
+            "editor": citation.editor,
+            "publisher": citation.publisher,
+            "edition": citation.edition,
+            "director": citation.director,
+            "production_co": citation.production_co,
         }
 
     def reset(self) -> None:
