@@ -274,10 +274,12 @@ Build a retrieval-augmented generation (RAG) system optimized for humanities res
 
 ### Phase 6: Scale & Optimize (Weeks 11-12)
 
-**Goal**: Handle 100-1000 PDFs, optimize performance  
-**Deliverable**: Production-ready system
+**Goal**: Handle 100-1000 PDFs, optimize performance, citation validation  
+**Deliverable**: Production-ready system with hallucination detection
 
 **Tasks:**
+- [ ] Add citation validation (validate LLM citations against metadata, catch hallucinations)
+- [ ] Enrich citation output with author name + year (currently only shows source title)
 - [ ] Batch ingestion (parallel processing)
 - [ ] Chroma optimization (index tuning)
 - [ ] Add caching layer (query result caching)
@@ -287,6 +289,7 @@ Build a retrieval-augmented generation (RAG) system optimized for humanities res
 - [ ] Documentation
 
 **Exit Criteria:**
+- [ ] Citation validation catches wrong author/year/non-existent sources
 - [ ] 100 PDFs ingested in <1 hour
 - [ ] Query latency <4s
 - [ ] Incremental updates work

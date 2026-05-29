@@ -383,13 +383,15 @@ examples/
 
 ## Phase 6: Scale & Optimize
 
-**Goal**: Handle 100-1000 PDFs, optimize performance  
-**Deliverable**: Production-ready system
+**Goal**: Handle 100-1000 PDFs, optimize performance, citation validation  
+**Deliverable**: Production-ready system with hallucination detection
 
 ### Tasks
 
 | Task | Priority | Effort | Notes |
 |------|----------|--------|-------|
+| Citation validation | High | 4h | Validate LLM citations against metadata, catch hallucinations |
+| Enrich citation output | High | 2h | Add author name + year to citation display |
 | Batch ingestion | High | 4h | Parallel processing |
 | Chroma optimization | Medium | 3h | Index tuning |
 | Add caching layer | Medium | 4h | Query result caching |
@@ -397,6 +399,35 @@ examples/
 | Add incremental updates | Medium | 4h | Re-ingest changed PDFs |
 | Performance benchmarking | Low | 4h | Measure latency |
 | Documentation | Low | 2h | Architecture docs |
+
+### Citation Validation (from rag-pipeline)
+
+**Problem**: LLM may hallucinate citations — cite chunks that don't exist, wrong authors, or wrong metadata.
+
+**Solution**: Two-layer validation:
+1. **Chunk existence check**: Verify `chunk_id` exists in retrieved chunks
+2. **Metadata validation**: Lookup filename in metadata files → verify author/year/title
+
+**Current output:**
+```
+Sources:
+  [1] Key Words: Affective politics..., p. 2
+```
+
+**With validation:**
+```
+Sources:
+  [1] Dr Urmila Devi (2021) — Key Words: Affective politics..., p. 2
+```
+
+**Hallucination detection:**
+
+| Hallucination Type | Detection Method | Result |
+|-------------------|------------------|--------|
+| LLM cites non-existent chunk | Check `chunk_id` bounds | Flag as "unknown" |
+| LLM cites wrong chunk | Match to actual `reference_id` | Use actual source |
+| Author name wrong | Compare to metadata | Replace with correct |
+| Year wrong/missing | Compare to metadata | Replace with correct (or "n.d.") |
 
 ### Optimization Targets
 
@@ -439,6 +470,8 @@ benchmarks/
 
 ### Exit Criteria
 
+- [ ] Citation validation catches wrong author/year/non-existent sources
+- [ ] Enriched citations show author name + year
 - [ ] 100 PDFs ingested in <1 hour
 - [ ] Query latency <4s
 - [ ] Incremental updates work
