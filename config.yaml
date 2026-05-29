@@ -7,7 +7,7 @@ ingestion:
   chunk_overlap: 0.12
 
 extraction:
-  entity_model: qwen3-8b
+  entity_model: deepseek/deepseek-v4-flash
   embedding_model: bge-base-en-v1.5
 
 retrieval:
@@ -15,7 +15,7 @@ retrieval:
   similarity_threshold: 0.7
 
 synthesis:
-  model: qwen3-32b
+  model: deepseek/deepseek-v4-flash
   max_tokens: 2000
   temperature: 0.3
 

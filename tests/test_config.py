@@ -17,7 +17,7 @@ def test_settings_defaults():
     assert settings.ingestion.chunk_size_min == 500
     assert settings.ingestion.chunk_size_max == 900
     assert settings.retrieval.top_k == 5
-    assert settings.synthesis.model == "qwen3-32b"
+    assert settings.synthesis.model == "deepseek/deepseek-v4-flash"
 
 
 def test_settings_from_env(monkeypatch):

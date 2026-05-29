@@ -19,7 +19,7 @@ class IngestionConfig(BaseModel):
 class ExtractionConfig(BaseModel):
     """Entity extraction configuration."""
 
-    entity_model: str = "qwen3-8b"
+    entity_model: str = "deepseek/deepseek-v4-flash"
     embedding_model: str = "bge-base-en-v1.5"
 
 
@@ -33,7 +33,7 @@ class RetrievalConfig(BaseModel):
 class SynthesisConfig(BaseModel):
     """Synthesis configuration."""
 
-    model: str = "qwen3-32b"
+    model: str = "deepseek/deepseek-v4-flash"
     max_tokens: int = Field(default=2000, ge=100)
     temperature: float = Field(default=0.3, ge=0.0, le=2.0)
 
