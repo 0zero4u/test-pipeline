@@ -5,6 +5,7 @@ import re
 from typing import Optional
 
 from research_rag.citations.parser import CitationParser, Citation
+from research_rag.citations.validator import CitationValidator
 from research_rag.retrieval import Retriever, SearchResult
 from research_rag.synthesis.client import SynthesisClient
 from research_rag.synthesis.prompts import build_synthesis_messages
@@ -15,7 +16,7 @@ logger = logging.getLogger(__name__)
 class AnswerGenerator:
     """Generates citation-grounded answers from retrieved evidence.
 
-    Pipeline: query → retrieve → build prompt → call LLM → parse citations → return.
+    Pipeline: query → retrieve → build prompt → call LLM → parse citations → validate → return.
     """
 
     def __init__(
@@ -24,6 +25,7 @@ class AnswerGenerator:
         synthesis_client: Optional[SynthesisClient] = None,
         top_k: int = 5,
         citation_parser: Optional[CitationParser] = None,
+        citation_validator: Optional[CitationValidator] = None,
     ):
         self.retriever = retriever
         self.synthesis_client = synthesis_client or SynthesisClient(
@@ -31,6 +33,7 @@ class AnswerGenerator:
         )
         self.top_k = top_k
         self.citation_parser = citation_parser or CitationParser()
+        self.citation_validator = citation_validator or CitationValidator()
 
     def answer(
         self,
@@ -86,7 +89,11 @@ class AnswerGenerator:
         # Step 4: Parse citations from LLM output
         citations = self.citation_parser.parse(raw_answer, results)
 
-        # Step 5: Estimate confidence based on citation coverage
+        # Step 5: Validate and enrich citations with metadata
+        metadata_map = self._build_metadata_map(results)
+        citations = self.citation_validator.validate(citations, metadata_map)
+
+        # Step 6: Estimate confidence based on citation coverage
         confidence = self._estimate_confidence(citations, results)
 
         response = {
@@ -106,6 +113,31 @@ class AnswerGenerator:
             }
 
         return response
+
+    def _build_metadata_map(self, results: list[SearchResult]) -> dict[str, dict]:
+        """Build a metadata map from search results for citation validation.
+
+        Args:
+            results: List of SearchResult objects with metadata.
+
+        Returns:
+            Dict mapping document_id -> metadata dict with title, authors, year.
+        """
+        metadata_map: dict[str, dict] = {}
+        for r in results:
+            if r.document_id and r.document_id not in metadata_map:
+                meta = r.metadata
+                authors_str = meta.get("authors", "")
+                authors = [a.strip() for a in authors_str.split(",") if a.strip()] if authors_str else []
+                year = meta.get("year") or None
+                if year and isinstance(year, str) and year.isdigit():
+                    year = int(year)
+                metadata_map[r.document_id] = {
+                    "title": meta.get("title", r.title),
+                    "authors": authors,
+                    "year": year,
+                }
+        return metadata_map
 
     def _estimate_confidence(
         self,

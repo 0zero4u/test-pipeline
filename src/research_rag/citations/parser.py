@@ -20,6 +20,9 @@ class Citation:
     page: int
     relevance_score: float
     citation_number: int
+    authors: list[str] = field(default_factory=list)
+    year: Optional[int] = None
+    is_validated: bool = False
 
     def to_dict(self) -> dict:
         return {
@@ -29,6 +32,9 @@ class Citation:
             "page": self.page,
             "relevance_score": round(self.relevance_score, 3),
             "citation_number": self.citation_number,
+            "authors": self.authors,
+            "year": self.year,
+            "is_validated": self.is_validated,
         }
 
 
