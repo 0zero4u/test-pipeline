@@ -117,6 +117,8 @@ class ChapterWriter:
             author = meta.get("authors", "")
             if isinstance(author, list):
                 author = ", ".join(author)
+            elif not author:
+                author = r.title.split(":")[0].strip() if r.title else "Unknown"
             chunk_data = {
                 "text": r.text,
                 "title": meta.get("title", r.title),
@@ -163,8 +165,8 @@ class ChapterWriter:
         text: str,
         citation_map: dict[int, dict],
     ) -> list[dict]:
-        """Parse [N] citation markers and resolve to source details."""
-        pattern = re.compile(r"\[(\d+)\]")
+        """Parse [N] or [N, p. X] citation markers and resolve to source details."""
+        pattern = re.compile(r"\[(\d+)(?:,\s*p\.\s*\d+)?\]")
         matches = pattern.findall(text)
 
         seen = set()
