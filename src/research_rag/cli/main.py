@@ -16,6 +16,7 @@ from research_rag.logging import setup_logging
 from research_rag.models import Chunk, DocumentMetadata, ChunkFlags
 from research_rag.retrieval import Retriever
 from research_rag.storage.chroma import ChromaStore
+from research_rag.synthesis import AnswerGenerator
 
 console = Console()
 
@@ -134,6 +135,78 @@ def query(ctx: click.Context, query_str: str, top_k: int, where: str | None) -> 
                 excerpt += "..."
             console.print(f"    [dim]Excerpt:[/] {excerpt}")
         console.print("")
+
+
+@main.command()
+@click.argument("question")
+@click.option("--top-k", "-k", type=int, default=5, help="Number of evidence chunks")
+@click.option("--reasoning", is_flag=True, help="Show reasoning trace")
+@click.pass_context
+def ask(ctx: click.Context, question: str, top_k: int, reasoning: bool) -> None:
+    """Ask a research question and get a citation-grounded answer."""
+    settings = ctx.obj["settings"]
+    console.print(f"[bold blue]Question:[/] {question}")
+    console.print("[dim]Searching knowledge base...[/]")
+
+    embed_service = EmbeddingService(
+        api_key=settings.openrouter_api_key,
+    )
+    store = ChromaStore(
+        persist_directory=settings.storage.chroma_path,
+        embedding_service=embed_service,
+    )
+    retriever = Retriever(
+        store=store,
+        top_k=top_k,
+    )
+
+    if not settings.openrouter_api_key:
+        console.print("[yellow]OPENROUTER_API_KEY not set. Showing retrieval results only.[/]")
+        results = retriever.search(query=question, top_k=top_k)
+        if results:
+            for i, r in enumerate(results, 1):
+                console.print(f"  [cyan][{i}][/] {r.title[:60]} (score: {r.score:.3f})")
+        else:
+            console.print("[yellow]No relevant evidence found.[/]")
+        return
+
+    generator = AnswerGenerator(
+        retriever=retriever,
+        top_k=top_k,
+    )
+
+    with console.status("[bold green]Generating answer...[/]"):
+        response = generator.answer(
+            query=question,
+            include_reasoning=reasoning,
+        )
+
+    console.print(f"\n[bold]Answer:[/] (confidence: {response['confidence']:.2f})\n")
+    console.print(response["answer"])
+    console.print("")
+
+    if response["citations"]:
+        console.print("[bold]Sources:[/]")
+        table = Table(show_header=False)
+        table.add_column("#", style="cyan")
+        table.add_column("Source", style="green")
+        table.add_column("Page", style="dim")
+        table.add_column("Relevance", style="dim")
+
+        for i, c in enumerate(response["citations"], 1):
+            title_short = c["title"][:40] if c["title"] else c["document_id"][:40]
+            table.add_row(
+                str(i),
+                title_short,
+                str(c["page"]),
+                f"{c['relevance_score']:.3f}",
+            )
+        console.print(table)
+    else:
+        console.print("[yellow]No citations extracted.[/]")
+
+    if reasoning and "reasoning_trace" in response:
+        console.print(f"\n[dim]Evidence count: {response['reasoning_trace']['evidence_count']}[/]")
 
 
 @main.command()
