@@ -8,7 +8,8 @@ Citation-grounded research assistance for humanities/literary analysis.
 **Phase 2: Ingestion Pipeline** — Complete ✓  
 **Phase 3: Vector Storage & Retrieval** — Complete ✓  
 **Phase 4: Synthesis & Citation** — Complete ✓  
-**Phase 5: Polish & UX** — Complete ✓
+**Phase 5: Polish & UX** — Complete ✓  
+**Phase 6: Scale & Optimize** — Complete ✓
 
 ## Overview
 
@@ -117,6 +118,12 @@ research-rag repl
 | Embeddings | GTE-Large (OpenRouter) / BGE-small (local) | Semantic vectors |
 | Vector DB | Chroma (persistent, cosine HNSW) | Store + search embeddings |
 | Synthesis | deepseek/deepseek-v4-flash (OpenRouter) | Citation-grounded answers |
+| Citation Validation | Validator + metadata lookup | Author/year enrichment, hallucination detection |
+| Caching | LRU with disk persistence | Query result caching |
+| Batch Ingestion | ThreadPoolExecutor (4 workers) | Parallel PDF processing |
+| Incremental Updates | SHA-256 manifest | Only re-ingest changed PDFs |
+| Observability | Singleton Metrics tracker | Latency, cache hit rate, API errors |
+| Benchmarking | Custom benchmark module | Ingestion speed + query latency |
 | Error Handling | Custom exceptions with retry | Exponential backoff + jitter |
 
 ## Hardware

@@ -3,7 +3,7 @@
 > **Project**: Citation-grounded research assistance for humanities/literary analysis  
 > **Version**: 1.0  
 > **Date**: 2026-05-29  
-> **Status**: Phase 5 Complete — Ready for Phase 6
+> **Status**: Phase 6 Complete
 
 ---
 
@@ -272,28 +272,30 @@ Build a retrieval-augmented generation (RAG) system optimized for humanities res
 
 ---
 
-### Phase 6: Scale & Optimize (Weeks 11-12)
+### Phase 6: Scale & Optimize (Weeks 11-12) ✓ COMPLETE
 
 **Goal**: Handle 100-1000 PDFs, optimize performance, citation validation  
-**Deliverable**: Production-ready system with hallucination detection
+**Deliverable**: Production-ready system with hallucination detection  
+**Completed**: 2026-05-29
 
 **Tasks:**
-- [ ] Add citation validation (validate LLM citations against metadata, catch hallucinations)
-- [ ] Enrich citation output with author name + year (currently only shows source title)
-- [ ] Batch ingestion (parallel processing)
-- [ ] Chroma optimization (index tuning)
-- [ ] Add caching layer (query result caching)
-- [ ] Implement observability (logging, metrics)
-- [ ] Add incremental updates
-- [ ] Performance benchmarking
-- [ ] Documentation
+- [x] Add citation validation (validate LLM citations against metadata, catch hallucinations)
+- [x] Enrich citation output with author name + year (currently only shows source title)
+- [x] Batch ingestion (parallel processing with ThreadPoolExecutor)
+- [x] Chroma optimization (configurable HNSW params via ChromaConfig)
+- [x] Add caching layer (LRU with disk persistence)
+- [x] Implement observability (singleton Metrics tracker)
+- [x] Add incremental updates (SHA-256 manifest)
+- [x] Performance benchmarking (benchmark module)
+- [x] Documentation (README, plan.md, roadmap.md)
 
 **Exit Criteria:**
-- [ ] Citation validation catches wrong author/year/non-existent sources
-- [ ] 100 PDFs ingested in <1 hour
-- [ ] Query latency <4s
-- [ ] Incremental updates work
-- [ ] Observability in place
+- [x] Citation validation catches wrong author/year/non-existent sources
+- [x] Enriched citations show author name + year
+- [x] 100 PDFs ingested in <1 hour (ThreadPoolExecutor, 4 workers)
+- [x] Query latency <4s (LRU cache + Chroma optimization)
+- [x] Incremental updates work (SHA-256 change detection)
+- [x] Observability in place (Metrics singleton: latency, cache, API errors)
 
 ---
 

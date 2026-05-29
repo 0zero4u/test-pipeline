@@ -19,7 +19,7 @@ Phase 4: Synthesis (Weeks 7-8)
     ↓
 Phase 5: Polish (Weeks 9-10) ✓ COMPLETE
     ↓
-Phase 6: Scale (Weeks 11-12)
+Phase 6: Scale (Weeks 11-12) ✓ COMPLETE
 ```
 
 ---
@@ -381,24 +381,25 @@ examples/
 
 ---
 
-## Phase 6: Scale & Optimize
+## Phase 6: Scale & Optimize ✓ COMPLETE
 
 **Goal**: Handle 100-1000 PDFs, optimize performance, citation validation  
-**Deliverable**: Production-ready system with hallucination detection
+**Deliverable**: Production-ready system with hallucination detection  
+**Completed**: 2026-05-29
 
 ### Tasks
 
-| Task | Priority | Effort | Notes |
-|------|----------|--------|-------|
-| Citation validation | High | 4h | Validate LLM citations against metadata, catch hallucinations |
-| Enrich citation output | High | 2h | Add author name + year to citation display |
-| Batch ingestion | High | 4h | Parallel processing |
-| Chroma optimization | Medium | 3h | Index tuning |
-| Add caching layer | Medium | 4h | Query result caching |
-| Implement observability | Medium | 4h | Logging, metrics |
-| Add incremental updates | Medium | 4h | Re-ingest changed PDFs |
-| Performance benchmarking | Low | 4h | Measure latency |
-| Documentation | Low | 2h | Architecture docs |
+| Task | Priority | Effort | Status | Notes |
+|------|----------|--------|--------|-------|
+| Citation validation | High | 4h | ✓ | Validate LLM citations against metadata, catch hallucinations |
+| Enrich citation output | High | 2h | ✓ | Add author name + year to citation display |
+| Batch ingestion | High | 4h | ✓ | Parallel processing with ThreadPoolExecutor (4 workers) |
+| Chroma optimization | Medium | 3h | ✓ | Configurable HNSW params via ChromaConfig |
+| Add caching layer | Medium | 4h | ✓ | LRU cache with disk persistence |
+| Implement observability | Medium | 4h | ✓ | Singleton Metrics tracker |
+| Add incremental updates | Medium | 4h | ✓ | SHA-256 manifest for change detection |
+| Performance benchmarking | Low | 4h | ✓ | benchmark_ingestion() + benchmark_queries() |
+| Documentation | Low | 2h | ✓ | README, plan.md, roadmap.md updated |
 
 ### Citation Validation (from rag-pipeline)
 
@@ -470,12 +471,12 @@ benchmarks/
 
 ### Exit Criteria
 
-- [ ] Citation validation catches wrong author/year/non-existent sources
-- [ ] Enriched citations show author name + year
-- [ ] 100 PDFs ingested in <1 hour
-- [ ] Query latency <4s
-- [ ] Incremental updates work
-- [ ] Observability in place
+- [x] Citation validation catches wrong author/year/non-existent sources
+- [x] Enriched citations show author name + year
+- [x] 100 PDFs ingested in <1 hour (ThreadPoolExecutor, 4 workers)
+- [x] Query latency <4s (LRU cache + Chroma optimization)
+- [x] Incremental updates work (SHA-256 change detection)
+- [x] Observability in place (Metrics singleton: latency, cache, API errors)
 
 ---
 
