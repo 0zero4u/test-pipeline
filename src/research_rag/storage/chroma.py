@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
 
@@ -18,6 +19,17 @@ COLLECTION_NAME = "research_chunks"
 DEFAULT_CHROMA_PATH = Path("./data/chroma")
 
 
+@dataclass
+class ChromaConfig:
+    """Configuration for Chroma index tuning."""
+
+    hnsw_space: str = "cosine"
+    hnsw_m: int = 16
+    hnsw_construction_ef: int = 100
+    hnsw_search_ef: int = 50
+    upsert_batch_size: int = 100
+
+
 class ChromaStore:
     """Wrapper around ChromaDB for storing and retrieving chunk vectors.
 
@@ -30,9 +42,11 @@ class ChromaStore:
         persist_directory: Path = DEFAULT_CHROMA_PATH,
         embedding_service: Optional[EmbeddingService] = None,
         collection_name: str = COLLECTION_NAME,
+        config: Optional[ChromaConfig] = None,
     ):
         self.persist_directory = Path(persist_directory)
         self.collection_name = collection_name
+        self.config = config or ChromaConfig()
         self._embedding_service = embedding_service
         self._client: Optional[chromadb.PersistentClient] = None
         self._collection: Optional[chromadb.Collection] = None
@@ -82,10 +96,10 @@ class ChromaStore:
                 if self.embedding_service._using_local
                 else None,
                 metadata={
-                    "hnsw:space": "cosine",
-                    "hnsw:M": 16,
-                    "hnsw:construction_ef": 100,
-                    "hnsw:search_ef": 50,
+                    "hnsw:space": self.config.hnsw_space,
+                    "hnsw:M": self.config.hnsw_m,
+                    "hnsw:construction_ef": self.config.hnsw_construction_ef,
+                    "hnsw:search_ef": self.config.hnsw_search_ef,
                 },
             )
             logger.info(
@@ -131,30 +145,33 @@ class ChromaStore:
             return 0
 
         collection = self._ensure_collection()
+        total_upserted = 0
 
-        ids = [c.chunk_id for c in chunks]
-        documents = [c.text for c in chunks]
-        metadatas = [self._chunk_to_metadata(c) for c in chunks]
+        for i in range(0, len(chunks), self.config.upsert_batch_size):
+            batch = chunks[i : i + self.config.upsert_batch_size]
+            ids = [c.chunk_id for c in batch]
+            documents = [c.text for c in batch]
+            metadatas = [self._chunk_to_metadata(c) for c in batch]
 
-        if self.embedding_service._using_local:
-            # Chroma handles embedding internally when using local ef
-            collection.upsert(
-                ids=ids,
-                documents=documents,
-                metadatas=metadatas,
-            )
-        else:
-            # API-based: we need to pre-compute embeddings
-            embeddings = self.embedding_service.embed(documents)
-            collection.upsert(
-                ids=ids,
-                embeddings=embeddings.tolist(),
-                metadatas=metadatas,
-                documents=documents,
-            )
+            if self.embedding_service._using_local:
+                collection.upsert(
+                    ids=ids,
+                    documents=documents,
+                    metadatas=metadatas,
+                )
+            else:
+                embeddings = self.embedding_service.embed(documents)
+                collection.upsert(
+                    ids=ids,
+                    embeddings=embeddings.tolist(),
+                    metadatas=metadatas,
+                    documents=documents,
+                )
 
-        logger.info("Upserted %d chunks into '%s'", len(chunks), self.collection_name)
-        return len(chunks)
+            total_upserted += len(batch)
+
+        logger.info("Upserted %d chunks into '%s'", total_upserted, self.collection_name)
+        return total_upserted
 
     def delete_chunks(self, chunk_ids: list[str]) -> int:
         """Delete specific chunks by ID.

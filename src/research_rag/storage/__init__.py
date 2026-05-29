@@ -1,5 +1,5 @@
 """Vector storage for Research RAG."""
 
-from research_rag.storage.chroma import ChromaStore
+from research_rag.storage.chroma import ChromaConfig, ChromaStore
 
-__all__ = ["ChromaStore"]
+__all__ = ["ChromaConfig", "ChromaStore"]
