@@ -3,7 +3,7 @@
 > **Project**: Citation-grounded research assistance for humanities/literary analysis  
 > **Version**: 1.0  
 > **Date**: 2026-05-29  
-> **Status**: Phase 6 Complete
+> **Status**: Phase 7 Complete (on dev branch)
 
 ---
 
@@ -296,6 +296,32 @@ Build a retrieval-augmented generation (RAG) system optimized for humanities res
 - [x] Query latency <4s (LRU cache + Chroma optimization)
 - [x] Incremental updates work (SHA-256 change detection)
 - [x] Observability in place (Metrics singleton: latency, cache, API errors)
+
+---
+
+### Phase 7: Chapter Writing Assistance (dev branch) ✓ COMPLETE
+
+**Goal**: Generate dissertation chapters with section-by-section generation, MLA formatting, and citation tracking  
+**Deliverable**: ChapterWriter + MLAFormatter + DissertationState  
+**Completed**: 2026-05-29
+
+**Tasks:**
+- [x] Create ChapterWriter (section-by-section generation with retrieval)
+- [x] Create MLAFormatter (MLA 9th Edition inline citations + Works Cited)
+- [x] Create ChapterOutline (skeleton generation from chapter plan)
+- [x] Add DissertationState (cross-chapter state and citation tracking)
+- [x] Write academic prose prompts (formal dissertation style)
+- [x] Integrate with REPL (new 'write' command)
+- [x] Write 20 tests for writing module
+- [x] Update docs
+
+**Exit Criteria:**
+- [x] ChapterWriter generates sections with retrieval and citations
+- [x] MLAFormatter converts [N] to (Author Page) inline format
+- [x] Works Cited page generated from accumulated citations
+- [x] DissertationState tracks chapters, sections, and word counts
+- [x] REPL 'write' command works end-to-end
+- [x] 198 tests passing (20 new writing tests)
 
 ---
 

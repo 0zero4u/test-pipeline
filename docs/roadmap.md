@@ -480,6 +480,52 @@ benchmarks/
 
 ---
 
+## Phase 7: Chapter Writing Assistance ✓ COMPLETE
+
+**Goal**: Generate dissertation chapters with section-by-section generation  
+**Deliverable**: ChapterWriter + MLAFormatter + DissertationState  
+**Completed**: 2026-05-29
+
+### Tasks
+
+| Task | Priority | Effort | Status | Notes |
+|------|----------|--------|--------|-------|
+| ChapterWriter | High | 6h | ✓ | Section-by-section generation with retrieval |
+| MLAFormatter | High | 4h | ✓ | MLA 9th Edition inline citations + Works Cited |
+| ChapterOutline | High | 3h | ✓ | Skeleton generation from chapter plan |
+| DissertationState | Medium | 3h | ✓ | Cross-chapter state and citation tracking |
+| Academic prose prompts | Medium | 2h | ✓ | Formal dissertation writing style |
+| REPL 'write' command | Medium | 2h | ✓ | Interactive chapter generation |
+| Tests | High | 2h | ✓ | 20 writing module tests |
+
+### Architecture
+
+```
+Chapter Outline → For each section:
+  ├── Retriever.search(section_query)
+  ├── Evidence chunks + metadata
+  ├── AcademicProsePrompt (long-form)
+  ├── LLM.generate(section_text)
+  └── CitationParser.parse(section_citations)
+  ↓
+Assemble sections → Chapter
+  ↓
+MLAFormatter (inline citations + Works Cited)
+  ↓
+Output: Complete MLA-formatted chapter
+```
+
+### Exit Criteria
+
+- [x] ChapterWriter generates sections with retrieval and citations
+- [x] MLAFormatter converts [N] to (Author Page) inline format
+- [x] Works Cited page generated from accumulated citations
+- [x] DissertationState tracks chapters, sections, and word counts
+- [x] REPL 'write' command works end-to-end
+- [x] 198 tests passing (20 new writing tests)
+
+---
+
 ## Success Metrics
 
 ### Phase 1-2 (Foundation + Ingestion)
