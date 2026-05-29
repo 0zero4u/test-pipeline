@@ -1,0 +1,485 @@
+# Research RAG System — Implementation Roadmap
+
+> **Timeline**: 8-12 weeks  
+> **Approach**: Phased delivery with working system at each phase  
+> **Philosophy**: Ship early, iterate based on actual pain
+
+---
+
+## Overview
+
+```
+Phase 1: Foundation (Weeks 1-2)
+    ↓
+Phase 2: Ingestion (Weeks 3-4)
+    ↓
+Phase 3: Retrieval (Weeks 5-6)
+    ↓
+Phase 4: Synthesis (Weeks 7-8)
+    ↓
+Phase 5: Polish (Weeks 9-10)
+    ↓
+Phase 6: Scale (Weeks 11-12)
+```
+
+---
+
+## Phase 1: Foundation
+
+**Goal**: Project structure, dependencies, configuration  
+**Deliverable**: Runnable skeleton with tests
+
+### Tasks
+
+| Task | Priority | Effort | Notes |
+|------|----------|--------|-------|
+| Initialize Python project | High | 1h | pyproject.toml, src layout |
+| Set up dependency management | High | 1h | Poetry or uv |
+| Create config system | High | 2h | YAML config with env overrides |
+| Design data schemas | High | 3h | JSON Schema for all objects |
+| Set up logging | Medium | 1h | Structured JSON logging |
+| Create test fixtures | Medium | 2h | Sample PDFs, expected outputs |
+| Write README | Low | 1h | Setup instructions |
+
+### Deliverables
+
+```
+research-rag/
+├── pyproject.toml
+├── config.yaml
+├── src/
+│   └── research_rag/
+│       ├── __init__.py
+│       ├── config.py
+│       ├── models.py
+│       └── utils.py
+├── tests/
+│   ├── fixtures/
+│   │   └── sample.pdf
+│   └── test_config.py
+└── docs/
+    └── architecture.md
+```
+
+### Exit Criteria
+
+- [ ] `pip install -e .` works
+- [ ] Config loads from YAML
+- [ ] Schemas validate sample data
+- [ ] Tests pass
+
+---
+
+## Phase 2: Ingestion Pipeline
+
+**Goal**: PDF → chunks with metadata  
+**Deliverable**: Ingest 10 PDFs, verify chunk quality
+
+### Tasks
+
+| Task | Priority | Effort | Notes |
+|------|----------|--------|-------|
+| Integrate Docling | High | 4h | PDF parsing, section detection |
+| Implement metadata extraction | High | 4h | Regex/heuristic parser |
+| Build section-aware chunker | High | 6h | 500-900 tokens, overlap |
+| Add chunk validation | Medium | 2h | Size, boundary checks |
+| Create ingestion CLI | Medium | 3h | `ingest.py --input ./pdfs/` |
+| Add progress tracking | Low | 2h | tqdm or similar |
+| Test on 10 PDFs | High | 2h | Manual quality check |
+
+### Key Decisions
+
+1. **Docling Configuration**
+   - Preserve layout: Yes
+   - Extract tables: Yes (markdown)
+   - Page markers: `<!-- Page N -->`
+
+2. **Chunking Algorithm**
+   ```
+   Split on headings →
+   Merge small sections (<500 tokens) →
+   Split large sections (>900 tokens) at paragraph boundaries →
+   Apply 12% overlap →
+   Validate boundaries
+   ```
+
+3. **Metadata Extraction**
+   ```
+   Title: First H1 or centered text
+   Authors: Line after title
+   Year: 4-digit number near journal
+   Journal: Line with "Journal/Review/Studies"
+   DOI: Pattern "10.XXXX/..."
+   ```
+
+### Deliverables
+
+```
+src/research_rag/
+├── ingestion/
+│   ├── __init__.py
+│   ├── parser.py          # Docling integration
+│   ├── metadata.py        # Metadata extraction
+│   ├── chunker.py         # Section-aware chunking
+│   └── pipeline.py        # Orchestration
+└── cli/
+    └── ingest.py          # CLI entry point
+```
+
+### Exit Criteria
+
+- [ ] 10 PDFs ingested successfully
+- [ ] Chunks are 500-900 tokens
+- [ ] Metadata extracted with >0.7 confidence
+- [ ] No split mid-sentence
+- [ ] Page markers preserved
+
+---
+
+## Phase 3: Vector Storage & Retrieval
+
+**Goal**: Embed chunks, store in Chroma, retrieve by query  
+**Deliverable**: Query returns relevant chunks
+
+### Tasks
+
+| Task | Priority | Effort | Notes |
+|------|----------|--------|-------|
+| Integrate embedding API | High | 3h | BGE-base-en-v1.5 |
+| Set up Chroma collection | High | 3h | Schema, indexing |
+| Implement upsert logic | High | 4h | Avoid duplicates |
+| Build retrieval function | High | 4h | top-k semantic search |
+| Add metadata filtering | Medium | 3h | Filter by author, year, etc. |
+| Create query CLI | Medium | 2h | `query.py "search term"` |
+| Test retrieval quality | High | 3h | Manual relevance check |
+
+### Key Decisions
+
+1. **Chroma Configuration**
+   ```python
+   collection = client.create_collection(
+       name="research_chunks",
+       metadata={
+           "hnsw:space": "cosine",
+           "hnsw:M": 16,
+           "hnsw:construction_ef": 100,
+           "hnsw:search_ef": 50
+       }
+   )
+   ```
+
+2. **Retrieval Parameters**
+   - Default top-k: 5
+   - Similarity threshold: 0.7
+   - Include metadata: Yes
+
+3. **Embedding Pipeline**
+   ```
+   Clean text → API call → Store vector + metadata
+   ```
+
+### Deliverables
+
+```
+src/research_rag/
+├── embeddings/
+│   ├── __init__.py
+│   └── api.py             # Embedding API client
+├── storage/
+│   ├── __init__.py
+│   ├── chroma.py          # Chroma operations
+│   └── metadata.py        # Local metadata store
+├── retrieval/
+│   ├── __init__.py
+│   └── search.py          # Semantic search
+└── cli/
+    └── query.py           # Query CLI
+```
+
+### Exit Criteria
+
+- [ ] All chunks embedded and stored
+- [ ] Query returns top-5 relevant chunks
+- [ ] Relevance is >80% on test queries
+- [ ] Metadata filtering works
+
+---
+
+## Phase 4: Synthesis & Citation
+
+**Goal**: Generate citation-grounded answers  
+**Deliverable**: Query → answer with citations
+
+### Tasks
+
+| Task | Priority | Effort | Notes |
+|------|----------|--------|-------|
+| Integrate OpenRouter | High | 3h | Qwen3 32B client |
+| Design synthesis prompt | High | 4h | Citation format, constraints |
+| Implement answer generation | High | 5h | Evidence → answer pipeline |
+| Add citation extraction | High | 3h | Parse inline citations |
+| Build response formatter | Medium | 3h | JSON response structure |
+| Add confidence scoring | Medium | 2h | Model confidence estimate |
+| Test on 20 queries | High | 3h | Quality assessment |
+
+### Key Decisions
+
+1. **Synthesis Prompt**
+   ```
+   System: You are a research assistant synthesizing academic evidence.
+   Only use provided evidence. Cite sources using [1], [2] format.
+   
+   Evidence:
+   [1] {chunk_text}
+       Source: {title}, Page {page}
+   
+   Provide citation-grounded answer.
+   ```
+
+2. **Citation Format**
+   - Inline: `[1]`, `[2]`, etc.
+   - footnote: `Source: Title, Page X`
+   - Bibliography: Full reference list
+
+3. **Response Structure**
+   ```json
+   {
+     "query": "...",
+     "answer": "...",
+     "citations": [...],
+     "confidence": 0.85
+   }
+   ```
+
+### Deliverables
+
+```
+src/research_rag/
+├── synthesis/
+│   ├── __init__.py
+│   ├── client.py          # OpenRouter client
+│   ├── prompts.py         # Prompt templates
+│   └── generator.py       # Answer generation
+├── citations/
+│   ├── __init__.py
+│   └── parser.py          # Citation extraction
+└── cli/
+    └── ask.py             # Full query CLI
+```
+
+### Exit Criteria
+
+- [ ] Answers are citation-grounded
+- [ ] Inline citations match sources
+- [ ] No unsupported claims
+- [ ] Confidence scores are calibrated
+
+---
+
+## Phase 5: Polish & UX
+
+**Goal**: Usable interface, error handling, documentation  
+**Deliverable**: End-to-end workflow working smoothly
+
+### Tasks
+
+| Task | Priority | Effort | Notes |
+|------|----------|--------|-------|
+| Build interactive CLI | High | 6h | REPL-style query interface |
+| Add error handling | High | 4h | Graceful failures |
+| Implement retry logic | Medium | 2h | API call retries |
+| Add progress indicators | Medium | 2h | Ingestion progress |
+| Write user documentation | High | 4h | README, examples |
+| Add example notebooks | Medium | 4h | Jupyter examples |
+| Performance optimization | Low | 4h | Caching, batching |
+
+### Key Features
+
+1. **Interactive CLI**
+   ```
+   $ python -m research_rag
+   
+   Research RAG v1.0
+   Type 'help' for commands, 'quit' to exit.
+   
+   > How does Singh portray Partition violence?
+   
+   [Generating answer...]
+   
+   Khushwant Singh's Train to Pakistan portrays Partition violence...
+   
+   Sources:
+   [1] Train to Pakistan, Khushwant Singh, p. 45
+   [2] The Other Side of Silence, Urvashi Butalia, p. 112
+   
+   > ingest ./new_papers/
+   
+   Ingesting 5 PDFs...
+   [████████████████████] 100% 5/5
+   
+   > quit
+   ```
+
+2. **Error Handling**
+   - API failures → retry with backoff
+   - Invalid PDF → skip with warning
+   - Low confidence → flag for review
+   - Empty retrieval → suggest reformulation
+
+### Deliverables
+
+```
+src/research_rag/
+├── cli/
+│   ├── __init__.py
+│   ├── main.py            # Interactive CLI
+│   └── commands.py        # Command handlers
+├── utils/
+│   ├── __init__.py
+│   ├── errors.py          # Custom exceptions
+│   └── retry.py           # Retry logic
+└── __main__.py            # Entry point
+
+examples/
+├── basic_usage.ipynb
+├── advanced_queries.ipynb
+└── ingestion_example.ipynb
+```
+
+### Exit Criteria
+
+- [ ] Interactive CLI works end-to-end
+- [ ] Errors handled gracefully
+- [ ] Documentation complete
+- [ ] Examples run without errors
+
+---
+
+## Phase 6: Scale & Optimize
+
+**Goal**: Handle 100-1000 PDFs, optimize performance  
+**Deliverable**: Production-ready system
+
+### Tasks
+
+| Task | Priority | Effort | Notes |
+|------|----------|--------|-------|
+| Batch ingestion | High | 4h | Parallel processing |
+| Chroma optimization | Medium | 3h | Index tuning |
+| Add caching layer | Medium | 4h | Query result caching |
+| Implement observability | Medium | 4h | Logging, metrics |
+| Add incremental updates | Medium | 4h | Re-ingest changed PDFs |
+| Performance benchmarking | Low | 4h | Measure latency |
+| Documentation | Low | 2h | Architecture docs |
+
+### Optimization Targets
+
+1. **Ingestion Speed**
+   - 10 PDFs: < 5 minutes
+   - 100 PDFs: < 1 hour
+   - 1000 PDFs: < 10 hours (overnight)
+
+2. **Query Latency**
+   - Retrieval: < 500ms
+   - Synthesis: < 3s
+   - Total: < 4s
+
+3. **Storage Efficiency**
+   - Chroma DB: < 1GB for 1000 PDFs
+   - Metadata: < 100MB
+
+### Deliverables
+
+```
+src/research_rag/
+├── batch/
+│   ├── __init__.py
+│   └── processor.py       # Batch ingestion
+├── cache/
+│   ├── __init__.py
+│   └── manager.py         # Query caching
+├── observability/
+│   ├── __init__.py
+│   ├── logger.py          # Structured logging
+│   └── metrics.py         # Performance metrics
+└── update/
+    ├── __init__.py
+    └── incremental.py     # Incremental updates
+
+benchmarks/
+├── ingestion_benchmark.py
+└── query_benchmark.py
+```
+
+### Exit Criteria
+
+- [ ] 100 PDFs ingested in <1 hour
+- [ ] Query latency <4s
+- [ ] Incremental updates work
+- [ ] Observability in place
+
+---
+
+## Success Metrics
+
+### Phase 1-2 (Foundation + Ingestion)
+- [ ] 10 PDFs ingested
+- [ ] Chunks are 500-900 tokens
+- [ ] Metadata extracted correctly
+
+### Phase 3-4 (Retrieval + Synthesis)
+- [ ] Retrieval relevance >80%
+- [ ] Answers are citation-grounded
+- [ ] No unsupported claims
+
+### Phase 5-6 (Polish + Scale)
+- [ ] 100 PDFs working
+- [ ] Interactive CLI smooth
+- [ ] Latency <4s
+
+---
+
+## Risk Register
+
+| Risk | Impact | Likelihood | Mitigation |
+|------|--------|------------|------------|
+| Docling PDF parsing failures | High | Medium | Fallback to PyMuPDF |
+| Metadata extraction low quality | Medium | High | Manual review option |
+| API rate limits | Medium | Medium | Exponential backoff |
+| Chroma performance at scale | Medium | Low | Monitor, optimize |
+| Synthesis hallucination | High | Medium | Strict evidence-only prompt |
+
+---
+
+## Dependencies
+
+### External
+
+- Docling (PDF parsing)
+- OpenRouter API (LLM inference)
+- Embedding API (vector generation)
+- Chroma (vector storage)
+
+### Internal
+
+- Python 3.10+
+- 8-16GB RAM
+- 4-8 CPU cores
+- Internet access (for APIs)
+
+---
+
+## Definition of Done
+
+**The system is complete when:**
+
+1. ✅ 100 PDFs ingested successfully
+2. ✅ Queries return relevant chunks (>80% relevance)
+3. ✅ Answers are citation-grounded
+4. ✅ Interactive CLI works smoothly
+5. ✅ Documentation is complete
+6. ✅ Latency <4s per query
+
+---
+
+*Roadmap v1.0 — Research RAG System*
