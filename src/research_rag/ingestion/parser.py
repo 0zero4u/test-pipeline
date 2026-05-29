@@ -132,7 +132,7 @@ def parse_pdf(file_path: Path) -> ParsedDocument:
     page_boundaries = _get_page_boundaries(markdown)
 
     # Determine page count
-    page_count = max(doc.page_count, len(page_boundaries))
+    page_count = max(len(doc.pages), len(page_boundaries))
 
     # Extract first page text (for metadata extraction)
     first_page_text = markdown
