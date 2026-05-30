@@ -141,6 +141,21 @@ Apply these to YOUR WRITING only (not quotes):
 - Before: "The policy — announced without warning — affects workers"
 - After: "The policy, announced without warning, affects workers"
 
+**11. Long Sentences (>25 words)**
+- Break into 2-3 shorter sentences
+- Vary length: mix 10-15 word sentences with 20-25 word sentences
+- Target average: 20-23 words per sentence (human average)
+
+**12. Repetitive Sentence Structure**
+- Vary: Simple, compound, complex sentences
+- Alternate subjects: Use "I", "we", "researchers" (where appropriate)
+- Mix active and passive voice (but prefer active)
+
+**13. Excessive Long Words (>8 chars)**
+- Replace where possible: "consequential" → "significant"
+- Keep technical terms but simplify common words
+- Target: 20-25% long words (human average)
+
 ### Communication Patterns
 
 **11. Chatbot Artifacts**
@@ -180,12 +195,19 @@ Apply these to YOUR WRITING only (not quotes):
 ## Process
 
 1. Read input text
-2. Identify all AI patterns (25 rules)
-3. Check for citations — preserve exactly
-4. Apply academic rules (7 rules)
-5. Rewrite naturally
+2. **Split into sections of 500-1000 words** (at natural breaks or headings)
+3. Humanize EACH section separately
+4. Apply all 25 AI patterns + 7 academic rules
+5. Recombine sections
 6. Verify citations intact
 7. Verify facts unchanged
+8. Save output
+
+**Why 500-1000 words?**
+- Forces shorter sentences (15-22 words average)
+- Each section fully processed (no token limit issues)
+- Consistent quality throughout
+- Natural human-like rhythm
 
 ## Output
 
