@@ -46,13 +46,29 @@ class MLACitation:
         self.production_co = production_co
 
     def format_author(self) -> str:
-        """Format author name as 'Last, First'."""
+        """Format author name as 'Last, First' in title case."""
         if not self.author:
             return "Unknown Author"
-        parts = self.author.strip().split()
+        
+        author = self.author.strip()
+        
+        # Filter out non-author entries
+        non_authors = {"key words", "keywords", "unknown", "untitled", "abstract"}
+        if author.lower() in non_authors:
+            return "Unknown Author"
+        
+        # Convert all-caps to title case
+        if author.isupper():
+            author = author.title()
+        
+        # If already in "Last, First" format, return as-is
+        if "," in author:
+            return author
+        
+        parts = author.split()
         if len(parts) >= 2:
             return f"{parts[-1]}, {' '.join(parts[:-1])}"
-        return self.author
+        return author
 
     def format_inline(self) -> str:
         """Format for inline citation: (Author Page)."""
@@ -193,13 +209,23 @@ class MLAFormatter:
         if not self._citation_map:
             return ""
 
+        # Deduplicate by author+title combination
+        seen = set()
+        unique_citations = []
+        for cit in self._citation_map.values():
+            key = f"{cit.format_author()}|{cit.title}"
+            if key not in seen:
+                seen.add(key)
+                unique_citations.append(cit)
+
+        # Sort alphabetically by author last name
         sorted_citations = sorted(
-            self._citation_map.values(),
-            key=lambda c: c.format_author(),
+            unique_citations,
+            key=lambda c: c.format_author().lower(),
         )
 
-        entries = [cit.format_works_cited() for cit in sorted_citations]
         header = "Works Cited\n" + "=" * 13 + "\n\n"
+        entries = [cit.format_works_cited() for cit in sorted_citations]
         return header + "\n\n".join(entries)
 
     def get_citation_details(self, number: int) -> Optional[dict]:
