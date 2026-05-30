@@ -93,19 +93,34 @@ def _extract_with_gliner(text: str) -> dict:
     title = ""
     orgs = []
     
+    # Context patterns that indicate NOT a publication year
+    birth_patterns = [
+        r"born\s+in\s+\d{4}",
+        r"lived\s+\d{4}",
+        r"(\d{4})\s*[-–]\s*(?:present|death|died)",
+        r"birth[:\s]+\d{4}",
+        r"(\d{4})\s*is\s+the\s+year",
+    ]
+    
     for ent in entities:
         label = ent["label"].lower()
         value = ent["text"].strip()
         
         if label == "person":
-            # Filter out non-person entities
             if len(value) > 3 and not value.startswith("AR") and not value.startswith("Dr."):
                 authors.append(value)
         elif label == "date":
-            # Extract year from date
             year_match = re.search(r"\b(1[89]\d{2}|20[0-2]\d)\b", value)
             if year_match:
-                year = int(year_match.group(1))
+                candidate_year = int(year_match.group(1))
+                # Check context around the date
+                date_pos = sample.find(value)
+                if date_pos >= 0:
+                    context = sample[max(0, date_pos-50):date_pos+len(value)+50]
+                    # Skip if in birth/biographical context
+                    is_birth_year = any(re.search(p, context, re.IGNORECASE) for p in birth_patterns)
+                    if not is_birth_year and 1900 <= candidate_year <= 2026:
+                        year = candidate_year
         elif label == "title" and not title:
             if len(value) > 10:
                 title = value
@@ -113,7 +128,7 @@ def _extract_with_gliner(text: str) -> dict:
             orgs.append(value)
     
     return {
-        "authors": authors[:3],  # Max 3 authors
+        "authors": authors[:3],
         "year": year,
         "title": title,
         "organizations": orgs,

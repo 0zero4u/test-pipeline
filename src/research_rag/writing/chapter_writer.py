@@ -156,6 +156,10 @@ class ChapterWriter:
             # Get year from document metadata
             year = doc_meta.get("year") or meta.get("year")
             
+            # Filter out birth years (e.g., 1915 is Khushwant Singh's birth year)
+            if year and (year < 1920 or year > 2026):
+                year = None
+            
             chunk_data = {
                 "text": r.text,
                 "title": title,
