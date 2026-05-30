@@ -575,6 +575,178 @@ Deliver the draft, the brief "still-AI" bullets, the final rewrite, and (optiona
 **Changes made:** Stripped the chatbot framing, significance inflation, promotional and -ing padding, rule-of-three and synonym cycling, false ranges, copula avoidance, em dashes/emojis/boldface/curly quotes, the formulaic "challenges" section, cutoff and hedging disclaimers, filler and persuasive framing, and the generic upbeat conclusion - then rebuilt the voice with varied rhythm and concrete detail.
 
 
+---
+
+## ACADEMIC WRITING RULES
+
+For dissertation and thesis writing, apply these additional rules:
+
+### 31. Avoid Second-Person Pronouns
+
+**Rule:** Do not use "you" or "your" to address or generalize the reader.
+
+**Instead use:**
+- Specific groups: "participants", "consumers", "students", "researchers"
+- Broad terms: "individuals", "people", "one" (formal)
+- Passive voice: "It can be observed that..." instead of "You can see that..."
+
+**Before:**
+> You can see that the results indicate a significant correlation.
+
+**After:**
+> The results indicate a significant correlation.
+
+### 32. Eliminate Contractions
+
+**Rule:** Do not use shortened words in academic writing.
+
+| Don't Use | Use Instead |
+|-----------|-------------|
+| can't | cannot |
+| didn't | did not |
+| won't | will not |
+| don't | do not |
+| it's | it is |
+| they're | they are |
+| we're | we are |
+| I'm | I am |
+| isn't | is not |
+| aren't | are not |
+| wasn't | was not |
+| weren't | were not |
+| hasn't | has not |
+| haven't | have not |
+| wouldn't | would not |
+| couldn't | could not |
+| shouldn't | should not |
+
+**Before:**
+> The results don't show what we expected. It's clear that the method isn't working.
+
+**After:**
+> The results do not show what was expected. It is clear that the method is not working.
+
+### 33. Replace Slang with Academic Vocabulary
+
+**Rule:** Use precise academic vocabulary instead of casual language.
+
+| Don't Use | Use Instead |
+|-----------|-------------|
+| a lot of | numerous, many, a significant number of |
+| get | obtain, acquire, receive |
+| nowadays | currently, in contemporary society, at present |
+| pretty good | satisfactory, adequate, reasonable |
+| stuff | material, substances, elements |
+| things | factors, elements, aspects, components |
+| a bunch | several, numerous, a collection of |
+| okay | acceptable, adequate, satisfactory |
+| kind of | somewhat, to some extent, partially |
+| sort of | rather, to a degree, approximately |
+| maybe | perhaps, possibly, it may be the case that |
+| a while | a period of time, an extended duration |
+| big | significant, substantial, considerable |
+| small | minor, negligible, insignificant |
+| fast | rapid, swift, accelerated |
+| slow | gradual, prolonged, extended |
+
+**Before:**
+> A lot of people think the results are pretty good. The method gets better over time.
+
+**After:**
+> Numerous researchers consider the results satisfactory. The method improves progressively over time.
+
+### 34. Write Out Numbers
+
+**Rule:** Spell out numbers zero through nine. Use digits for 10 and above.
+
+| Don't Use | Use Instead |
+|-----------|-------------|
+| 1 | one |
+| 2 | two |
+| 3 | three |
+| 4 | four |
+| 5 | five |
+| 6 | six |
+| 7 | seven |
+| 8 | eight |
+| 9 | nine |
+| 10+ | 10, 11, 12, etc. (use digits) |
+
+**Exceptions:**
+- Numbers with units: "5 km", "3 mg"
+- Dates: "1947", "2023"
+- Page numbers: "p. 45"
+- Percentages: "5%"
+- Mathematical expressions: "2 + 2 = 4"
+
+**Before:**
+> The study involved 3 researchers and 5 participants. They collected 12 samples over 9 days.
+
+**After:**
+> The study involved three researchers and five participants. They collected 12 samples over nine days.
+
+### 35. Use Active Voice
+
+**Rule:** Prefer active voice for clarity and directness. Use passive voice only when the actor is unknown or unimportant.
+
+**Active Voice (preferred):**
+- "The researcher collected the data."
+- "The study examined the effects of..."
+- "Smith (2020) argues that..."
+
+**Passive Voice (use sparingly):**
+- "The data was collected over a six-month period." (when actor is unimportant)
+- "The samples were analyzed by the laboratory." (when emphasis is on the object)
+
+**Before (passive):**
+> The data was collected by the researchers. The samples were analyzed in the laboratory. It was found that the results were significant.
+
+**After (active):**
+> The researchers collected the data. The laboratory analyzed the samples. The results proved significant.
+
+### 36. Avoid "I Think" and "I Believe"
+
+**Rule:** Do not use hedging or emotional statements. Use objective, evidence-based phrasing.
+
+| Don't Use | Use Instead |
+|-----------|-------------|
+| I think | The evidence suggests, The data indicates |
+| I believe | Research demonstrates, Studies show |
+| In my opinion | It can be argued that, The literature suggests |
+| I feel | The findings indicate, The analysis reveals |
+| In my view | The evidence points to, The data supports |
+
+**Before:**
+> I think this means the policy is effective. In my opinion, the results are promising.
+
+**After:**
+> The evidence suggests the policy is effective. The results are promising.
+
+### 37. Maintain Formal Tone
+
+**Rule:** Academic writing should be formal, objective, and impersonal.
+
+**Avoid:**
+- Personal anecdotes ("When I was studying...")
+- Emotional language ("This is amazing!")
+- Colloquialisms ("It's a piece of cake")
+- Humor or jokes
+- Rhetorical questions (use sparingly)
+
+**Use:**
+- Third-person perspective
+- Objective language
+- Technical vocabulary
+- Measured assertions
+- Hedging with evidence ("The data suggests..." not "This definitely shows...")
+
+**Before:**
+> This is really cool! The experiment worked great, and I'm excited about the results. It's not rocket science, but it's pretty impressive.
+
+**After:**
+> The experiment yielded favorable results. The findings demonstrate the effectiveness of the proposed methodology.
+
+
 ## Reference
 
 This skill is based on [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), maintained by WikiProject AI Cleanup. The patterns documented there come from observations of thousands of instances of AI-generated text on Wikipedia.
