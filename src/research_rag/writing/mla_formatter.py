@@ -90,7 +90,7 @@ class MLACitation:
         return self._format_journal()
 
     def _format_journal(self) -> str:
-        """Format journal article: Author. 'Title.' Journal, vol. X, no. Y (Year), pp. X-Y."""
+        """Format journal article: Author. 'Title.' Journal, vol. X, no. Y, Year, pp. X-Y."""
         author = self.format_author()
         title = f'"{self.title}."' if self.title else '"Untitled."'
         journal_part = f" *{self.journal}*" if self.journal else ""
@@ -98,9 +98,9 @@ class MLACitation:
             journal_part += f", vol. {self.volume}"
         if self.issue:
             journal_part += f", no. {self.issue}"
-        year_part = f" ({self.year})" if self.year else " (n.d.)"
+        year_part = f", {self.year}" if self.year else ", n.d."
         page_part = f", pp. {self.page}" if self.page else ""
-        doi_part = f". DOI: {self.doi}" if self.doi else ""
+        doi_part = f". doi:{self.doi}" if self.doi else ""
         return f"{author}. {title}{journal_part}{year_part}{page_part}{doi_part}."
 
     def _format_book(self) -> str:

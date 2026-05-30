@@ -43,7 +43,7 @@ class TestMLACitation:
         assert "*Research Scholar*" in result
         assert "vol. 7" in result
         assert "no. 2" in result
-        assert "(2018)" in result
+        assert ", 2018" in result
         assert "pp. 45-60" in result
 
     def test_format_book(self):
@@ -127,7 +127,7 @@ class TestMLACitation:
             source_type="journal",
         )
         result = cit.format_works_cited()
-        assert "(n.d.)" in result
+        assert ", n.d." in result
 
     def test_format_no_title(self):
         cit = MLACitation(
