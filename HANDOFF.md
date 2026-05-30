@@ -200,6 +200,55 @@ pytest tests/test_dissertation_writer.py -v
 
 ---
 
+## Humanization Workflow
+
+### What is it?
+
+Transform AI-generated academic text to sound natural while preserving:
+- All facts, statistics, and claims
+- All citations [N, p. X] exactly as written
+- All quotes and paraphrases
+- The academic tone and formality
+
+### How to use
+
+```bash
+# Humanize a chapter
+# 1. Read the original
+cat chapter/Chapter_1.md
+
+# 2. Use the humanize skill
+# The skill is at .opencode/skills/humanize/SKILL.md
+
+# 3. Or manually humanize using the task() function
+```
+
+### Humanize Skill
+
+Located at `.opencode/skills/humanize/SKILL.md`
+
+Based on Wikipedia's "Signs of AI writing" guide with 30 patterns:
+- Content patterns (significance inflation, vague attributions)
+- Language patterns (AI vocabulary, copula avoidance)
+- Style patterns (em/dash overuse, boldface overuse)
+- Filler and hedging (filler phrases, excessive hedging)
+
+### Example
+
+```bash
+# Original
+chapter/Chapter_1.md (38KB, AI-generated)
+
+# Humanized
+chapter/Chapter_1_humanized.md (37KB, natural sounding)
+
+# Verify citations preserved
+diff <(grep -o "\[[0-9]*\]" chapter/Chapter_1.md) \
+     <(grep -o "\[[0-9]*\]" chapter/Chapter_1_humanized.md)
+```
+
+---
+
 ## Session History
 
 ### 2026-05-30 (Current Session)
@@ -211,6 +260,7 @@ pytest tests/test_dissertation_writer.py -v
 5. ✅ Integrated GLiNER for improved metadata extraction
 6. ✅ Updated documentation
 7. ✅ Pushed all changes to GitHub
+8. ✅ Humanized Chapter 1 using Wikipedia "Signs of AI writing" guide
 
 ### Previous Sessions
 

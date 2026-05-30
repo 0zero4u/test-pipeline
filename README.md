@@ -207,6 +207,7 @@ research-rag/
 - **Chapter writing**: Generate dissertation chapters section-by-section with retrieval and citations.
 - **MLA 9th Edition formatting**: Inline citations (Author Page) + Works Cited page. Supports journal articles, books, films, edited volumes.
 - **Dissertation orchestration**: Parse `chapter_plan.md` and write full dissertation with cross-chapter state tracking.
+- **Humanization**: Transform AI-generated text to sound natural using Wikipedia's "Signs of AI writing" guide. Preserves all facts and citations.
 - **Interactive REPL**: Multi-turn Q&A with command history, tab completion, Rich-formatted output.
 - **Graceful fallback**: Works without API keys (local embeddings via BGE-small, retrieval-only mode without synthesis).
 - **Retry with backoff**: Exponential backoff ±25% jitter on API calls. Structured exception hierarchy.

@@ -26,6 +26,8 @@ Phase 7: Chapter Writing Assistance ✓ COMPLETE
 Phase 8: MLA Citation Support ✓ COMPLETE
     ↓
 Phase 9: GLiNER Metadata Extraction ✓ COMPLETE
+    ↓
+Phase 10: Text Humanization ✓ COMPLETE
 ```
 
 ---
@@ -686,6 +688,42 @@ src/research_rag/ingestion/
 - Falls back to GLiNER when regex fails
 - All 15 metadata tests passing
 - No GPU required (CPU inference)
+
+---
+
+## Phase 10: Text Humanization ✓ COMPLETE
+
+**Goal**: Transform AI-generated text to sound natural  
+**Deliverable**: Humanize skill based on Wikipedia "Signs of AI writing" guide  
+**Completed**: 2026-05-30
+
+### Tasks
+
+| Task | Priority | Status | Notes |
+|------|----------|--------|-------|
+| Install humanize skill | High | ✓ | blader/humanizer (21.5k stars) |
+| 30 AI patterns | High | ✓ | Content, language, style, filler |
+| Preserve citations | High | ✓ | All [N, p. X] intact |
+| Preserve facts | High | ✓ | No content changes |
+| Test on Chapter 1 | High | ✓ | 56 citations preserved |
+
+### Deliverables
+
+```
+.opencode/skills/humanize/
+└── SKILL.md   # Humanize skill (Wikipedia guide)
+chapter/
+├── Chapter_1.md              # Original (AI-generated)
+└── Chapter_1_humanized.md    # Humanized version
+```
+
+### Exit Criteria
+
+- Humanized text sounds natural (no AI vocabulary)
+- All citations preserved exactly
+- Works Cited section unchanged
+- Facts, statistics, and claims unchanged
+- Style improvements applied
 
 ---
 
