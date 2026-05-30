@@ -1,7 +1,9 @@
 """Chapter writer for dissertation generation."""
 
+import json
 import logging
 import re
+from pathlib import Path
 from typing import Optional
 
 from research_rag.retrieval import Retriever
@@ -27,6 +29,7 @@ class ChapterWriter:
         state: Optional[DissertationState] = None,
         formatter: Optional[MLAFormatter] = None,
         top_k: int = 10,
+        metadata_dir: Optional[Path] = None,
     ):
         self.retriever = retriever
         self.synthesis_client = synthesis_client or SynthesisClient(
@@ -35,6 +38,25 @@ class ChapterWriter:
         self.state = state or DissertationState()
         self.formatter = formatter or MLAFormatter()
         self.top_k = top_k
+        self.metadata_dir = metadata_dir or Path("./data/metadata")
+        self._metadata_cache: dict[str, dict] = {}
+
+    def _load_document_metadata(self, document_id: str) -> dict:
+        """Load metadata from JSON file for a document."""
+        if document_id in self._metadata_cache:
+            return self._metadata_cache[document_id]
+        
+        metadata_file = self.metadata_dir / f"{document_id}.json"
+        if metadata_file.exists():
+            try:
+                with open(metadata_file) as f:
+                    meta = json.load(f)
+                self._metadata_cache[document_id] = meta
+                return meta
+            except Exception as e:
+                logger.warning("Failed to load metadata for %s: %s", document_id, e)
+        
+        return {}
 
     def write_chapter(
         self,
@@ -113,26 +135,41 @@ class ChapterWriter:
         evidence_chunks = []
         citation_map = {}
         for i, r in enumerate(results, 1):
+            # Load metadata from JSON file
+            doc_meta = self._load_document_metadata(r.document_id)
+            
+            # Get author from document metadata or chunk metadata
             meta = r.metadata
-            author = meta.get("authors", "")
+            author = doc_meta.get("authors", [])
             if isinstance(author, list):
-                author = ", ".join(author)
-            elif not author:
-                author = r.title.split(":")[0].strip() if r.title else "Unknown"
+                author = ", ".join(author) if author else ""
+            if not author:
+                author = meta.get("authors", "")
+            if isinstance(author, list):
+                author = ", ".join(author) if author else ""
+            if not author:
+                author = "Unknown"
+            
+            # Get title from document metadata or chunk metadata
+            title = doc_meta.get("title", "") or meta.get("title", "") or r.title or "Untitled"
+            
+            # Get year from document metadata
+            year = doc_meta.get("year") or meta.get("year")
+            
             chunk_data = {
                 "text": r.text,
-                "title": meta.get("title", r.title),
+                "title": title,
                 "page": meta.get("page_start", r.page_start),
                 "author": author,
-                "year": meta.get("year"),
+                "year": year,
             }
             evidence_chunks.append(chunk_data)
             citation_map[i] = {
                 "chunk_id": r.chunk_id,
                 "document_id": r.document_id,
-                "title": meta.get("title", r.title),
+                "title": title,
                 "author": author,
-                "year": meta.get("year"),
+                "year": year,
                 "page": meta.get("page_start", r.page_start),
             }
 

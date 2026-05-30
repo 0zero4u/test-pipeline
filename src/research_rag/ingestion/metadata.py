@@ -289,8 +289,47 @@ def _extract_authors(text: str) -> list[str]:
 
 
 def _extract_year(text: str) -> Optional[int]:
-    """Extract publication year from text."""
-    years = YEAR_PATTERN.findall(text)
+    """Extract publication year from text.
+
+    Strategy:
+    1. Look for year near journal/publisher keywords (highest confidence)
+    2. Look for year in copyright/publication patterns
+    3. Look for year attached to month names (e.g., "June2023")
+    4. Fall back to most common year in reasonable range
+    """
+    lines = text.split("\n")
+    
+    # Strategy 1: Year near journal/publisher keywords (first 10 lines)
+    journal_patterns = [
+        r"(?:journal|vol\.|volume|issue|published|copyright|©|ISSN)\s*.*?\b(1[89]\d{2}|20[0-2]\d)\b",
+        r"\b(1[89]\d{2}|20[0-2]\d)\b\s*(?:journal|vol\.|volume|issue|published)",
+    ]
+    for line in lines[:10]:
+        for pattern in journal_patterns:
+            match = re.search(pattern, line, re.IGNORECASE)
+            if match:
+                year = int(match.group(1))
+                if 1900 <= year <= 2026:
+                    return year
+    
+    # Strategy 2: Year attached to month (e.g., "June2023", "Jan 2023")
+    month_year_pattern = r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s*(\d{4})"
+    match = re.search(month_year_pattern, text[:2000], re.IGNORECASE)
+    if match:
+        year = int(match.group(1))
+        if 1900 <= year <= 2026:
+            return year
+    
+    # Strategy 3: Year in parentheses after title-like text
+    title_year_pattern = r"[\"'].*?[\"'].*?\((\d{4})\)"
+    match = re.search(title_year_pattern, text[:1000])
+    if match:
+        year = int(match.group(1))
+        if 1900 <= year <= 2026:
+            return year
+    
+    # Strategy 4: Most common year in reasonable range (fallback)
+    years = re.findall(r"\b(1[89]\d{2}|20[0-2]\d)\b", text)
     if years:
         valid_years = [int(y) for y in years if 1900 <= int(y) <= 2026]
         if valid_years:
