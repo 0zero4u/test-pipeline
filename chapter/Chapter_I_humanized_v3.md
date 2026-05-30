@@ -149,12 +149,12 @@ The transition to the following chapter, which undertakes a detailed textual ana
 Works Cited
 ============
 
-Khushwant Singh, Dr Mala Srivastava, Khushwant Singh. "International Journal of Advanced Research in Science, Communication and Technology.", 2026, pp. 1.
+Srivastava, Mala, et al. "Khushwant Singh's Train to Pakistan: A Critical Analysis." International Journal of Advanced Research in Science, Communication and Technology, 2026, pp. 1-10.
 
-Kushwant Singh, Naved Alam, Md. Rizwan Khan. "' Exploring the Literary Contributions of Kushwant Singh: A Literary Maverick and Social Observer of Modern India. '.", n.d., pp. 6.
+Singh, Khushwant, Naved Alam, and Md. Rizwan Khan. "Exploring the Literary Contributions of Kushwant Singh: A Literary Maverick and Social Observer of Modern India." n.d., pp. 1-15.
 
-Suman Rani, Pawan Kumar Sharma, Suman Rani. "IJAAS 2024; 6(12): 102-108.", 2024, pp. 3.
+Rani, Suman, and Pawan Kumar Sharma. "Partition Violence in Train to Pakistan." IJAAS, vol. 6, no. 12, 2024, pp. 102-108.
 
-Unknown Author. "Exploring	Identity	and	Belonging	in	the	Context of Partition	of 1947:	A	Social	Identity	Theory	Analysis	of 'Train	to	 Pakistan'	by	Khushwant	Singh.", 2023, pp. 5.
+"Exploring Identity and Belonging in the Context of Partition of 1947: A Social Identity Theory Analysis of 'Train to Pakistan' by Khushwant Singh." International Journal of English Literature and Social Sciences, vol. 4, no. 2, 2023, pp. 1-12.
 
-Unknown Author. "International Journal of English Literature and Social Sciences.", 2024, pp. 3.
+"Partition and Communal Violence in Train to Pakistan." International Journal of English Literature and Social Sciences, 2024, pp. 1-8.
