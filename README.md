@@ -11,7 +11,8 @@ Citation-grounded research assistance for humanities/literary analysis.
 **Phase 5: Polish & UX** — Complete ✓  
 **Phase 6: Scale & Optimize** — Complete ✓  
 **Phase 7: Chapter Writing Assistance** — Complete ✓  
-**Phase 8: MLA Citation Support** — Complete ✓
+**Phase 8: MLA Citation Support** — Complete ✓  
+**Phase 9: GLiNER Metadata Extraction** — Complete ✓
 
 ## Overview
 
@@ -124,11 +125,11 @@ research-rag dissertation ./chapter_plan.md --title "My Thesis" --output dissert
 | CLI | Click + Rich | Command-line + interactive REPL |
 | PDF Parser | Docling | Parse PDFs to structured markdown |
 | Chunking | Custom section-aware | 500-900 tokens, 12% overlap |
-| Metadata | Heuristic regex | Title, authors, year, journal |
+| Metadata | Regex + GLiNER | Title, authors, year, journal extraction |
+| NER | GLiNER (gliner_small) | Person, date, organization extraction |
 | Embeddings | GTE-Large (OpenRouter) / BGE-small (local) | Semantic vectors |
 | Vector DB | Chroma (persistent, cosine HNSW) | Store + search embeddings |
 | Synthesis | deepseek/deepseek-v4-flash (OpenRouter) | Citation-grounded answers |
-| Citation Validation | Validator + metadata lookup | Author/year enrichment, hallucination detection |
 | MLA Formatting | Custom MLA 9th Edition | Journal, book, film, edited volume citations |
 | Chapter Writing | DissertationWriter + ChapterWriter | Section-by-section academic generation |
 | Caching | LRU with disk persistence | Query result caching |
@@ -202,6 +203,7 @@ research-rag/
 ## Key Features
 
 - **Citation-grounded answers**: LLM can only use provided evidence. Inline citations [1], [2] with source attribution. No hallucination — says "no direct evidence" when insufficient.
+- **GLiNER metadata extraction**: NER model extracts author names, dates, organizations from PDFs. Falls back when regex fails.
 - **Chapter writing**: Generate dissertation chapters section-by-section with retrieval and citations.
 - **MLA 9th Edition formatting**: Inline citations (Author Page) + Works Cited page. Supports journal articles, books, films, edited volumes.
 - **Dissertation orchestration**: Parse `chapter_plan.md` and write full dissertation with cross-chapter state tracking.

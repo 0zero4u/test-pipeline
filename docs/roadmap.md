@@ -24,6 +24,8 @@ Phase 6: Scale (Weeks 11-12) ✓ COMPLETE
 Phase 7: Chapter Writing Assistance ✓ COMPLETE
     ↓
 Phase 8: MLA Citation Support ✓ COMPLETE
+    ↓
+Phase 9: GLiNER Metadata Extraction ✓ COMPLETE
 ```
 
 ---
@@ -651,6 +653,39 @@ src/research_rag/writing/
 - Works Cited page includes "Works Cited" header
 - REPL 'dissertation' command works end-to-end
 - All 79 tests passing
+
+---
+
+## Phase 9: GLiNER Metadata Extraction ✓ COMPLETE
+
+**Goal**: Improve metadata extraction accuracy using NER  
+**Deliverable**: GLiNER integration for author/date/title extraction  
+**Completed**: 2026-05-30
+
+### Tasks
+
+| Task | Priority | Status | Notes |
+|------|----------|--------|-------|
+| Install GLiNER | High | ✓ | urchade/gliner_small model |
+| NER extraction | High | ✓ | Person, date, organization |
+| Lazy loading | Medium | ✓ | No startup delay |
+| Regex fallback | High | ✓ | Uses GLiNER when confidence < 0.65 |
+| Tests | High | ✓ | 15 metadata tests passing |
+
+### Deliverables
+
+```
+src/research_rag/ingestion/
+└── metadata.py   # Added GLiNER integration
+```
+
+### Exit Criteria
+
+- GLiNER extracts author names correctly
+- GLiNER extracts dates correctly
+- Falls back to GLiNER when regex fails
+- All 15 metadata tests passing
+- No GPU required (CPU inference)
 
 ---
 

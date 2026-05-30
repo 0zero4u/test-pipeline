@@ -581,6 +581,31 @@ The regex-based metadata extraction (`ingestion/metadata.py`) has been significa
 
 ---
 
+## Phase 9: GLiNER Metadata Extraction ✓ COMPLETE
+
+> **Goal**: Improve metadata extraction accuracy using NER  
+> **Deliverable**: GLiNER integration for author/date/title extraction  
+> **Completed**: 2026-05-30
+
+### Tasks
+
+-    Install GLiNER library (urchade/gliner_small model)
+-    Implement _extract_with_gliner() function for NER extraction
+-    Add lazy model loading to avoid startup delay
+-    Integrate GLiNER as fallback when regex confidence < 0.65
+-    Extract person names (authors), dates (publication year), organizations
+-    Test on real PDFs with proper metadata
+
+### Exit Criteria
+
+- GLiNER extracts author names correctly (RAJARSHI MAITY, Marc Chatterji)
+- GLiNER extracts dates correctly (June2023 → 2023)
+- Falls back to GLiNER when regex fails
+- All 15 metadata tests passing
+- No GPU required (CPU inference)
+
+---
+
 ## Appendices
 
 ### Appendix A: API Key Management
