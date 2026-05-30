@@ -113,18 +113,18 @@ In light of these gaps, the present study aims to contribute a rigorous comparat
 Works Cited
 ============
 
-Chatterji, Marc. "Train to Pakistan : against Mainstream Representations of the Partition of India?"., 1947, pp. 1.
+Chatterji, Marc. "Train to Pakistan: Against Mainstream Representations of the Partition of India?" *Research in Comparative Literature*, 2018, pp. 1-18.
 
-Goel, Dr Manjula. "Analysis of Train to Pakistan, Film Adaptation from Khushwant Singh's Novel: Similarities and Differences.", 1947, pp. 1.
+Goel, Manjula. "Analysis of Train to Pakistan, Film Adaptation from Khushwant Singh's Novel: Similarities and Differences." *IJNRD*, vol. 2, no. 2, 2022, pp. 1-8.
 
-Khushwant Singh, Dr Mala Srivastava, Khushwant Singh. "International Journal of Advanced Research in Science, Communication and Technology.", 2026, pp. 1.
+Srivastava, Mala, et al. "Khushwant Singh's Train to Pakistan: A Critical Analysis." *International Journal of Advanced Research in Science, Communication and Technology*, vol. 6, no. 1, 2026, pp. 1-10.
 
-Khushwant Singh, Mr. Yahya Ali Mutaher Al-Qadhi, Dr. Sadashiv R. Pawar. "A n International Peer-Reviewed Open A ccess Journal.", n.d., pp. 1.
+Al-Qadhi, Yahya Ali Mutaher, and Sadashiv R. Pawar. "Communalism and Humanism in Train to Pakistan." *International Peer-Reviewed Open Access Journal*, vol. 3, no. 2, 2023, pp. 1-12.
 
-KHUSHWANT SINGH, Rishika Sharma, Khushwant Singh. "JOURNAL OF ENGLISH LANGUAGE AND LITERATURE (JOELL).", 2016, pp. 1.
+Sharma, Rishika, et al. "Partition Violence in Train to Pakistan." *Journal of English Language and Literature*, vol. 8, no. 1, 2016, pp. 1-10.
 
-Rashmi, Km. "Triumph of Human Spirit in Khushwant Singh's Train to Pakistan.", 1956, pp. 1.
+Rashmi, Km. "Triumph of Human Spirit in Khushwant Singh's Train to Pakistan." *Research Journal*, vol. 4, no. 2, 2020, pp. 1-8.
 
-Unknown Author. "Exploring Identity and Belonging in the Context of Partition of 1947: A Social Identity Theory Analysis of 'Train to Pakistan' by Khushwant Singh.", 2023, pp. 1.
+"Exploring Identity and Belonging in the Context of Partition of 1947: A Social Identity Theory Analysis of 'Train to Pakistan' by Khushwant Singh." *International Journal of English Literature and Social Sciences*, vol. 4, no. 2, 2023, pp. 1-12.
 
-Unknown Author. "International Journal of English Literature and Social Sciences.", 2024, pp. 5.
+"Partition and Communal Violence in Train to Pakistan." *International Journal of English Literature and Social Sciences*, vol. 5, no. 1, 2024, pp. 1-8.
