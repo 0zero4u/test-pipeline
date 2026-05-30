@@ -589,6 +589,44 @@ For dissertation and thesis writing, apply these additional rules:
 - Proper nouns, technical terms, or field-specific vocabulary
 - Numbers in dates, page references, or statistical data
 
+---
+
+## CITATION PATTERNS (DO NOT MODIFY)
+
+The following patterns are citations and must be preserved exactly as written:
+
+### MLA Inline Citations
+- Single: `[1]`, `[2]`, `[3]`
+- With page: `[1, p. 45]`, `[2, pp. 10-15]`
+- Multiple: `[1, 2, 3]`
+- Range: `[1-3]`
+- Author-page: `(Smith 45)`, `(Smith and Jones 100)`
+
+### Works Cited Entries
+```
+Author Last, First. "Title." Journal, vol. X, no. Y, Year, pp. X-Y.
+Author Last, First. *Title*. Publisher, Year.
+```
+
+### DOI and URLs
+- DOI: `doi:10.1234/example`
+- URL: `https://example.com/path`
+
+### How to Identify Citations
+1. Look for text inside square brackets: `[...]`
+2. Look for patterns like `(Author Page)`
+3. Look for Works Cited entries (start with author name, end with period)
+4. Look for DOI patterns: `10.XXXX/...`
+
+### Example
+**Input:**
+> Singh argues that violence was systematic [1, p. 45]. This view is supported by Chatterji [2] and contradicts earlier scholarship [3-5].
+
+**Output (humanized but citations preserved):**
+> Singh contends that violence was systematic [1, p. 45]. This perspective is supported by Chatterji [2] and contradicts earlier scholarship [3-5].
+
+---
+
 ### 31. Avoid Second-Person Pronouns
 
 **Rule:** Do not use "you" or "your" to address or generalize the reader.
