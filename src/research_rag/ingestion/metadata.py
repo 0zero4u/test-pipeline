@@ -1,4 +1,4 @@
-"""Metadata extraction from parsed PDF text using regex/heuristics."""
+"""Metadata extraction from parsed PDF text using regex/heuristics + GLiNER."""
 
 import logging
 import re
@@ -10,6 +10,23 @@ from research_rag.logging import get_logger
 from research_rag.models import DocumentMetadata
 
 logger = get_logger("ingestion.metadata")
+
+# GLiNER model (lazy loaded)
+_gliner_model = None
+
+def _get_gliner():
+    """Lazy-load GLiNER model."""
+    global _gliner_model
+    if _gliner_model is None:
+        try:
+            from gliner import GLiNER
+            logger.info("Loading GLiNER model...")
+            _gliner_model = GLiNER.from_pretrained("urchade/gliner_small")
+            logger.info("GLiNER model loaded")
+        except Exception as e:
+            logger.warning("Failed to load GLiNER: %s", e)
+            return None
+    return _gliner_model
 
 # Patterns for metadata extraction
 TITLE_PATTERN = re.compile(r"^##?\s+(.+)$", re.MULTILINE)
@@ -54,6 +71,53 @@ NON_AUTHOR_PHRASES = {
     "study material", "research paper", "journal article",
     "vol. ", "issue ", "pp. ", "pages ",
 }
+
+
+def _extract_with_gliner(text: str) -> dict:
+    """Extract metadata using GLiNER NER model."""
+    model = _get_gliner()
+    if model is None:
+        return {"authors": [], "year": None, "title": ""}
+    
+    # Take first 1000 chars for efficiency
+    sample = text[:1000]
+    
+    try:
+        entities = model.predict_entities(sample, ["person", "organization", "date", "title"])
+    except Exception as e:
+        logger.warning("GLiNER extraction failed: %s", e)
+        return {"authors": [], "year": None, "title": ""}
+    
+    authors = []
+    year = None
+    title = ""
+    orgs = []
+    
+    for ent in entities:
+        label = ent["label"].lower()
+        value = ent["text"].strip()
+        
+        if label == "person":
+            # Filter out non-person entities
+            if len(value) > 3 and not value.startswith("AR") and not value.startswith("Dr."):
+                authors.append(value)
+        elif label == "date":
+            # Extract year from date
+            year_match = re.search(r"\b(1[89]\d{2}|20[0-2]\d)\b", value)
+            if year_match:
+                year = int(year_match.group(1))
+        elif label == "title" and not title:
+            if len(value) > 10:
+                title = value
+        elif label == "organization":
+            orgs.append(value)
+    
+    return {
+        "authors": authors[:3],  # Max 3 authors
+        "year": year,
+        "title": title,
+        "organizations": orgs,
+    }
 
 
 def _is_metadata_line(line: str) -> bool:
@@ -410,7 +474,7 @@ def _compute_confidence(
 
 
 def extract_metadata(text: str, filename: str) -> DocumentMetadata:
-    """Extract document metadata from first-page text using heuristics."""
+    """Extract document metadata from first-page text using heuristics + GLiNER."""
     if not text:
         logger.warning("Empty text provided for metadata extraction: %s", filename)
         return DocumentMetadata(
@@ -420,14 +484,37 @@ def extract_metadata(text: str, filename: str) -> DocumentMetadata:
             metadata_confidence=0.3,
         )
 
+    # Step 1: Try regex extraction
     title = _extract_title(text)
     authors = _extract_authors(text)
     year = _extract_year(text)
     journal = _extract_journal(text)
     volume, issue = _extract_volume_issue(text)
     doi = _extract_doi(text)
-
+    
     confidence = _compute_confidence(title, authors, year, journal, doi)
+    
+    # Step 2: If confidence is low, try GLiNER
+    if confidence < 0.65:
+        logger.info("Low confidence (%.2f), trying GLiNER...", confidence)
+        gliner_result = _extract_with_gliner(text)
+        
+        # Use GLiNER results if regex failed
+        if not authors and gliner_result["authors"]:
+            authors = gliner_result["authors"]
+            logger.info("GLiNER extracted authors: %s", authors)
+        
+        if year is None and gliner_result["year"]:
+            year = gliner_result["year"]
+            logger.info("GLiNER extracted year: %s", year)
+        
+        if not title and gliner_result["title"]:
+            title = gliner_result["title"]
+            logger.info("GLiNER extracted title: %s", title)
+        
+        # Recompute confidence
+        confidence = _compute_confidence(title, authors, year, journal, doi)
+
     document_id = Path(filename).stem
 
     return DocumentMetadata(
