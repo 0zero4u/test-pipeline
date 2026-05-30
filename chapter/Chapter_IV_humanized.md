@@ -1,0 +1,345 @@
+# Chapter IV
+
+# Humanism and Moral Conflict in *Train to Pakistan*
+
+The preceding chapter examined the representation of partition violence and the mechanisms of communal breakdown in Khushwant Singh's novel and its film adaptation. This chapter shifts the focus from collective violence to individual moral agency, analyzing how both texts negotiate the tension between humanistic values and the pressures of political crisis. The central argument of this chapter is that *Train to Pakistan*, in both its novelistic and cinematic forms, presents humanism not as a stable ethical position but as a fragile and contested terrain, produced and destroyed in the crucible of partition violence. While scholars such as Dr Mala Srivastava have identified the novel's "dual vision of human nature: people are capable of both cruelty and selflessness" (Srivastava), the present analysis extends this observation to argue that the novel's humanism is specifically dramatized through the tension between individual acts of moral courage and the systemic failure of institutional and political ethics. The chapter traces this tension across five sections: Jugga's transformation and sacrifice as the novel's primary instance of humanist heroism; the representation of compassion and human relationships amid crisis; the moral crises of Iqbal Singh and Hukum Chand as examples of ethical ambiguity; the film's cinematic translation of these humanist themes; and a comparative reading that foregrounds the differences between the novel's psychological interiority and the film's visual moral vocabulary.
+
+## 4.1 Jugga as the Humanist Figure
+
+### 4.1.1 From Transgression to Moral Center
+
+Jugga Singh, the Sikh "badmash" or outlaw of Mano Majra, occupies the center of Singh's moral universe in *Train to Pakistan*. The character is introduced as a figure of transgression: he has stolen another man's wife, Nooran, and lives outside the conventional moral order of the village. Singh does not sentimentalize Jugga's early characterization; the character is rough, impulsive, and socially marginalized. Yet it is precisely Jugga's position outside the respectable social order that enables his transformation into the novel's primary humanist figure.
+
+Scholars have noted that "Jugga is the central moral figure of the novel. Initially portrayed as a local criminal, he undergoes moral transformation through love and sacrifice" (Srivastava). This transformation, which occurs through his relationship with Nooran and through the crisis of partition, is the novel's most sustained engagement with the question of what humanism looks like in extremis. The character's arc from social marginality to moral centrality provides Singh with the narrative architecture for exploring whether ethical action is possible when the social bonds that normally constrain behavior have been dissolved by communal violence.
+
+The process of Jugga's transformation is gradual. Singh presents it through his characteristic ironic restraint rather than through heroic declamation. The novel traces Jugga's changing relationship to the village and to Nooran, showing how love introduces a capacity for moral feeling that was previously absent. Nooran, who is a Muslim woman, embodies the possibility of cross-communal intimacy in a society that is increasingly organized around communal antagonism.
+
+Jugga's love for her is not presented as politically conscious or ideologically motivated. It is a simple human attachment that, in the context of partition, becomes an act of moral resistance. When the village is threatened by the possibility of massacre and when the authorities fail to act, Jugga's love provides the ground from which his act of sacrifice emerges. Singh carefully avoids the sentimentalization that would transform Jugga's love into a political statement. Instead, the love remains stubbornly personal and therefore all the more powerful as a humanist gesture.
+
+The novel's refusal to elevate Jugga's action to the status of political heroism is itself a comment on the nature of humanism in conditions of partition. It suggests that humanism is not an ideology but a relationship, an orientation toward another person that persists even when all the structural supports for ethical behavior have collapsed.
+
+### 4.1.2 The Ambiguity of Sacrifice
+
+The climax of Jugga's arc is his decision to derail the train carrying the refugees. This act prevents the massacre but also costs him his own life. Scholars have read this act as the novel's primary instance of "morality can survive through individual acts of courage and love. Jugga's sacrifice proves that humanity can exist even in times of extreme violence" (Srivastava). This reading is compelling but requires qualification.
+
+Singh does not present Jugga's sacrifice as a triumphant assertion of humanist values. Rather, he presents it as an ambiguous and costly act, accomplished through the destruction of the very object that represents both historical trauma and the possibility of intercommunal coexistence. The train, which has carried the dead throughout the novel, is the symbol of partition's violence. It is also the vehicle that might carry the living refugees to safety.
+
+Jugga's act of derailing it is thus a profoundly ambivalent gesture. It stops the violence but kills the train's occupants, including Nooran, who is among the passengers. The ambivalence of this act is not a narrative weakness. It is the novel's most sophisticated ethical move. It refuses to allow the reader the comfort of a morally clean solution. Instead, it presents sacrifice as always already caught up in destruction.
+
+The train carries the dead because of partition violence. Jugga stops it by producing more death. Humanism, the novel suggests, does not offer escape from violence. It offers only the possibility of a different relationship to violence. One in which the agent accepts the moral cost of action rather than the moral paralysis of inaction.
+
+Singh's treatment of this ambiguity is one of the novel's most sophisticated achievements. He refuses to resolve the moral paradox of Jugga's act. In doing so, he enacts the very complexity that characterizes humanist ethics in conditions of mass violence. As Marc Chatterji has argued in his analysis of the novel's subversion of mainstream partition narratives, Singh presents a text in which "the only crime they could have committed is prevented and atoned for by a sacrifice" (Chatterji).
+
+The emphasis on sacrifice as atonement rather than heroic assertion is crucial to understanding the novel's humanism. It is a humanism grounded not in triumphant idealism but in the acknowledgment of moral cost. The novel does not celebrate Jugga's sacrifice. It mourns it while simultaneously affirming it. This double movement, which is characteristic of Singh's narrative voice throughout the novel, prevents the text from becoming either a celebration of individual heroism or a critique of futile resistance. Instead, it positions humanism as a form of tragic knowledge, an understanding that moral action in conditions of extreme violence is always also a form of destruction.
+
+### 4.1.3 Marginal Status and Moral Clarity
+
+The transformation of Jugga from a social transgressor to a moral agent speaks to the novel's broader argument about the relationship between social marginality and ethical clarity. Jugga is not a respected member of the village community. He is a figure of disrepute whose presence is tolerated but not embraced. Yet it is precisely this marginality that enables him to see what the respectable members of the community cannot or will not see.
+
+The villagers who participate in or acquiesce to the planned massacre are, in the main, respectable men. They have social positions to protect. They have families whose honor is at stake. They have institutional roles that bind them to the existing order. Jugga has nothing to protect, and this absence of social investment becomes the condition of his moral clarity.
+
+Singh's use of the marginal figure as the locus of moral action is a technique that aligns the novel with a broader humanist tradition. In this tradition, ethical knowledge is associated with those who stand outside the dominant social order. The homeless man sees what the homeowner cannot. The criminal sees what the citizen refuses to see.
+
+This association of moral insight with social marginality is not accidental. It reflects the novel's broader argument about the relationship between respectability and complicity. The respectable citizens of Mano Majra are the ones who will participate in the massacre. They do so not because they are inherently more violent than Jugga but because they have more to lose. Therefore, they have more reason to collaborate with the forces of communal hatred.
+
+The historical context of Jugga's transformation is also significant. The character is situated within a specific Punjabi rural economy and social structure that Singh describes with careful attention to its material conditions. Jugga is a landless laborer who has turned to crime because there is no other way for a man of his class to survive. His relationship with Nooran is made possible by the same conditions of material deprivation that produce his criminality. Both are figures who exist outside the respectable social order. Their connection is a product of shared marginality rather than of social convention.
+
+This material grounding of Jugga's humanism is important because it connects the individual moral act to the broader political economy of partition. Singh does not present Jugga's sacrifice as an abstract ethical gesture. He presents it as an act that emerges from and is shaped by the specific material conditions of Punjabi rural life in 1947. The humanism that Jugga embodies is thus not a universal value. It is a historically specific response to historically specific conditions. This specificity is what gives the novel's humanism its moral force.
+
+### 4.1.4 Jugga in the Film Adaptation
+
+In the 1998 film adaptation directed by Pamela Rooks, Jugga's transformation is rendered through visual and performative strategies that differ significantly from the novel's literary method. The film presents Jugga's love for Nooran as a primary narrative thread, investing the relationship with an emotional weight that the novel distributes more broadly. The actor playing Jugga conveys the character's moral evolution through facial expression, physical bearing, and the progressive deepening of his emotional engagement with Nooran.
+
+The film's close-up shots of Jugga watching Nooran establish a visual language of tenderness. This language contrasts sharply with the harsh visual environment of communal violence that surrounds them. This cinematic strategy has the effect of foregrounding the emotional dimension of Jugga's humanism at the expense of the psychological complexity that the novel achieves through narrative description.
+
+The film cannot, in the time available, develop the slow temporal process by which Jugga's love gradually transforms him. Instead, it compresses this transformation into key scenes. These scenes convey the emotional arc while sacrificing the nuanced psychological development that the novel's extended temporal framework allows.
+
+The film's treatment of Jugga's sacrifice is similarly transformed. While the novel presents the act with deliberate ambiguity, the film tends toward a more emotionally resolved representation of the sacrifice. Rooks uses slow motion, musical score, and extended close-up to transform Jugga's act into a moment of emotional catharsis. The visual grammar of sacrifice in the film draws on conventions of melodrama and romantic heroism.
+
+It presents Jugga's death as a climactic emotional event rather than as an ambiguous moral gesture. This transformation reflects a broader tendency in the film adaptation. The film provides emotional clarity and resolution that the novel deliberately withholds. The film presents a world in which sacrifice is heroic, in which death is meaningful, and in which humanism is affirmed rather than complicated.
+
+As Dr Manjula Goel has noted in her analysis of the adaptation, "the film simplifies some of these aspects for brevity" (Goel). This simplification extends to the moral complexity of Jugga's character arc. The result is a Jugga who is more emotionally legible and more clearly heroic than his literary counterpart. However, he is also less ambiguous and less representative of the complex humanism that Singh's narrative achieves. The film's Jugga is a romantic hero. The novel's Jugga is a morally uncertain figure whose action is open to multiple and conflicting interpretations.
+
+The difference between the novel's and the film's treatment of Jugga's sacrifice reflects the different capacities of literary and cinematic narrative to represent moral complexity. The novel can sustain ambiguity across a long text. It has access to the reader's interior experience, to the nuances of thought and feeling that do not have to be externalized in order to be communicated.
+
+The film must externalize everything. It must make moral complexity visible and audible in performance and image. This requirement inevitably simplifies. The film's Jugga is a figure whom the viewer can immediately understand and emotionally engage with. The novel's Jugga is a figure who requires the reader to think through his moral position. The reader must grapple with the ambiguity of his action. The reader must arrive at an interpretation that is necessarily partial and uncertain.
+
+These are different modes of engaging with moral complexity. Neither is simply superior to the other. The novel's ambiguity may be more intellectually satisfying. The film's clarity may be more emotionally powerful. The comparison between them reveals the specific affordances and limitations of each medium for representing the moral questions that partition raises.
+
+## 4.2 Compassion Amid Violence
+
+### 4.2.1 Compassion as Fragile Social Practice
+
+While Jugga's transformation provides the novel's primary instance of individual humanist action, the theme of compassion extends more broadly through the text. It appears in smaller gestures, in moments of mutual aid and solidarity, and in the representation of relationships that persist or emerge amid the crisis of partition. Singh's treatment of compassion is notable for its restraint and for its refusal to present compassion as a simple remedy to the violence that surrounds it.
+
+The compassion that appears in the novel is fragile, incomplete, and often insufficient in the face of the scale of suffering. This insufficiency is not a narrative failure. It is a deliberate thematic choice. It reflects Singh's understanding that compassion, as a moral practice, is always embedded in social and political conditions that it cannot simply overcome.
+
+The novel asks not whether compassion is good but whether compassion is enough. Its answer is profoundly ambivalent. Compassion exists in the novel, but it cannot save the village from the violence that partition unleashes.
+
+One of the most significant representations of compassion in the novel is the relationship between the villagers and the refugees who arrive on the train. Singh depicts the villagers' initial response to the refugees as a mixture of curiosity, fear, and nascent solidarity. The refugees are strangers, but they are also co-religionists and fellow Punjabis. This shared identity provides the ground for compassion even as communal suspicion grows.
+
+The novel shows how compassion functions in the early stages of the crisis. Villagers share food. They offer shelter. They engage in the ordinary practices of mutual aid that characterize rural Punjabi society. These acts are not presented as heroic or extraordinary. They are depicted as the natural responses of people who have not yet been overtaken by communal hatred.
+
+The ordinariness of this compassion is one of its most striking features. It is not a grand moral gesture. It is a small and human response to suffering that is embedded in the texture of daily life. Singh's representation of this ordinary compassion is significant. It suggests that humanism is not something that emerges only in moments of extreme crisis. It is already present in the ordinary practices of communal life. It waits only to be either sustained or destroyed by the pressure of events.
+
+### 4.2.2 The Collapse of Compassion Under Pressure
+
+However, Singh is equally clear about the limits of this compassion. As the crisis deepens and as outside agitators arrive in the village, the initial compassion curdles into suspicion, and then into hostility. The process is gradual. It is depicted with precise attention to social mechanism.
+
+Scholars have observed that in the novel, "the coming of refugees to villages increased. For the first time" the village confronts the reality of violence not as rumor but as immediate presence (Pushpraj Singh). This confrontation reveals the fragility of the compassion that had been extended to strangers. Once the strangers become potential threats, the compassion that had organized the village's initial response to the refugees evaporates.
+
+Singh's representation of this process is one of the novel's most powerful achievements. It shows compassion not as a stable moral condition but as a relationship that is continuously renegotiated under the pressure of political circumstances. The villagers are not inherently cruel. They are caught in a situation in which the social conditions that had supported their compassion have been removed. They are replaced by a political logic that demands communal loyalty at the expense of human connection.
+
+Compassion, in the novel, is a function of social conditions. When those conditions change, compassion changes with them.
+
+This observation connects the novel's treatment of compassion to a broader literature on the social determinants of moral behavior. Singh suggests that compassion is not a stable human trait that persists regardless of circumstances. It is a social practice that is dependent on the structures of community and the frameworks of meaning that organize social life. When partition destroys the structures of community in Mano Majra, it simultaneously destroys the conditions that had made compassion possible.
+
+The villagers' failure to protect the refugees is thus not a failure of individual moral character. It is a product of the social dissolution that partition causes. This analysis is one of the novel's most important contributions to the literature on partition. It locates the failure of compassion not in individual villainy but in the systemic effects of political violence on the social fabric that normally supports ethical behavior.
+
+### 4.2.3 Gender, Vulnerability, and the Limits of Protection
+
+The novel also represents compassion in the context of gender and vulnerability, though this representation is complicated by the gendered dynamics of the narrative. The women refugees, in particular, are depicted as objects of competing forms of concern. Men argue about what should be done with the women. They frame their arguments in the language of protection while simultaneously treating the women as possessions whose fate is to be decided by male authorities.
+
+Singh does not resolve this contradiction. Instead, he presents it as a structural feature of the social order that compassion cannot simply overcome. The women themselves are largely silent in these debates. This silence is itself a form of representation. It indicates the extent to which the crisis of partition disempowers those who are most vulnerable.
+
+The compassion that men extend to women in the novel is thus always also a form of control. It is a practice of protection that simultaneously denies women's agency. It positions them as objects to be protected rather than subjects with their own moral claims.
+
+The representation of female vulnerability in the novel reflects the historical reality of partition violence. In this reality, women's bodies became the site of communal aggression. The question of women's safety was one of the most pressing concerns raised by the displacement. Scholars have noted that "at the same time, the novel demonstrates how the absence of moral values leads to the violation of human rights. When people abandon compassion and coexistence, violence becomes normalized" (Srivastava).
+
+This normalization of violence is gendered. It operates differently on men and women. The novel's representation of women's vulnerability reflects this differential operation. The silence of the women refugees in the novel is thus not merely a narrative convention. It is a comment on the political conditions that render women's experience invisible in moments of crisis.
+
+### 4.2.4 Compassion in the Film Adaptation
+
+The film adaptation handles the theme of compassion through a different set of visual and auditory strategies. These strategies both extend and simplify the novel's treatment of the theme. Rooks's direction emphasizes the physical dimension of compassion. Bodies share space. Hands offer food. Eyes meet across communal boundaries.
+
+The film's early sequences establish a visual vocabulary of intimacy and solidarity. This vocabulary is then systematically disrupted by the arrival of violence. The use of close-up shots in scenes of compassion creates an intimacy that makes the subsequent violence more impactful by contrast. The viewer has been drawn into a relationship of identification with the characters. The violence thus registers as a violation of that intimacy.
+
+This cinematic strategy aligns with what scholars have identified as the film's broader approach. The film represents partition trauma as bodily and sensory rather than merely political or historical. The film insists on the physical reality of compassion. It emphasizes the way that human connection is experienced through the body and is destroyed through the body.
+
+The film also extends the representation of compassion into scenes that are not explicitly present in the novel. It adds visual and narrative details that emphasize the human relationships that persist amid crisis. These additions serve to foreground the humanist theme at the expense of the novel's ironic restraint. The film is less interested than the novel in depicting the limits of compassion. It is more interested in depicting compassion itself as a value worth asserting.
+
+This tendency reflects the different affordances of cinema as a medium. Where the novel can sustain ambiguity across a long narrative, the film requires more immediate emotional resolution in order to be effective within the constraints of its runtime. The film's compassion is thus not merely a translation of the novel's compassion. It is a transformation of it. It is a version of the theme that is adapted to the medium's needs and that therefore differs from the source in important ways.
+
+A particularly significant instance of compassion in the film is the visual treatment of the relationship between Jugga and Nooran. The film devotes substantial screen time to their scenes together. It presents their relationship as a space of tenderness and mutual recognition that exists in deliberate counterpoint to the surrounding violence. Rooks uses warm lighting, soft focus, and extended dialogue to establish this relationship as the film's primary emotional anchor.
+
+The contrast between the intimacy of the Jugga-Nooran scenes and the brutal violence of the partition sequences is the film's primary mechanism for communicating its humanist argument. It suggests that human love and compassion persist even in conditions of extreme violence. This persistence is itself a form of resistance. The film presents the Jugga-Nooran relationship not only as a personal love story. It also functions as a visual argument about the possibility of human connection in conditions designed to destroy it.
+
+The difference between the novel's and the film's treatment of compassion raises important questions about the relationship between medium and theme. The novel's ambivalent treatment of compassion reflects the literary medium's capacity to sustain complexity. It can represent the social conditions that shape moral behavior. The film's more affirmative treatment of compassion reflects cinema's tendency toward emotional resolution. It relies on visual iconography to communicate moral values.
+
+Neither representation is simply more accurate than the other. Each is a product of its medium's specific affordances and constraints. The comparison between them reveals that compassion, as a theme, takes different forms in literary and cinematic narrative. These formal differences are not incidental. They are constitutive of the meaning that each text produces.
+
+## 4.3 Moral Crisis: Iqbal Singh and Hukum Chand
+
+### 4.3.1 The Crisis of Political Idealism
+
+The novel's representation of moral conflict extends beyond Jugga's individual act of sacrifice. It encompasses the broader landscape of ethical ambiguity inhabited by other characters. Two figures in particular, Iqbal Singh and Hukum Chand, embody the crisis of moral responsibility in conditions of partition violence. Their stories provide the novel with its most sustained engagement with the ethical complexity of the period.
+
+Scholars have noted that "the novel reaches its climax in the chapter Manno Majra when it was discovered that the train had brought a full load of corpses" (Pushpraj Singh). It is in this climactic context that the moral crises of Iqbal and Hukum Chand become most acute. The two characters represent distinct modes of moral failure. Each illuminates a different dimension of the crisis of responsibility that partition produces.
+
+Iqbal fails because his political framework is inadequate to the task of responding to trauma. Hukum Chand fails because his institutional position constrains him in ways that make resistance effectively impossible. Together, their stories constitute a comprehensive analysis of the conditions under which moral action becomes impossible.
+
+Iqbal Singh is introduced as a political activist. He is a representative of the People's Party of India who arrives in Mano Majra to organize the peasantry against feudal exploitation. His political ideology positions him as someone who should be capable of resisting communal violence through class solidarity rather than communal loyalty. The novel, however, complicates this expectation at every turn.
+
+Iqbal is depicted as an idealist who is gradually confronted with the limits of his idealism. His communist framework provides him with analytical tools for understanding the structural causes of communal violence. However, it does not equip him with the means to resist the immediate pressure of communal identity. Scholars have noted that Iqbal "is a cynical intellectual who questions the efficacy of political solutions and grapples with the limitations of his own idealism" (Goel).
+
+This characterization suggests that the novel is engaged not only with the question of what individuals should do in conditions of crisis. It is also engaged with the question of what political ideologies can offer when confronted with the visceral pull of communal belonging. The communist framework that Iqbal brings to Mano Majra is designed to supersede communal identity with class identity. It aims to replace the logic of religious hatred with the logic of economic struggle. The novel, however, shows how completely the logic of communal hatred overwhelms the logic of class solidarity in the conditions of partition violence.
+
+### 4.3.2 The Collapse of Ideological Framework
+
+The specific context of Iqbal's arrival in the village is significant for understanding his moral position. He comes as an outsider, a man whose commitment to political change brings him into communities that are not his own. His relationship to those communities is therefore instrumental rather than organic.
+
+Scholars have analyzed the character of Iqbal in the context of "communism and complexity." They note that "Iqbal, entrenched in a communistic ideology, promptly asserts, 'Morality is a matter of affluence. Impoverished individuals'" (Sheikh and Khushi). This dialogue reveals the philosophical framework within which Iqbal operates. He understands morality in terms of economic conditions, as a product of material circumstance rather than of individual choice or spiritual conviction.
+
+This framework is, in some respects, a sophisticated analysis of the social determinants of moral behavior. It recognizes that individuals are not autonomous moral agents. They are shaped by the material conditions of their lives. However, the framework also has limitations when confronted with the specific conditions of partition. Iqbal can explain why communal violence occurs in terms of the political economy of colonialism and feudalism. But he cannot explain what to do about it when it is actually happening. His theoretical knowledge is useless in the face of the immediate sensory reality of mass death.
+
+Iqbal's moral crisis is precipitated by his encounter with the train and its cargo of corpses. The scene in which he confronts the dead bodies represents a moment of profound ethical rupture. The theoretical understanding of partition violence that his political education had provided is overwhelmed by the immediate sensory reality of mass death.
+
+Scholars have analyzed this scene in the context of trauma theory. They note that "trauma is not readily communicable; in fact, it is frequently incomprehensible to the individual who endures it, let alone to others" (Schultermandl qtd. in Pardeep and Singh). Iqbal's response to the trauma of the train is not political action but paralysis. His ideological framework, which had seemed adequate to the task of understanding partition, proves inadequate to the task of responding to it.
+
+This paralysis is a form of moral crisis. Iqbal cannot act because the scale of the violence exceeds the horizon of his moral imagination. He has no framework for understanding what it means to encounter hundreds of dead bodies. Without such a framework, he cannot formulate a response. The novel thus presents a profound critique of political idealism. It suggests that political ideologies, however sophisticated, may be fundamentally unable to respond to the scale and intensity of trauma that partition produced.
+
+The complexity of Iqbal's moral position is further complicated by his relationship to the villagers. As an outsider and an activist, he is not embedded in the social networks of Mano Majra in the way that native villagers are. This outsider status gives him a certain critical distance. But it also means that his moral choices are not constrained by the social obligations that bind other characters.
+
+When he fails to act, his failure is not the result of social pressure or communal loyalty. It is the result of a more fundamental inability to translate his political convictions into effective moral behavior. The novel thus presents Iqbal as a figure of moral crisis not because he chooses the wrong action. He is unable to choose any action at all. His idealism, which had seemed like a source of moral strength, reveals itself as a form of paralysis.
+
+The crisis that Iqbal faces is thus not a crisis of values but a crisis of capacity. He knows what he should do in abstract terms but cannot find the resources to do it in practice. This distinction between abstract moral knowledge and the capacity for moral action is one of the novel's most important contributions to the literature on partition ethics.
+
+### 4.3.3 Hukum Chand and Institutional Failure
+
+Hukum Chand, the local policeman, presents a different but equally significant instance of moral crisis. Where Iqbal fails to act because of the limits of his idealism, Hukum Chand fails to act because of the pressure of institutional authority and personal cowardice. The novel presents Hukum Chand as a man who understands the horror of what is happening but lacks the moral courage to resist it.
+
+Scholars have noted that "Hukum Chand, the magistrate, understands the horror of communalism but lacks the strength to prevent violence. Intellectuals and political leaders often remain passive observers. Singh criticizes society for its inability to uphold justice and morality during times of crisis" (Srivastava). This characterization aligns Hukum Chand with the broader theme of institutional failure that runs through the novel. He is not a villain but an ordinary man whose ordinary cowardice becomes a form of complicity.
+
+The novel's treatment of Hukum Chand is notably nuanced. It does not simply condemn him. Instead, it attempts to understand the institutional and psychological conditions that produce his failure. Hukum Chand is a product of the colonial and postcolonial bureaucratic apparatus. His identity is constituted by his institutional role. His moral capacity is shaped and constrained by that role.
+
+Hukum Chand's moral crisis is dramatized through his interactions with the mob and with his superiors. He is given the authority to maintain order. But the order he is expected to maintain is the order of communal violence. His dilemma is not simply whether to resist but whether resistance is possible within the framework of his institutional role.
+
+The novel does not offer a simple answer to this question. Instead, it shows how the institutional framework of colonial and postcolonial governance produces a specific kind of moral incapacity. Hukum Chand's failure is not merely personal. It is systemic, a product of the way in which institutional authority is organized around the assumption of communal order rather than moral principle.
+
+The institution that employs Hukum Chand does not ask him to be moral. It asks him to be efficient, to maintain order regardless of what that order consists of. This institutional logic is what makes Hukum Chand's complicity possible. He is not choosing to participate in violence. He is simply doing his job. The doing of his job requires him to participate in violence.
+
+The novel's critique of institutional authority is thus also a critique of the moral poverty of bureaucratic governance. It substitutes procedural correctness for ethical responsibility.
+
+### 4.3.4 Character Simplification in the Film
+
+The representation of Hukum Chand in the novel is notably more complex than in the film adaptation. Scholars have observed that "Iqbal's political stance as a socialist is more subtly introduced in the film, and his internal conflict regarding the violence of Partition is not as thoroughly explored as in the novel. He is a cynical intellectual who questions the efficacy of political solutions and grapples with the limitations of his own idealism. The film presents him as a more straightforward idealist" (Goel).
+
+Similarly, "Hukum Chand's character is more complex in the novel, where he" is given extensive interiority and moral nuance that the film cannot fully reproduce within its compressed narrative (Goel). This simplification of character is one of the most significant differences between the novel and the film. It has consequences for the representation of moral crisis.
+
+The film presents characters who are more clearly either heroic or complicit. The novel maintains a more ambiguous moral landscape in which characters are genuinely uncertain about what they should do. Hukum Chand in the novel is a man trapped by his circumstances, a figure whose moral failure is the product of forces larger than himself.
+
+Hukum Chand in the film is more clearly a villain. He is a man who chooses complicity where the novel shows him as unable to choose otherwise.
+
+The comparison between the two characters also illuminates the novel's broader argument about the relationship between political ideology and moral action. Iqbal, who has a political ideology, fails morally because his ideology cannot accommodate the scale of the trauma he encounters. Hukum Chand, who has no political ideology beyond the maintenance of order, fails morally because his institutional position makes resistance impossible.
+
+Neither failure is simply the result of individual moral weakness. Both are the product of structural conditions that constrain and shape moral agency. The novel thus presents a critique of both political idealism and institutional authority. It suggests that neither provides a reliable basis for moral action in conditions of partition violence.
+
+Humanism, in the novel's conception, cannot be grounded in political ideology or institutional role. It must be something more personal, more embedded in the specific relationships and circumstances of individual lives. This is why Jugga, who has no ideology and no institutional position, is able to act morally in a way that Iqbal and Hukum Chand cannot. His moral capacity is grounded not in abstract principle but in the concrete relationship of love that gives him the motivation to act and the freedom from social constraint that gives him the ability to act.
+
+The representation of moral crisis in the novel is thus inseparable from the novel's broader analysis of the conditions of partition violence. The failure of moral agency is not an aberration but a structural feature of the historical moment that partition represents. When the social and institutional frameworks that normally support moral behavior are destroyed, the individuals who are embedded in those frameworks are rendered incapable of moral action.
+
+The novel does not present this as a reason for despair but as a reason for understanding. By analyzing the conditions that produce moral failure, it opens the possibility of imagining different conditions under which moral action might be possible. This analytical dimension of the novel's treatment of moral crisis is one of its most significant contributions to the literature on partition. It distinguishes the text from simpler narratives that attribute the violence of partition to individual villainy or ancient hatred.
+
+## 4.4 Humanism in the Film Adaptation
+
+### 4.4.1 Visual Grammar and Moral Argument
+
+The 1998 film adaptation of *Train to Pakistan* translates the novel's humanist themes into a cinematic register. It relies on visual iconography, performative intensity, and the conventions of melodrama to communicate its moral arguments. The film's treatment of humanism is thus substantially different from the novel's, not because the film abandons the theme of humanism but because it reimagines what humanism looks like when rendered through camera, edit, and performance.
+
+The central question that this section addresses is how cinematic devices such as cinematography, mise-en-scene, sound design, and editing work to construct a moral argument about the possibility and limits of human compassion in conditions of partition violence. The analysis that follows argues that the film's humanism is achieved primarily through affective and sensory strategies rather than through the intellectual and analytical modes that characterize the novel's treatment of the same themes.
+
+Rooks's direction employs a visual grammar of contrast and symmetry to communicate the humanist argument. The film's early sequences establish Mano Majra as a coherent and visually ordered space. Wide shots of the village landscape, natural lighting, and unhurried camera movements create a sense of spatial and social stability.
+
+These establishing shots serve a double function. They provide the viewer with a sense of place and community. They also establish the visual conditions that will later be destroyed by the arrival of violence. The introduction of the train and the refugees disrupts this visual order. The film's cinematography shifts accordingly. The camera becomes more mobile and anxious. The lighting becomes harder and more contrastive. The spatial relationships among characters become more charged with unspoken threat.
+
+This shift in visual style is itself an argument about humanism. It suggests that violence destroys the visual order that makes compassion possible. Humanism must be understood not as a stable condition but as something that exists in tension with the forces that destroy it. The visual grammar of the film thus enacts the argument that humanism is fragile. It depends on conditions that can be destroyed by political violence.
+
+### 4.4.2 Light, Shadow, and the Destruction of Peace
+
+The use of light and shadow in the film is particularly significant for the representation of humanism. Rooks employs a naturalistic lighting scheme in the early sequences. This scheme emphasizes the warmth and stability of village life. It gives way to more dramatic and expressionistic lighting as the violence intensifies. Harsh contrasts and deep shadows create a visual environment of threat and danger.
+
+This shift in lighting style is not merely aesthetic. It is moral. It positions the destruction of peaceful village life as a cosmically significant event. One that disrupts not only the social order but the visual order of the world itself.
+
+The humanism of the film is thus expressed through visual contrast. The viewer is shown what is lost when violence replaces peaceful coexistence. This visual demonstration of loss becomes the primary vehicle for the film's moral argument.
+
+The film's humanist argument is most powerfully conveyed through its treatment of the refugee bodies. Rooks uses slow-motion photography, extended close-ups, and a restrained musical score. These techniques present the refugees as figures of dignity and suffering rather than as anonymous masses.
+
+This treatment is notably different from the novel's collective representation of refugees. The film individualizes through visual intimacy what the novel renders impersonal through narrative description. The effect is to make the humanist argument more immediately affective. The viewer is drawn into an emotional relationship with individual characters. This relationship generates the compassionate response that the film seeks to produce.
+
+The refugees in the film are not merely symbols of historical displacement. They are specific, embodied presences whom the viewer is invited to care about. This cinematic strategy reflects the medium's capacity for immediate emotional engagement. It uses the resources of visual representation to create a compassionate response that does not require the intellectual processing that the novel's more abstract and collective representations demand.
+
+### 4.4.3 Sound Design as Moral Register
+
+Sound design is another primary mechanism of humanism in the film. Rooks uses ambient sound to create a sonic environment that emphasizes the texture of rural Punjabi life. Birdsong, wind, and the rhythmic sounds of daily labor contribute to this atmosphere.
+
+This ambient soundscape is progressively disrupted by the sounds of violence. The contrast between the peaceful soundscape of the village's early sequences and the chaotic soundscape of the violence sequences works to create an emotional argument about what is lost when violence replaces peaceful coexistence.
+
+The film's sound design thus functions as a form of moral argumentation. It positions the loss of peaceful soundscape as a moral loss, a destruction of the conditions that make humanism possible. The use of sound as a moral register is one of the film's most sophisticated cinematic strategies. It allows the film to communicate moral arguments that are not explicitly stated in dialogue but are conveyed through the sensory experience of the viewer.
+
+The performative dimension of the film's humanism is carried primarily by the actors playing Jugga and Nooran. Their love story is presented through a combination of verbal and physical performance. This performance emphasizes tenderness, vulnerability, and mutual dependence.
+
+The actors use facial expression, gesture, and physical proximity to communicate a relationship that exists in deliberate counterpoint to the surrounding violence. This performative intensity is one of the film's primary mechanisms for generating the emotional response that it seeks. The viewer is invited to feel the compassion that the characters feel for each other. This emotional identification becomes the vehicle for the film's humanist argument.
+
+The chemistry between the actors playing Jugga and Nooran is essential to the film's humanist project. It is through their performances that the film communicates the value of human connection in conditions designed to destroy it. The intimacy of their scenes together, rendered through close-up and careful attention to physical detail, creates a visual argument about the persistence of love amid violence.
+
+### 4.4.4 Sacrifice and Melodramatic Resolution
+
+The film's treatment of sacrifice as a humanist gesture differs significantly from the novel's. While the novel presents Jugga's sacrifice as ambiguous and costly, the film tends toward emotional resolution. Rooks uses the conventions of melodrama to present the sacrifice as a climactic moment of moral triumph. Slow motion, musical underscoring, and extended close-up work together to transform the sacrifice into an emotionally satisfying conclusion.
+
+This cinematic strategy has the effect of clarifying the moral stakes of the sacrifice in ways that the novel deliberately refuses. The film offers a more legible moral universe than the novel, one in which sacrifice is unambiguously heroic and in which humanism is affirmed rather than complicated.
+
+This difference reflects the medium's demand for emotional clarity. Cinema, particularly popular cinema, requires clear emotional stakes and unambiguous moral positions in order to be effective as a narrative form. The film thus transforms the novel's ambivalent moral gesture into a melodramatic climax. This provides the viewer with emotional resolution and moral satisfaction.
+
+A further aspect of the film's humanism is its use of religious and cultural symbolism. The Sikh characters in the film are associated with specific religious symbols and practices. These are presented as markers of humanist value.
+
+Scholars have noted that "Singh's genuine 'hero' is clearly Sabhrai. Like the Sikh hero Juggut of Train to Pakistan she is uninformed, strictly standard, a basic woman gave to God and her family. Alone of the Buta Singh family she endeavors to keep the Sikh religion alive" (Shikha and Charyulu).
+
+In the film, this religious dimension of humanism is visually emphasized through mise-en-scene, costume, and the positioning of religious practice within the narrative. Sabhrai is depicted through visual symbols that emphasize her piety and moral clarity. Her positioning in domestic scenes emphasizes her role as caretaker. Her costume marks her as a religious woman. Her behavior toward other characters communicates compassion and moral conviction.
+
+The result is a film that presents humanism not as a secular or political position. It presents it as something grounded in religious and cultural identity. This representation reflects the film's broader tendency to simplify the novel's complex relationship to religious identity. It presents religious commitment as a clear moral good rather than as the ambiguous and problematic phenomenon that the novel depicts.
+
+The comparison between the film's humanism and the novel's humanism reveals the specific affordances and limitations of cinematic narrative for representing moral complexity. The film is able to communicate humanist values through immediate sensory and emotional experience. It creates an affective engagement with the viewer that the novel cannot match. At the same time, the film sacrifices the intellectual complexity and moral ambiguity that are central to the novel's humanist vision.
+
+The film's humanism is thus a different kind of humanism from the novel's. It is more emotionally satisfying but less intellectually challenging. It is more visually coherent but morally simpler. The comparison between the two texts reveals that humanism can take multiple forms depending on the medium through which it is expressed. These formal differences are not incidental. They are constitutive of the meaning that each text produces.
+
+## 4.5 Comparative Reading of Humanism in the Novel and Film
+
+### 4.5.1 Interiority versus Externalization
+
+The comparison between the novel's and the film's treatment of humanism reveals fundamental differences in the media's capacity to represent moral complexity. These differences are not simply technical or formal. They reflect deeper commitments to different models of how moral knowledge is produced and communicated.
+
+The novel, as a literary form, has access to psychological interiority, narrative ambiguity, and the temporal depth that allows for the gradual development of moral complexity. The film, as a visual medium, operates through immediate affective impact, spatial composition, and the emotional resonance of performance and iconography. The comparison between the two texts reveals both the affordances and the limitations of each medium in representing the humanist themes of partition.
+
+This comparison constitutes the central argument of the present section.
+
+One of the most significant differences between the novel and the film is in the treatment of character interiority. The novel provides extensive access to the internal moral reasoning of characters such as Jugga, Iqbal, and Hukum Chand. The reader can follow the processes by which these characters navigate ethical dilemmas. This interiority is achieved through narrative description, through the narrator's access to characters' thoughts and feelings, and through the temporal depth that allows for the gradual development of moral complexity over the course of the narrative.
+
+The film must externalize these processes through performance, dialogue, and visual iconography. This externalization necessarily simplifies the moral complexity of the characters. Scholars have noted that "the film simplifies some of these aspects for brevity" (Goel). This simplification extends to the novel's treatment of moral crisis. Iqbal's internal conflict, which is extensively developed in the novel as a function of his ideological framework and his encounter with trauma, is presented in the film through a small number of key scenes. These scenes convey his political idealism but do not fully represent the depth of his moral uncertainty. The film shows Iqbal's paralysis but does not explain it in the way that the novel's narrative voice can.
+
+The moral ambiguity that characterizes the novel's treatment of humanism is thus reduced in the film to a more binary moral landscape. Jugga's sacrifice, which is presented in the novel as an act of profound moral ambiguity involving the killing of innocent passengers, is rendered in the film as a moment of emotional clarity and heroic affirmation. The train, which in the novel is both a symbol of violence and a vehicle of potential salvation, is presented in the film primarily as a symbol of violence that must be stopped.
+
+The ambiguity of the train's function, which is central to the novel's moral argument, is largely absent from the film. The film requires a more legible symbolic system in order to function effectively as a cinematic narrative. The novel asks the reader to think through the moral complexity of Jugga's act. The film asks the viewer to feel the heroism of Jugga's sacrifice. These are different modes of moral engagement, and each reflects the specific affordances of its medium.
+
+### 4.5.2 Compassion, Characterization, and Modes of Engagement
+
+The representation of compassion also differs significantly between the two texts. In the novel, compassion is depicted as a fragile and conditional relationship that is continuously renegotiated under the pressure of political circumstances. The novel shows how compassion emerges and collapses in relation to the changing conditions of the crisis.
+
+This dynamic representation suggests that compassion is not a stable moral virtue. It is a relationship that must be continuously produced and maintained. Singh's narrative voice is particularly attentive to the social mechanisms by which compassion is produced and destroyed. It shows how the structures of community and the frameworks of meaning that organize social life shape the conditions under which compassion becomes possible or impossible.
+
+The film, by contrast, tends to present compassion as a more stable value. It is symbolized by the relationship between Jugga and Nooran and reinforced through visual and musical emphasis. The film's compassion is less conditional and more emotionally resolved than the novel's. This difference reflects the medium's tendency toward emotional clarity and catharsis.
+
+Where the novel shows compassion as a fragile social achievement that can be destroyed by political violence, the film shows compassion as a stable human value that persists despite that violence.
+
+In terms of visual versus textual representation, the film offers the advantage of immediate sensory impact while sacrificing the depth of psychological narration. The film's visual representation of suffering achieves a directness that the novel's narrative description cannot match. The viewer is confronted directly with the bodies of refugees, the visual evidence of violence, and the sensory environment of crisis. This confrontation generates an affective response that is different in kind from the reader's response to the novel's more mediated descriptions.
+
+However, this immediate impact comes at the cost of the moral complexity that the novel achieves through its more analytical narrative voice. The film shows. The novel describes and analyzes. These are different modes of moral engagement, and the comparison between them reveals the specific affordances and limitations of each. The novel's analysis of the social conditions that produce and destroy compassion provides an intellectual framework for understanding the moral dimensions of partition that the film cannot offer. At the same time, the film's immediate sensory impact creates an emotional engagement with the human cost of partition that the novel's more abstract descriptions cannot fully achieve.
+
+### 4.5.3 What Is Lost and Gained in Adaptation
+
+The differences in characterization between the novel and the film are particularly significant for the theme of humanism. The novel's Jugga is a complex figure whose transformation is rendered through psychological description and narrative development. His moral evolution is presented as a process rather than a sudden conversion. The transformation takes time. It is marked by hesitations, doubts, and moments of uncertainty that the novel depicts in detail.
+
+The film's Jugga is a more clearly heroic figure whose emotional journey is conveyed through performance and visual emphasis. The transformation is compressed into key scenes that establish the emotional arc while sacrificing the nuanced psychological development that the novel's extended temporal framework allows.
+
+Similarly, the novel's Hukum Chand is a deeply ambiguous figure whose moral failure is presented with a nuance that the film cannot fully reproduce. Hukum Chand in the novel is a man trapped by his institutional position and his personal cowardice. But he is also a man who retains some moral awareness of what he is doing and why it is wrong.
+
+The film's Hukum Chand, while still morally complex, is more clearly positioned as a figure of institutional failure. He is not an individual navigating genuine ethical uncertainty. These differences in characterization reflect the different demands of the media. The novel has the temporal space to develop ambiguity. The film must provide moral legibility within its compressed runtime.
+
+The question of what is lost and gained in the adaptation is not resolvable into a simple calculation. The film offers a visual and emotional immediacy that the novel cannot match. This immediacy has the power to communicate the humanist argument to audiences who may not engage with the novel's literary complexity. The film's use of performance, visual iconography, and sound design creates an affective engagement with the human cost of partition that can be more immediately impactful than the novel's more analytical approach.
+
+At the same time, the film sacrifices the moral ambiguity and psychological depth that are central to the novel's humanist vision. The comparison between the two texts thus reveals that adaptation is not simply a translation but a transformation. One that reworks the source text's moral and aesthetic commitments in accordance with the demands and affordances of the new medium.
+
+The humanism of the novel is not the humanism of the film. They are related but distinct. Each is the product of its medium's specific capacities and limitations.
+
+### 4.5.4 Visual Representation and Moral Knowledge
+
+The comparative reading also raises questions about the relationship between visual representation and moral knowledge. The film, by presenting moral conflict through visual iconography and performative intensity, makes moral knowledge more immediately available to the viewer. However, this availability comes at the cost of the critical distance that the novel's narrative voice creates.
+
+The reader of the novel is positioned as an observer of moral complexity. They are invited to think through the ethical questions that the text raises. The viewer of the film is positioned as an emotional participant in the moral drama. They are invited to feel the compassion and horror that the images generate.
+
+These are different modes of moral engagement, and neither is simply superior to the other. Rather, the comparison between them reveals the range of ways in which literary and cinematic texts can represent the humanist response to historical catastrophe. The novel's intellectual engagement with moral complexity and the film's emotional engagement with human suffering are both valid modes of representing the humanist response to partition. The comparison between them enriches the understanding of what humanism means in the context of historical trauma.
+
+The chapter has argued that both the novel and the film engage substantively with the question of humanism in conditions of partition violence. However, they do so through fundamentally different means. The novel achieves its humanist argument through narrative ambiguity, psychological interiority, and the sustained moral complexity of its characters. The film achieves its humanist argument through visual iconography, emotional intensity, and the immediate affective impact of cinematic representation.
+
+The comparison between these two modes of humanist engagement reveals not only the specific affordances and limitations of the literary and cinematic media. It also reveals the broader question of what humanism means when confronted with the scale and brutality of partition violence. Both texts suggest that humanism is not a stable achievement but a fragile and continuously contested condition. It is this fragility that both the novel's narrative restraint and the film's visual intensity work to communicate.
+
+The humanism that emerges from this comparison is not a triumphant assertion of human values. It is a mourning for what is lost and a continuing effort to imagine the conditions under which compassion might become possible again.
+
+---
+
+## Works Cited
+
+Chatterji, Marc. "Train to Pakistan: against Mainstream Representations of the Partition of India?" *Research in Comparative Literature*, 2018, pp. 1-18.
+
+Goel, Manjula. "Analysis of Train to Pakistan, Film Adaptation from Khushwant Singh's Novel: Similarities and Differences." *IJNRD*, vol. 2, no. 2, 2022, pp. 1-8.
+
+Pardeep, Manav, and Dr. Surender Singh. "Narrating the Nation's Wounds: Trauma and Testimony in Khushwant Singh's Train to Pakistan." *Journal*, 2024, DOI: 10.33545.26647699.2024.v6.i2c.212.
+
+Pushpraj Singh. "Analyzing Existentialist assertions in Indian Literature: a study Humanistic Dynamics in Train to Pakistan." *JETIR*, vol. 18, no. 12, 2018, pp. 1-6.
+
+Sheikh, Imran Ahmad, and Khushi. "Communism and Complexity: A dichotomous study of Iqbal Singh in Khushwant Singh's Novel, Train to Pakistan." *International Journal of English Literature and Social Sciences*, vol. 9, issue 2, 2024, pp. 1-8.
+
+Shikha, and Dr. G. Mohana Charyulu. "Khushwant Singh Novel 'Train to Pakistan': Essential Style and Technique for Exploration of the Experience of Rural India." *Research Journal*, 2023, pp. 1-12.
+
+Singh, Khushwant. *Train to Pakistan*. Ravi Dayal Publisher, 1956.
+
+Srivastava, Dr Mala. "Communalism and Moral Values in Train to Pakistan by Khushwant Singh." *IJARSC*, vol. 6, issue 6, 2026, pp. 1-8.
