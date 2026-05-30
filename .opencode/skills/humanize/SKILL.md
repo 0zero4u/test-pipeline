@@ -173,6 +173,8 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 **Problem:** These words appear far more frequently in post-2023 text. They often co-occur.
 
+**IMPORTANT:** In academic writing, some of these words are legitimate transitions. Only remove them when they appear excessive or formulaic. "Additionally" is acceptable once per paragraph; remove if it appears multiple times.
+
 **Before:**
 > Additionally, a distinctive feature of Somali cuisine is the incorporation of camel meat. An enduring testament to Italian colonial influence is the widespread adoption of pasta in the local culinary landscape, showcasing how these dishes have integrated into the traditional diet.
 
@@ -581,6 +583,12 @@ Deliver the draft, the brief "still-AI" bullets, the final rewrite, and (optiona
 
 For dissertation and thesis writing, apply these additional rules:
 
+**IMPORTANT: These rules apply to YOUR WRITING only. Do NOT modify:**
+- Direct quotes from sources (preserve exactly as written)
+- Citations and references
+- Proper nouns, technical terms, or field-specific vocabulary
+- Numbers in dates, page references, or statistical data
+
 ### 31. Avoid Second-Person Pronouns
 
 **Rule:** Do not use "you" or "your" to address or generalize the reader.
@@ -599,6 +607,8 @@ For dissertation and thesis writing, apply these additional rules:
 ### 32. Eliminate Contractions
 
 **Rule:** Do not use shortened words in academic writing.
+
+**IMPORTANT: Do NOT modify contractions in direct quotes from sources. Preserve quotes exactly as written.**
 
 | Don't Use | Use Instead |
 |-----------|-------------|
@@ -659,6 +669,8 @@ For dissertation and thesis writing, apply these additional rules:
 
 **Rule:** Spell out numbers zero through nine. Use digits for 10 and above.
 
+**IMPORTANT: Do NOT modify numbers in direct quotes, citations, dates, or statistical data.**
+
 | Don't Use | Use Instead |
 |-----------|-------------|
 | 1 | one |
@@ -672,12 +684,14 @@ For dissertation and thesis writing, apply these additional rules:
 | 9 | nine |
 | 10+ | 10, 11, 12, etc. (use digits) |
 
-**Exceptions:**
+**Exceptions (do NOT change):**
 - Numbers with units: "5 km", "3 mg"
 - Dates: "1947", "2023"
 - Page numbers: "p. 45"
 - Percentages: "5%"
 - Mathematical expressions: "2 + 2 = 4"
+- Direct quotes from sources
+- Statistical data: "p < 0.05", "n = 30"
 
 **Before:**
 > The study involved 3 researchers and 5 participants. They collected 12 samples over 9 days.
@@ -694,14 +708,15 @@ For dissertation and thesis writing, apply these additional rules:
 - "The study examined the effects of..."
 - "Smith (2020) argues that..."
 
-**Passive Voice (use sparingly):**
-- "The data was collected over a six-month period." (when actor is unimportant)
+**Passive Voice (acceptable in academic writing):**
+- "The data was collected over a six-month period." (methods section)
 - "The samples were analyzed by the laboratory." (when emphasis is on the object)
+- "It has been demonstrated that..." (when citing established findings)
 
-**Before (passive):**
+**Before (excessive passive):**
 > The data was collected by the researchers. The samples were analyzed in the laboratory. It was found that the results were significant.
 
-**After (active):**
+**After (balanced):**
 > The researchers collected the data. The laboratory analyzed the samples. The results proved significant.
 
 ### 36. Avoid "I Think" and "I Believe"
