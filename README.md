@@ -12,7 +12,17 @@ Citation-grounded research assistance for humanities/literary analysis.
 **Phase 6: Scale & Optimize** — Complete ✓  
 **Phase 7: Chapter Writing Assistance** — Complete ✓  
 **Phase 8: MLA Citation Support** — Complete ✓  
-**Phase 9: GLiNER Metadata Extraction** — Complete ✓
+**Phase 9: GLiNER Metadata Extraction** — Complete ✓  
+**Phase 10: Text Humanization** — Complete ✓
+
+## Knowledge Base
+
+| Metric | Value |
+|--------|-------|
+| PDFs | 28 |
+| Chunks | 278 |
+| Total Size | 9.8MB |
+| Tests | 79/79 passing |
 
 ## Overview
 

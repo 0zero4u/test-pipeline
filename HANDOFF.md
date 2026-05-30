@@ -1,7 +1,7 @@
 # HANDOFF.md — Session Continuity
 
 **Last Updated**: 2026-05-30  
-**Status**: All phases complete, ready for production use
+**Status**: All phases complete, 28 PDFs ingested, ready for chapter writing
 
 ---
 
@@ -23,6 +23,48 @@ pytest tests/test_metadata.py tests/test_mla_formatter.py tests/test_dissertatio
 # 5. Start REPL
 research-rag repl
 ```
+
+---
+
+## Current Status
+
+### Knowledge Base
+
+| Metric | Value |
+|--------|-------|
+| **PDFs** | 28 |
+| **Chunks** | 278 (deduplicated) |
+| **Documents** | 28 |
+| **Total Size** | 9.8MB |
+
+### PDFs Included
+
+```
+pdfs/
+├── 363508_8461703.pdf (478K)
+├── 4Article_407DipakRJoshi2020.pdf (100K)
+├── 609a7c99198bdf42126fv3fe915d1434e84f5.pdf (244K)
+├── 63c2bf255668a.pdf (610K)
+├── 66578-1-journal-bpaper-1_rajarshi-vgh-tyhyt.pdf (241K)
+├── 7-2-47-190.pdf (146K)
+├── 7-8-14-837.pdf (477K)
+├── 91-priyanka-gupta.pdf (141K)
+├── CET-JJ21-8-Dr-Unrmila-Devi.pdf (172K)
+├── English.pdf (341K)
+├── HISTORY-AS-LEbIT-MOTIF.pdf (662K)
+├── IdentityandBelonging_AnalysisofTraintoPakistan.pdf (919K)
+├── Term3researchpaper3.pdf (171K)
+├── Train-To-Pakistan.pdf (620K)
+├── Train_To_Pakistan_A_Realistic_Picture_of_Partition.pdf (182K)
+├── Train_to_Pakistan_against_Mainstream_Rep.pdf (38K)
+└── study_material_1770263377.pdf (50K)
+```
+
+### Excluded (3 biggest)
+
+- `the-other-side-of-silence-voices-from-the-partition-of-india.pdf` (16MB)
+- `Partition_The_Holocaust_Train_to_Pakista.pdf` (5.5MB)
+- `ijrar_issue_20542129.pdf` (985KB)
 
 ---
 
@@ -261,6 +303,9 @@ diff <(grep -o "\[[0-9]*\]" chapter/Chapter_1.md) \
 6. ✅ Updated documentation
 7. ✅ Pushed all changes to GitHub
 8. ✅ Humanized Chapter 1 using Wikipedia "Signs of AI writing" guide
+9. ✅ Fixed MLA Works Cited formatting (deduplication, title case, DOI format)
+10. ✅ Ingested 28 PDFs (278 chunks, 35 duplicates removed)
+11. ✅ End-to-end test passed (all queries returning relevant results)
 
 ### Previous Sessions
 
