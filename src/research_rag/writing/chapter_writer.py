@@ -182,7 +182,7 @@ class ChapterWriter:
             target_words=section.target_words,
         )
 
-        raw_text = self.synthesis_client.generate(messages)
+        raw_text = self.synthesis_client.generate(messages, reasoning_effort="high")
 
         parsed_citations = self._parse_citations(raw_text, citation_map)
 
