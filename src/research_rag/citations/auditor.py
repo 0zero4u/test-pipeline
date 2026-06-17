@@ -155,7 +155,7 @@ class CitationAuditor:
             chunk_id = citation.get("chunk_id", "")
 
             # --- Edge: marker absent from answer ---
-            if f"[{citation_number}]" not in answer:
+            if not re.search(rf"\[{citation_number}[^\]]*\]", answer):
                 details.append({
                     "citation_number": citation_number,
                     "verified": True,

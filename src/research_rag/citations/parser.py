@@ -45,7 +45,11 @@ class CitationParser:
     """
 
     # Pattern matches [1], [2,3], [1-3], etc.
-    CITATION_PATTERN = re.compile(r"\[(\d+(?:\s*[,–\-]\s*\d+)*)\]")
+    CITATION_PATTERN = re.compile(
+        r"\[(\d+(?:\s*[,–\-]\s*\d+)*)"  # match citation numbers: 1, 1,2, 1-3
+        r"(?:\s*[,;]\s*(?:p{1,2}\.)?\s*\d+(?:\s*[–\-]\s*\d+)?\s*)?"  # optional p./pp.: , p. 2 or , pp. 2-3
+        r"\]"
+    )
 
     def parse(
         self,

@@ -102,7 +102,7 @@ class CitationFormatter:
             for c in citations
         }
         return re.sub(
-            r"\[(\d+)\]",
+            r"\[(\d+)[^\]]*\]",
             lambda m: lookup.get(m.group(1), m.group(0)),
             answer,
         )

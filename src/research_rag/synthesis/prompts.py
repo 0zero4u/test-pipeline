@@ -41,7 +41,11 @@ def build_synthesis_messages(
         f"EVIDENCE:\n{evidence_section}\n\n"
         f"QUESTION: {query}\n\n"
         f"Answer the question using ONLY the evidence above. "
-        f"Cite sources as [1], [2], etc."
+        f"Cite sources as [1], [2], etc.\n"
+        f"IMPORTANT: Use EXACTLY [N] format for citations.\n"
+        f"CORRECT: This is a key finding [1].\n"
+        f"INCORRECT: This is a key finding [1, p. 2].\n"
+        f"Do NOT include page numbers inside the brackets.\n"
     )
 
     return [
