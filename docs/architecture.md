@@ -621,7 +621,7 @@ Store only essential information:
 
 ```bash
 # Install dependencies
-pip install docling chromadb openai
+pip install pymupdf4llm chromadb openai
 
 # Set API keys
 export OPENROUTER_API_KEY="..."
@@ -657,14 +657,14 @@ services:
 ```yaml
 # config.yaml
 ingestion:
-  parser: docling
+  parser: pymupdf4llm
   chunk_size_min: 500
   chunk_size_max: 900
   chunk_overlap: 0.12
 
 extraction:
   entity_model: qwen3-8b
-  embedding_model: bge-base-en-v1.5
+  embedding_model: qwen/qwen3-embedding-8b
 
 retrieval:
   top_k: 5
