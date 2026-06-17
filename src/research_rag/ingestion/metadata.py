@@ -5,6 +5,7 @@ import re
 import json
 import os
 import requests
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -292,6 +293,10 @@ def extract_metadata(text: str, filename: str) -> DocumentMetadata:
     title_weak = not title or len(title) < 10
     if author_weak or title_weak or confidence < 0.7:
         llm_meta = LLMMetadataExtractor.extract(text, filename)
+        if not llm_meta.get("author") and not llm_meta.get("title"):
+            # One retry for transient API errors
+            time.sleep(0.5)
+            llm_meta = LLMMetadataExtractor.extract(text, filename)
         if llm_meta.get("author"):
             authors = [llm_meta["author"]]
             logger.info("LLM metadata fallback provided author for %s", filename)
