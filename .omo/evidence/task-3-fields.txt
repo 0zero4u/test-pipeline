@@ -1,0 +1,32 @@
+=== ParsedDocument fields ===
+document_id: test_001
+file_path: test.pdf
+markdown: # Title
+
+Content here.
+sections: [{'title': 'Title', 'level': 1, 'page_no': 1}]
+page_boundaries: [(1, 0, 20)]
+page_count: 1
+first_page_text: # Title
+
+Content here.
+repr: ParsedDocument(id=test_001, pages=1, sections=1)
+
+=== _make_document_id ===
+My_Paper.pdf -> my_paper
+article v2 final.pdf -> article_v2_final
+UPLOAD_001.PDF -> upload_001
+
+=== _get_page_boundaries ===
+Markers text: [(1, 0, 5), (2, 24, 29), (3, 48, 53)]
+No markers: [(1, 0, 15)]
+
+=== _extract_sections ===
+  page_no=1, level=1, title='Title'
+  page_no=1, level=2, title='Subtitle'
+  page_no=2, level=2, title='Page 2 Heading'
+
+=== ParsedDocument.__init__ signature ===
+Parameters: ['self', 'document_id', 'file_path', 'markdown', 'sections', 'page_boundaries', 'page_count', 'first_page_text']
+
+ALL VERIFICATIONS PASSED

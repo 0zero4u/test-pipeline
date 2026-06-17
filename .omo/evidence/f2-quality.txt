@@ -1,0 +1,77 @@
+================================================================================
+F2. Code Quality Review — Re-Review after fixes
+Date: 2026-06-17
+================================================================================
+
+FILES REVIEWED:
+  src/research_rag/cache.py
+  src/research_rag/utils/retry.py
+
+TEST SUITE: pytest tests/test_cache.py tests/test_utils.py -v
+----------------------------------------------------------------------
+RESULT: 28 passed, 0 failed
+
+LINT: ruff check
+----------------------------------------------------------------------
+src/research_rag/cache.py:
+  UP045 [style] Use `X | None` for type annotations (Optional[str] → str|None) — L18
+  UP045 [style] Use `X | None` for type annotations (Optional[dict] → dict|None) — L33
+
+src/research_rag/utils/retry.py:
+  UP045 [style] Use `X | None` for type annotations (Optional[Callable...] → Callable...|None) — L31
+  UP035 [style] Import from `collections.abc` instead: `Callable` — L3
+  I001 [style] Import block is un-sorted or un-formatted — L3
+  F401 [unused] `typing.Any` imported but unused — L3
+
+Total: 6 findings (all auto-fixable, 1 unused-import in retry.py)
+LINT VERDICT: PASS (no logic errors; only style / auto-fixable issues)
+
+TYPE CHECK: mypy
+----------------------------------------------------------------------
+  L7:  import-untyped — diskcache missing stubs (pre-existing)
+  L48: no-any-return — returning Any from cache.get() (pre-existing)
+TYPE CHECK VERDICT: PASS (2 pre-existing errors, no new issues)
+
+MANUAL REVIEW
+----------------------------------------------------------------------
+ISSUE 1 [REGRESSION / UNFIXED] — cache.py L29
+  self._cache.clear() still present in __init__.
+  Claimed as removed ("Removed self._cache.clear() from __init__") but line 29
+  still executes it: self._cache.clear(). Comment says it's for test isolation,
+  but clearing the cache on every instantiation is destructive — test suites
+  should manage their own isolation. This was one of the original FAIL reasons
+  and has NOT been fixed.
+
+ISSUE 2 [FRAGILE API USAGE] — cache.py L67-72
+  Manual SQL-based LRU eviction via self._cache._sql(...).
+  Uses diskcache's private _sql() method and couples directly to internal
+  SQLite schema (table "Cache", column "access_time"). If diskcache changes
+  internal schema, this breaks silently. No try/except guard. While the
+  count-based eviction intent is understood, private API access is brittle
+  and should be wrapped in defensive error handling.
+
+ISSUE 3 [UNUSED IMPORT] — retry.py L3
+  `Any` imported from typing but never used. This is caught by ruff F401.
+
+No broad except clauses found.     ✅
+No commented-out dead code found.  ✅
+No obvious AI slop patterns found. ✅
+Imports in cache.py are all used.  ✅
+
+V E R D I C T
+================================================================================
+Tests:  28 pass, 0 fail
+Lint:   PASS (6 auto-fixable style issues; 1 real unused-import in retry.py)
+Mypy:   PASS (2 pre-existing errors)
+Manual: 3 issues (1 regression from claimed fix, 1 fragile API, 1 unused import)
+
+VERDICT: FAIL
+
+RATIONALE:
+  Issue #1 (self._cache.clear() in __init__) was explicitly listed as fixed
+  in the changelog but remains present in the code. Since this was one of the
+  primary FAIL reasons in the previous review, the fix is incomplete.
+  The clear-on-init pattern is destructive — any caller creating a QueryCache
+  instance loses all previously cached data, including data written by another
+  part of the same process.
+================================================================================

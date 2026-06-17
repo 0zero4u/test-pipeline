@@ -1,0 +1,24 @@
+TASK-2 EVIDENCE: Import verification
+=====================================
+Date: 2026-06-17
+
+Consumer imports verified (no changes needed):
+
+1. src/research_rag/embeddings/api.py line 9:
+   from research_rag.utils import APIError, RateLimitError, ServerError, retry
+   -> re-exports from research_rag.utils.__init__ -> research_rag.utils.retry.retry
+   Usage: @retry(retryable_exceptions=(APIError, RateLimitError, ...)) on _embed_api()
+
+2. src/research_rag/synthesis/client.py line 9:
+   from research_rag.utils import APIError, RateLimitError, ServerError, retry
+   Usage: @retry(retryable_exceptions=(APIError, RateLimitError, ...)) on generate()
+   No on_retry parameter in actual usage (unlike inherited wisdom)
+
+3. tests/test_utils.py line 15:
+   from research_rag.utils.retry import retry
+   -> direct import from module level
+   All 8 retry tests pass with tenacity backend.
+
+Dependencies updated:
+  pyproject.toml: Added "tenacity>=8.0" to dependencies array
+  Installed: tenacity==9.1.4

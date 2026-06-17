@@ -1,0 +1,25 @@
+Task 1: Swap cache.py to diskcache.Cache
+=========================================
+Date: 2026-06-17
+File: src/research_rag/cache.py
+
+Changes:
+- Removed: OrderedDict, json, Path, manual JSON I/O (_save/_load methods)
+- Removed: Manual LRU eviction via OrderedDict
+- Added: diskcache.Cache with directory="./cache", size_limit=100MB, expire=3600
+- Added: collections.deque for key-order tracking (count-based LRU)
+- Kept: QueryCache class name, public API (get/set/stats/clear), _make_key with SHA-256
+
+Evidence:
+---------
+$ PYTHONPATH=src pytest tests/test_cache.py -v
+Pytest: 7 passed
+
+Test results:
+  ✓ test_get_miss
+  ✓ test_set_and_get
+  ✓ test_lru_eviction
+  ✓ test_stats
+  ✓ test_clear
+  ✓ test_different_top_k_different_key
+  ✓ test_query_normalization

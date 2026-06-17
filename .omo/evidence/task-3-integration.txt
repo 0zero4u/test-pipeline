@@ -1,0 +1,15 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.5, pytest-9.1.0, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /tmp/opencode/test-pipeline
+configfile: pyproject.toml
+collecting ... collected 6 items
+
+tests/test_pipeline.py::test_pipeline_no_pdfs PASSED                     [ 16%]
+tests/test_pipeline.py::test_pipeline_initialization PASSED              [ 33%]
+tests/test_pipeline.py::test_pipeline_custom_config PASSED               [ 50%]
+tests/test_pipeline.py::test_pipeline_output_dir PASSED                  [ 66%]
+tests/test_pipeline.py::test_pipeline_invalid_pdf PASSED                 [ 83%]
+tests/test_pipeline.py::test_ingestion_result_model PASSED               [100%]
+
+============================== 6 passed in 0.61s ===============================

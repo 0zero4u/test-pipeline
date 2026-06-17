@@ -1,0 +1,21 @@
+TASK-2 EVIDENCE: retry.py tenacity migration
+============================================
+Date: 2026-06-17
+
+Original: src/research_rag/utils/retry.py (66 lines)
+- Custom implementation with exponential backoff + jitter
+- ~50 lines of hand-rolled retry logic (functools, random, time)
+
+New: src/research_rag/utils/retry.py (73 lines)
+- Uses tenacity library (tenacity>=8.0)
+- Same public API: retry(max_retries, base_delay, retryable_exceptions, on_retry)
+- Same DEFAULT_RETRYABLE_EXCEPTIONS tuple preserved
+
+Tenacity parameter mapping:
+  max_retries -> stop_after_attempt(max_retries + 1)
+  base_delay -> wait_exponential(multiplier=base_delay, min=base_delay, max=base_delay*2^max_retries)
+  jitter (25%) -> wait_random(0, base_delay * 0.25)
+  on_retry callback -> before_sleep (with attempt_number - 1 for 0-based compat)
+  retryable_exceptions -> retry_if_exception_type(retryable_exceptions)
+
+Test results: 21/21 passed (tests/test_utils.py)

@@ -116,12 +116,13 @@ class AnswerGenerator:
         metadata_map = self._build_metadata_map(results)
         citations = self.citation_validator.validate(citations, metadata_map)
 
-        # Optional: Format citations in answer
+        # Optional: Format citations in answer (replaces [N] markers, adds Works Cited)
         if self.citation_formatter:
-            formatted = self.citation_formatter.format(raw_answer, citations)
+            formatted = self.citation_formatter.format(
+                raw_answer,
+                [c.to_dict() for c in citations],
+            )
             raw_answer = formatted["answer"]
-            if formatted.get("works_cited"):
-                raw_answer += "\n\n---\n\n" + formatted["works_cited"]
 
         # Step 6: Estimate confidence based on citation coverage
         confidence = self._estimate_confidence(citations, results)

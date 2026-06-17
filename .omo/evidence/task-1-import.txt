@@ -1,0 +1,10 @@
+Task 1: Import verification
+============================
+Date: 2026-06-17
+
+$ PYTHONPATH=src python3 -c "from research_rag.cache import QueryCache; print('OK:', QueryCache.__name__)"
+OK: QueryCache
+
+Also verified that synthesis/generator.py imports successfully:
+  from research_rag.cache import QueryCache  (line 8)
+  Used as: self.cache.get(query, k) and self.cache.set(query, k, response)
