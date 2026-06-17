@@ -2,6 +2,7 @@
 
 import math
 import re
+import tiktoken
 from typing import Any, Optional
 
 from research_rag.config import IngestionConfig
@@ -10,15 +11,24 @@ from research_rag.models import Chunk, DocumentMetadata
 
 logger = get_logger("ingestion.chunker")
 
-# Rough token estimation (~4 chars per token for English text)
-CHARS_PER_TOKEN = 4
+# Rough token estimation (~5.5 chars per token for English prose)
+CHARS_PER_TOKEN = 5
+
+_encoding = None
+
+
+def _get_encoding():
+    global _encoding
+    if _encoding is None:
+        _encoding = tiktoken.get_encoding("cl100k_base")
+    return _encoding
 
 
 def estimate_tokens(text: str) -> int:
-    """Estimate token count from text length."""
+    """Estimate token count using tiktoken (cl100k_base)."""
     if not text:
         return 0
-    return max(1, len(text) // CHARS_PER_TOKEN)
+    return len(_get_encoding().encode(text))
 
 
 def _find_section_boundaries(

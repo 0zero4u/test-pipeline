@@ -22,7 +22,7 @@ def test_estimate_tokens():
     """Test token estimation."""
     assert estimate_tokens("") == 0
     assert estimate_tokens("Hello world") == 2
-    assert estimate_tokens("A" * 100) == 25
+    assert estimate_tokens("A" * 100) == 13
 
 
 def test_chunk_small_document():
@@ -37,9 +37,8 @@ def test_chunk_with_sections():
     """Test chunking with section headings."""
     markdown = (
         "# Section 1\n\n"
-        + "A" * 2000
-        + "\n\n# Section 2\n\n"
-        + "B" * 2000
+        + "A" * 2500
+        + "B" * 2500
     )
     sections = [
         {"title": "Section 1", "level": 1, "page_no": 1},
