@@ -10,6 +10,7 @@ from typing import Optional, TYPE_CHECKING
 from research_rag.cache import QueryCache
 from research_rag.citations.parser import CitationParser, Citation
 from research_rag.citations.validator import CitationValidator
+from research_rag.citations.auditor import CitationAuditor
 from research_rag.metrics import Metrics
 from research_rag.retrieval import Retriever, SearchResult
 from research_rag.synthesis.client import SynthesisClient
@@ -37,6 +38,7 @@ class AnswerGenerator:
         citation_validator: Optional[CitationValidator] = None,
         cache: Optional[QueryCache] = None,
         citation_formatter: Optional['CitationFormatter'] = None,
+        auditor: Optional[CitationAuditor] = None,
     ):
         self.retriever = retriever
         self.synthesis_client = synthesis_client or SynthesisClient(
@@ -47,6 +49,7 @@ class AnswerGenerator:
         self.citation_validator = citation_validator or CitationValidator()
         self.cache = cache
         self.citation_formatter = citation_formatter
+        self.auditor = auditor
 
     def answer(
         self,
@@ -116,6 +119,14 @@ class AnswerGenerator:
         metadata_map = self._build_metadata_map(results)
         citations = self.citation_validator.validate(citations, metadata_map)
 
+        # Citation audit (hallucination detection)
+        audit_report = None
+        if self.auditor:
+            audit_report = self.auditor.audit(
+                raw_answer,
+                [c.to_dict() for c in citations],
+                results,
+            )
         # Optional: Format citations in answer (replaces [N] markers, adds Works Cited)
         if self.citation_formatter:
             formatted = self.citation_formatter.format(
@@ -133,6 +144,8 @@ class AnswerGenerator:
             "citations": [c.to_dict() for c in citations],
             "confidence": round(confidence, 2),
         }
+        if audit_report:
+            response["hallucination_report"] = audit_report
 
         if include_reasoning:
             response["reasoning_trace"] = {
