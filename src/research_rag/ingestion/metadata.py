@@ -261,7 +261,7 @@ Output JSON only, no explanation."""
         return {}
 
 def extract_metadata(text: str, filename: str) -> DocumentMetadata:
-    """Extract document metadata from first-page text using heuristics.
+    """Extract document metadata from first-page text using LLM first, then heuristics.
 
     Args:
         text: First page text from parsed PDF.
@@ -279,41 +279,36 @@ def extract_metadata(text: str, filename: str) -> DocumentMetadata:
             metadata_confidence=0.3,
         )
 
-    title = _extract_title(text)
-    authors = _extract_authors(text)
-    year = _extract_year(text)
-    journal = _extract_journal(text)
-    volume, issue = _extract_volume_issue(text)
-    doi = _extract_doi(text)
-
-    confidence = _compute_confidence(title, authors, year, journal, doi)
-
-    # LLM fallback for low-confidence or missing fields
-    author_weak = not authors or len(authors) == 0
-    title_weak = not title or len(title) < 10
-    if author_weak or title_weak or confidence < 0.7:
+    # Always try LLM first for best results
+    llm_meta = LLMMetadataExtractor.extract(text, filename)
+    # Retry once on empty result for transient API errors
+    if not llm_meta.get("author") and not llm_meta.get("title"):
+        time.sleep(0.5)
         llm_meta = LLMMetadataExtractor.extract(text, filename)
-        if not llm_meta.get("author") and not llm_meta.get("title"):
-            # One retry for transient API errors
-            time.sleep(0.5)
-            llm_meta = LLMMetadataExtractor.extract(text, filename)
-        if llm_meta.get("author"):
-            authors = [llm_meta["author"]]
-            logger.info("LLM metadata fallback provided author for %s", filename)
-        if llm_meta.get("title"):
-            title = llm_meta["title"]
-            logger.info("LLM metadata fallback provided title for %s", filename)
-        if llm_meta.get("year") and not year:
+
+    # If LLM returned useful data, use it
+    if llm_meta.get("author") or llm_meta.get("title"):
+        authors = [llm_meta["author"]] if llm_meta.get("author") else []
+        title = llm_meta.get("title")
+        year = None
+        if llm_meta.get("year"):
             try:
                 year = int(llm_meta["year"])
             except (ValueError, TypeError):
                 pass
-        if llm_meta.get("journal"):
-            journal = llm_meta["journal"]
-        if llm_meta.get("doi") and not doi:
-            doi = llm_meta["doi"]
+        journal = llm_meta.get("journal", "")
+        doi = llm_meta.get("doi")
+        volume, issue = _extract_volume_issue(text)
+        logger.info("LLM metadata extraction succeeded for %s", filename)
+    else:
+        # LLM failed or returned empty → use regex extraction
+        title = _extract_title(text)
+        authors = _extract_authors(text)
+        year = _extract_year(text)
+        journal = _extract_journal(text)
+        volume, issue = _extract_volume_issue(text)
+        doi = _extract_doi(text)
 
-    # Recompute confidence with LLM-improved metadata
     confidence = _compute_confidence(title, authors, year, journal, doi)
     document_id = Path(filename).stem
 
