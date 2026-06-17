@@ -2,8 +2,7 @@
 
 import hashlib
 import logging
-from collections import deque
-from typing import Any, Optional
+from typing import Optional
 
 import diskcache
 
@@ -19,16 +18,17 @@ class QueryCache:
         persist_path: Optional[str] = None,
     ):
         self.max_size = max_size
+        cache_dir = persist_path if persist_path else "./cache"
         self._cache = diskcache.Cache(
-            directory="./cache",
+            directory=cache_dir,
             size_limit=100 * 1024 * 1024,
             eviction_policy="least-recently-used",
-            expire=3600,
         )
+        # Start fresh — diskcache is process-local; this avoids test
+        # isolation issues from a shared on-disk cache directory.
+        self._cache.clear()
         self._hits = 0
         self._misses = 0
-        self._keys: deque[str] = deque()
-        self._cache.clear()
 
     def get(self, query: str, top_k: int = 5) -> Optional[dict]:
         """Get cached result for a query.
@@ -41,14 +41,11 @@ class QueryCache:
             Cached result dict or None if not found.
         """
         key = self._make_key(query, top_k)
-        if key in self._cache:
+        result = self._cache.get(key)
+        if result is not None:
             self._hits += 1
             logger.debug("Cache hit for query: %s", query[:50])
-            # Promote to MRU position
-            if key in self._keys:
-                self._keys.remove(key)
-                self._keys.append(key)
-            return self._cache[key]
+            return result
         self._misses += 1
         return None
 
@@ -61,16 +58,18 @@ class QueryCache:
             result: The result dict to cache.
         """
         key = self._make_key(query, top_k)
-        self._cache[key] = result
+        self._cache.set(key, result, expire=3600)
 
-        if key in self._keys:
-            self._keys.remove(key)
-        self._keys.append(key)
-
-        # Evict oldest entries if over capacity
-        while len(self._keys) > self.max_size:
-            oldest = self._keys.popleft()
-            del self._cache[oldest]
+        # Enforce count-based LRU: evict oldest entry by access_time
+        # when capacity is exceeded.  diskcache's built-in cull is
+        # byte-based (volume relies on PRAGMA page_count), so we
+        # handle count-based eviction directly here.
+        if len(self._cache) > self.max_size:
+            self._cache._sql(
+                "DELETE FROM Cache "
+                "WHERE rowid = (SELECT rowid FROM Cache "
+                "ORDER BY access_time ASC LIMIT 1)"
+            )
 
         logger.debug("Cached result for query: %s", query[:50])
 
@@ -79,7 +78,7 @@ class QueryCache:
         """Return cache statistics."""
         total = self._hits + self._misses
         return {
-            "size": len(self._keys),
+            "size": len(self._cache),
             "max_size": self.max_size,
             "hits": self._hits,
             "misses": self._misses,
@@ -89,7 +88,6 @@ class QueryCache:
     def clear(self) -> None:
         """Clear the cache."""
         self._cache.clear()
-        self._keys.clear()
         self._hits = 0
         self._misses = 0
 
