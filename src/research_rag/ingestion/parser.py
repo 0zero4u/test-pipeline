@@ -131,18 +131,14 @@ def parse_pdf(file_path: Path) -> ParsedDocument:
     logger.info("Parsing PDF: %s", file_path.name)
 
     try:
-        raw_markdown = pymupdf4llm.to_markdown(str(file_path))
+        chunks = pymupdf4llm.to_markdown(str(file_path), page_chunks=True)
     except Exception as exc:
         raise RuntimeError(
             f"pymupdf4llm failed to parse {file_path.name}: {exc}"
         ) from exc
 
-    # pymupdf4llm separates pages with form feed (\f) characters
-    raw_markdown = raw_markdown or ""
-    raw_markdown = raw_markdown.rstrip("\f")
-    pages = raw_markdown.split("\f")
-    if not pages:
-        pages = [""]
+    # pymupdf4llm returns list of dicts with 'text' key when page_chunks=True
+    pages = [chunk["text"] for chunk in chunks] if chunks else [""]
 
     # Reconstruct markdown with page break markers
     markdown = PAGE_BREAK_MARKER.join(pages)
