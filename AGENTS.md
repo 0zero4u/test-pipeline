@@ -75,6 +75,15 @@ research-rag/
 
 ### Hallucination Detection (`CitationAuditor`)
 - Extracts claims around [N] markers at 3 granularities (sentence, last-50, last-20 chars)
+- Verifies claims against source chunk text via **exact normalized substring matching**
+- **Limitation**: Only catches verbatim quote matches. Paraphrased or synthesized claims
+  (e.g. "This paper analyzes...", introductory/transitional sentences) will be flagged
+  even if factually correct. This is NOT a hallucination — just a substring match limitation.
+- Report-only: never modifies answer or citations, never blocks output
+- Returns `hallucination_report` dict: `total_citations`, `verified_count`, `flagged_count`, `details`
+- **PASS** = claim text found in source chunk (substring match)
+- **FLAG** = claim text NOT found verbatim in source chunk (may still be factually correct, just paraphrased)
+- Extracts claims around [N] markers at 3 granularities (sentence, last-50, last-20 chars)
 - Verifies claims against source chunk text via normalized substring matching
 - Report-only: never modifies answer or citations
 - Returns `hallucination_report` dict alongside answer
@@ -100,7 +109,35 @@ research-rag/
 - `type: ignore` in pipeline.py — list initialization pattern
 - Encapsulation leak — ChromaStore accesses EmbeddingService private attrs
 - Singleton — Metrics uses `__new__` override
-- Empty `except: pass` in chroma.py
+
+## CAVEATS & PITFALLS
+
+### 1. CitationAuditor Flags Are NOT Hallucinations
+The auditor uses **exact substring matching**. LLM-written synthesis sentences like
+"This paper analyzes..." or "In conclusion..." will ALWAYS flag even when factually
+correct. A FLAG means "this text isn't verbatim in the source" — NOT "this is a lie."
+Real hallucinations (LLM inventing fake claims) will also flag, but so will legitimate
+paraphrasing. **Do not treat flags as errors** — they're informational.
+
+### 2. Metadata Still Fails on Unusual PDF Layouts
+LLM-first fixes 95% of cases (costs ~$0.00005/PDF). But sidebar authors, journal headers
+before titles, or scanned PDFs can still produce wrong metadata. No reliable confidence
+scoring exists for these edge cases.
+
+### 3. Re-index After Chunking Changes
+Changing chunk sizes, token estimation method, or any chunking parameter invalidates
+existing ChromaDB index. Always delete `./data/chroma` and re-run ingestion.
+
+### 4. top_k Has No Source Diversity
+ChromaDB returns the N most semantically similar chunks regardless of source PDF.
+With multiple PDFs, all top-k chunks could come from one PDF if it's more relevant
+to the query. Other PDFs become invisible in that answer.
+
+### 5. Costs
+- LLM metadata: ~$0.00005/PDF
+- Embedding (qwen3-embedding-8b): ~$0.00001/PDF
+- Answer generation (deepseek-v4-flash): ~$0.001-0.005/query
+- tiktoken: free (local)
 
 ## COMMANDS
 
