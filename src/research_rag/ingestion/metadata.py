@@ -31,8 +31,7 @@ VOLUME_ISSUE_PATTERN = re.compile(
 )
 DOI_PATTERN = re.compile(r"\b(10\.\d{4,}/[\w\-._;()/:]+)\b")
 AUTHOR_LINE_PATTERN = re.compile(
-    r"^(?:by\s+)?([A-Z][a-zA-Z]*\s+[A-Z][a-zA-Z]*"
-    r"(?:\s+(?:and|&)\s+[A-Z][a-zA-Z]*\s+[A-Z][a-zA-Z]*)*)",
+    r"^(?:by\s+)?([A-Z][a-zA-Z]*(?:[ \t]+[A-Z][a-zA-Z]*)+(?:[ \t]+(?:and|&)[ \t]+[A-Z][a-zA-Z]*(?:[ \t]+[A-Z][a-zA-Z]*)+)*)",
     re.MULTILINE,
 )
 
@@ -86,7 +85,7 @@ def _extract_authors(text: str) -> list[str]:
             return [n.strip() for n in cleaned.split(",")]
         # Look for "Name Surname and Name Surname"
         name_match = re.findall(
-            r"([A-Z][a-z]+\s+[A-Z]\.?\s*[A-Z]?[a-z]*)", cleaned
+            r"([A-Z][a-z]+(?:[ \t]+[A-Z]\.?[ \t]*[A-Z]?[a-z]*)+)",
         )
         if len(name_match) >= 1 and i > 0:
             # Only if previous line looks like a title
@@ -106,9 +105,8 @@ def _extract_year(text: str) -> Optional[int]:
         # Filter to reasonable range
         valid_years = [int(y) for y in years if 1900 <= int(y) <= 2026]
         if valid_years:
-            # Return the most common year (usually the publication year)
-            from collections import Counter
-            return Counter(valid_years).most_common(1)[0][0]
+            # Prefer most recent year (publication year vs historical event years)
+            return max(valid_years)
     return None
 
 
@@ -292,7 +290,7 @@ def extract_metadata(text: str, filename: str) -> DocumentMetadata:
     # LLM fallback for low-confidence or missing fields
     author_weak = not authors or len(authors) == 0
     title_weak = not title or len(title) < 10
-    if author_weak or title_weak or confidence < 0.6:
+    if author_weak or title_weak or confidence < 0.7:
         llm_meta = LLMMetadataExtractor.extract(text, filename)
         if llm_meta.get("author"):
             authors = [llm_meta["author"]]
