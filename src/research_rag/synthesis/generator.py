@@ -1,9 +1,11 @@
 """Answer generation pipeline for Research RAG."""
+from __future__ import annotations
+
 
 import logging
 import re
 import time
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from research_rag.cache import QueryCache
 from research_rag.citations.parser import CitationParser, Citation
@@ -12,6 +14,10 @@ from research_rag.metrics import Metrics
 from research_rag.retrieval import Retriever, SearchResult
 from research_rag.synthesis.client import SynthesisClient
 from research_rag.synthesis.prompts import build_synthesis_messages
+
+if TYPE_CHECKING:
+    from research_rag.citations.formatter import CitationFormatter
+
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +36,7 @@ class AnswerGenerator:
         citation_parser: Optional[CitationParser] = None,
         citation_validator: Optional[CitationValidator] = None,
         cache: Optional[QueryCache] = None,
+        citation_formatter: Optional['CitationFormatter'] = None,
     ):
         self.retriever = retriever
         self.synthesis_client = synthesis_client or SynthesisClient(
@@ -39,6 +46,7 @@ class AnswerGenerator:
         self.citation_parser = citation_parser or CitationParser()
         self.citation_validator = citation_validator or CitationValidator()
         self.cache = cache
+        self.citation_formatter = citation_formatter
 
     def answer(
         self,
@@ -107,6 +115,13 @@ class AnswerGenerator:
         # Step 5: Validate and enrich citations with metadata
         metadata_map = self._build_metadata_map(results)
         citations = self.citation_validator.validate(citations, metadata_map)
+
+        # Optional: Format citations in answer
+        if self.citation_formatter:
+            formatted = self.citation_formatter.format(raw_answer, citations)
+            raw_answer = formatted["answer"]
+            if formatted.get("works_cited"):
+                raw_answer += "\n\n---\n\n" + formatted["works_cited"]
 
         # Step 6: Estimate confidence based on citation coverage
         confidence = self._estimate_confidence(citations, results)
