@@ -2,6 +2,9 @@
 
 import logging
 import re
+import json
+import os
+import requests
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -181,6 +184,83 @@ def _compute_confidence(
     return 0.3
 
 
+class LLMMetadataExtractor:
+    """Extracts bibliographic metadata via OpenRouter LLM, used as regex fallback."""
+
+    OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+    MODEL = "deepseek/deepseek-v4-flash"
+
+    @classmethod
+    def extract(cls, text: str, filename: str) -> dict[str, str]:
+        """Extract metadata from first page text using LLM.
+
+        Args:
+            text: First page text (~2000 chars) of the PDF.
+            filename: PDF filename for fallback.
+
+        Returns:
+            dict with author, title, year, journal, doi keys (empty strings if LLM fails).
+        """
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+        if not api_key:
+            logger.warning("No OPENROUTER_API_KEY set, skipping LLM metadata extraction")
+            return {}
+
+        snippet = text[:2000].strip()
+        if len(snippet) < 50:
+            return {}
+
+        prompt = f"""Extract bibliographic metadata from this academic document header.
+Return ONLY a JSON object with these exact keys: author, title, year, journal, doi.
+If any field is unknown, use empty string "".
+
+Document text:
+---
+{snippet}
+---
+
+Rules:
+- author: Full name(s) as they appear, cleaned (no "Dr.", "Prof."). Multiple authors separated by " and ".
+- title: The article/paper title exactly as printed, NOT the journal name.
+- year: 4-digit year only.
+- journal: The journal or publisher name, NOT the article title.
+- doi: DOI if present, else empty string.
+
+Output JSON only, no explanation."""
+
+        try:
+            response = requests.post(
+                f"{cls.OPENROUTER_BASE_URL}/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": cls.MODEL,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "max_tokens": 500,
+                    "temperature": 0.1,
+                },
+                timeout=30
+            )
+            response.raise_for_status()
+            content = response.json()["choices"][0]["message"]["content"]
+
+            json_match = re.search(r'\{[\s\S]*\}', content)
+            if json_match:
+                metadata = json.loads(json_match.group(0))
+                return {
+                    "author": metadata.get("author", "").strip(),
+                    "title": metadata.get("title", "").strip(),
+                    "year": metadata.get("year", "").strip(),
+                    "journal": metadata.get("journal", "").strip(),
+                    "doi": metadata.get("doi", "").strip(),
+                }
+        except Exception as e:
+            logger.warning(f"LLM metadata extraction failed for {filename}: {e}")
+
+        return {}
+
 def extract_metadata(text: str, filename: str) -> DocumentMetadata:
     """Extract document metadata from first-page text using heuristics.
 
@@ -207,6 +287,30 @@ def extract_metadata(text: str, filename: str) -> DocumentMetadata:
     volume, issue = _extract_volume_issue(text)
     doi = _extract_doi(text)
 
+    confidence = _compute_confidence(title, authors, year, journal, doi)
+
+    # LLM fallback for low-confidence or missing fields
+    author_weak = not authors or len(authors) == 0
+    title_weak = not title or len(title) < 10
+    if author_weak or title_weak or confidence < 0.6:
+        llm_meta = LLMMetadataExtractor.extract(text, filename)
+        if llm_meta.get("author"):
+            authors = [llm_meta["author"]]
+            logger.info("LLM metadata fallback provided author for %s", filename)
+        if llm_meta.get("title"):
+            title = llm_meta["title"]
+            logger.info("LLM metadata fallback provided title for %s", filename)
+        if llm_meta.get("year") and not year:
+            try:
+                year = int(llm_meta["year"])
+            except (ValueError, TypeError):
+                pass
+        if llm_meta.get("journal"):
+            journal = llm_meta["journal"]
+        if llm_meta.get("doi") and not doi:
+            doi = llm_meta["doi"]
+
+    # Recompute confidence with LLM-improved metadata
     confidence = _compute_confidence(title, authors, year, journal, doi)
     document_id = Path(filename).stem
 
