@@ -1,12 +1,12 @@
 # RESEARCH-RAG Knowledge Base
 
 **Generated:** 2026-06-17
-**Commit:** 81558cf
+**Commit:** 20d7527
 **Branch:** dev3
 
 ## OVERVIEW
 
-Citation-grounded RAG system for humanities/literary analysis. Ingests academic PDFs, extracts structured content, answers research queries with MLA/APA inline citations and hallucination detection. Python 3.10+, Pydantic v2, ChromaDB, OpenRouter (deepseek-v4-flash, qwen3-embedding-8b).
+Citation-grounded RAG system for humanities/literary analysis. Ingests academic PDFs with LLM-first metadata extraction and tiktoken token counting, extracts structured content, answers research queries with MLA/APA inline citations and hallucination detection. Python 3.10+, Pydantic v2, ChromaDB, OpenRouter (deepseek-v4-flash, qwen3-embedding-8b).
 
 ## STRUCTURE
 
@@ -38,11 +38,11 @@ research-rag/
 | Core models | `src/research_rag/models.py` | Chunk, Citation, DocumentMetadata |
 | Config schema | `src/research_rag/config.py` | Pydantic Settings, YAML+env |
 | PDF ingestion | `src/research_rag/ingestion/` | parser -> LLM metadata -> chunker -> pipeline |
-| LLM metadata | `src/research_rag/ingestion/metadata.py` | LLMMetadataExtractor (regex->LLM fallback) |
+| LLM metadata | src/research_rag/ingestion/metadata.py | LLMMetadataExtractor (LLM-first, regex fallback on API error) |
 | Embedding | `src/research_rag/embeddings/api.py` | qwen3-embedding-8b (4096-dim) |
 | Chroma ops | `src/research_rag/storage/chroma.py` | CRUD, HNSW config |
 | Semantic search | `src/research_rag/retrieval/search.py` | top-k, metadata filtering |
-| Answer generation | `src/research_rag/synthesis/generator.py` | 7-step pipeline + optional auditor |
+| Answer generation | src/research_rag/synthesis/generator.py | 7-step pipeline with LLM-first metadata + tiktoken token counting, optional auditor |
 | Citation parser | `src/research_rag/citations/parser.py` | Extracts [N] markers from LLM output |
 | Citation validator | `src/research_rag/citations/validator.py` | Author/year enrichment |
 | Citation formatter | `src/research_rag/citations/formatter.py` | MLA/APA inline + Works Cited |
@@ -55,16 +55,16 @@ research-rag/
 
 ## TWO PIPELINES
 
-**INGESTION:** PDF -> `pymupdf4llm` parse -> regex+LLM metadata (title/author/year) -> section-aware chunking (500-900t, 12% overlap) -> `qwen3-embedding-8b` (4096-dim) -> Chroma HNSW index.
+**INGESTION:** PDF -> `pymupdf4llm` parse -> LLM metadata (LLM-first, regex fallback) -> section-aware chunking (500-900t, 12% overlap, tiktoken token counting) -> `qwen3-embedding-8b` (4096-dim) -> Chroma HNSW index.
 
 **QUERY:** Query -> Chroma top-k search -> build prompt -> OpenRouter LLM -> `CitationParser` ([N] markers) -> `CitationValidator` (enrich) -> `CitationAuditor` (hallucination check) -> `CitationFormatter` (MLA/APA) -> Works Cited. LRU cache via diskcache.
 
 ## KEY COMPONENTS
 
 ### Metadata Extraction
-- Primary: regex heuristics (title, author, year, journal, DOI)
-- Fallback: `LLMMetadataExtractor` calls deepseek-v4-flash via OpenRouter when confidence < 0.7
-- Retry: 1 retry on transient API errors
+- Strategy: LLM-first — always call deepseek-v4-flash via OpenRouter for metadata extraction
+- Fallback: regex heuristics used only on API failure or parse error
+- Retry: tenacity exponential backoff + jitter (configurable retries)
 - Multi-word author names supported (e.g. "Dipak Raj Joshi")
 
 ### Citation Formatting
@@ -137,4 +137,5 @@ research-rag <cmd>            # CLI (ingest, query, ask, status, repl)
 - Caching: `diskcache` (disk-backed LRU with TTL) replaces custom JSON I/O.
 - Retry: `tenacity` (exponential backoff + jitter) replaces custom retry decorator.
 - Metadata: LLM fallback triggers when regex confidence < 0.7. Retry on API failure.
+- Token counting: tiktoken (cl100k_base) replaces len(text)//4 for accurate token counts
 - All 6 dev phases complete.

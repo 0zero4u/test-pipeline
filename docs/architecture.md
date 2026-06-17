@@ -2,7 +2,7 @@
 
 > **Purpose**: Citation-grounded research assistance for humanities/literary analysis  
 > **Design Philosophy**: Automatic where stable, inference where ambiguous  
-> **Last Updated**: 2026-05-29  
+> **Last Updated**: 2026-06-17
 > **Status**: Phase 1 Complete (Foundation), Phase 2 Next (Ingestion)
 
 ---
@@ -48,15 +48,15 @@ Ontology never unless proven necessary
 │                                                              │
 │   PDF Files                                                  │
 │       ↓                                                      │
-│   Docling (parse + structure)                                │
+│   pymupdf4llm (parse + structure)                                │
 │       ↓                                                      │
-│   Metadata Extraction (lightweight heuristics)               │
+│   Metadata Extraction (LLM-first, regex fallback)               │
 │       ↓                                                      │
-│   Section-Aware Chunking (500-900 tokens)                    │
+│   Section-Aware Chunking (500-900t, tiktoken token counting)     │
 │       ↓                                                      │
 │   Qwen3 8B via OpenRouter (entity extraction)                │
 │       ↓                                                      │
-│   Embedding API (BGE-base-en-v1.5)                           │
+│   Embedding (qwen3-embedding-8b, 4096-dim)                       │
 │       ↓                                                      │
 │   Chroma (vectors + metadata)                                │
 │                                                              │
@@ -74,7 +74,7 @@ Ontology never unless proven necessary
 │       ↓                                                      │
 │   Evidence Chunks + Metadata                                 │
 │       ↓                                                      │
-│   Qwen3 32B via OpenRouter (synthesis)                       │
+│   deepseek-v4-flash via OpenRouter (synthesis)                   │
 │       ↓                                                      │
 │   Citation-Grounded Answer                                   │
 │                                                              │
@@ -89,27 +89,27 @@ Ontology never unless proven necessary
 
 | Component | Technology | Purpose | Deployment |
 |-----------|------------|---------|------------|
-| PDF Parser | Docling | Parse PDFs to structured markdown | Local (CPU) |
-| Metadata Extraction | Heuristic regex | Extract title, authors, year, journal | Local (CPU) |
+| PDF Parser | pymupdf4llm | Parse PDFs to structured markdown | Local (CPU) |
+| Metadata Extraction | LLM-first + regex fallback | LLM extract with heuristic fallback on API error | API (OpenRouter) |
 | Chunking | Custom section-aware | Split documents preserving context | Local (CPU) |
 | Entity Extraction | Qwen3 8B via OpenRouter | Extract people, works, themes | API |
-| Embeddings | BGE-base-en-v1.5 via API | Generate semantic vectors | API |
+| Embeddings | qwen3-embedding-8b (4096-dim) via OpenRouter | Generate semantic vectors | API |
 | Vector DB | Chroma | Store embeddings + metadata | Local (CPU) |
-| Synthesis | Qwen3 32B via OpenRouter | Cross-paper reasoning | API |
+| Synthesis | deepseek-v4-flash via OpenRouter | Cross-paper reasoning | API |
 
 ### API Dependencies
 
 | Service | Model | Use Case | Cost Model |
 |---------|-------|----------|------------|
 | OpenRouter | Qwen3 8B | Entity extraction | Per-token |
-| OpenRouter | Qwen3 32B | Answer synthesis | Per-token |
-| Embedding API | BGE-base-en-v1.5 | Query/document vectors | Per-call |
+| OpenRouter | deepseek-v4-flash | Answer synthesis | Per-token |
+| OpenRouter | qwen3-embedding-8b | Query/document vectors | Per-token |
 
 ### Local Infrastructure
 
 | Component | Spec | Notes |
 |-----------|------|-------|
-| RAM | 8-16GB | Sufficient for Docling + Chroma |
+| RAM | 8-16GB | Sufficient for pymupdf4llm (lighter than Docling) + Chroma |
 | CPU | 4-8 cores | Handles overnight ingestion |
 | Storage | 10-50GB | PDFs + Chroma database |
 | GPU | None required | All heavy compute via API |
@@ -337,14 +337,14 @@ Ontology never unless proven necessary
 
 ## 5. Ingestion Pipeline
 
-### 5.1 PDF Parsing (Docling)
+### 5.1 PDF Parsing (pymupdf4llm)
 
 ```
 Input:  PDF file
 Output: Structured markdown with sections, tables, page markers
 
 Process:
-1. Load PDF via Docling
+1. Load PDF via pymupdf4llm
 2. Extract text with layout preservation
 3. Identify sections via heading detection
 4. Preserve page boundaries
@@ -360,28 +360,26 @@ Process:
 ### 5.2 Metadata Extraction
 
 ```
-Input:  First page text from Docling
+Input:  First page text from pymupdf4llm
 Output: JSON metadata object
 
-Extraction Rules:
-1. Title: First H1 or centered large text
-2. Authors: Line after title (comma-separated names)
-3. Year: 4-digit number near journal info
-4. Journal: Line containing "Journal", "Review", "Studies"
-5. Volume/Issue: Patterns like "Vol. X, No. Y"
-6. DOI: Pattern matching "10.XXXX/..."
+Extraction Strategy:
+1. Primary: LLM call to deepseek-v4-flash via OpenRouter
+   - Prompt includes document text, requests structured metadata
+   - Returns title, authors, year, journal, volume, issue, DOI
+2. Fallback: Regex heuristics applied only on API failure/error
+3. Retry: tenacity exponential backoff + jitter (default 2 retries)
 ```
 
-**Confidence Scoring:**
-- 1.0: All fields extracted with high confidence
-- 0.8: Most fields extracted, minor ambiguity
-- 0.5: Partial extraction, significant gaps
-- 0.3: Minimal extraction, mostly from filename
+**Error Handling:**
+- LLM API failure: fallback to regex heuristics
+- Both fail: partial metadata with warning
+- Retry: tenacity exponential backoff + jitter
 
 ### 5.3 Section-Aware Chunking
 
 ```
-Input:  Structured markdown from Docling
+Input:  Structured markdown from pymupdf4llm
 Output: Array of chunk objects
 
 Algorithm:
@@ -401,6 +399,7 @@ Algorithm:
 - Overlap: 10-15% for context continuity
 - Boundary: Never split mid-sentence
 - Preserve: Quoted text, citation markers
+- Token counting: tiktoken (cl100k_base) for accuracy
 
 ### 5.4 Entity Extraction (Qwen3 8B)
 
@@ -429,13 +428,12 @@ Return JSON only. No explanation."
 
 ```
 Input:  Chunk text
-Output: 768-dimensional vector (BGE-base-en-v1.5)
+Output: 4096-dimensional vector (qwen3-embedding-8b)
 
 Process:
 1. Clean chunk text (remove markdown artifacts)
-2. Send to embedding API
-3. Receive vector embedding
-4. Store with chunk metadata in Chroma
+2. Send to OpenRouter embedding API
+3. Receive 4096-dim vector embedding
 ```
 
 ---
@@ -452,7 +450,7 @@ Steps:
 1. Generate query embedding (same API as ingestion)
 2. Query Chroma for top-k similar chunks (k=5-10)
 3. Retrieve chunk text + metadata
-4. Send to Qwen3 32B with synthesis prompt
+4. Send to deepseek-v4-flash with synthesis prompt
 5. Return answer with inline citations
 ```
 
@@ -604,7 +602,7 @@ Store only essential information:
 ### 9.3 Add GROBID (When Needed)
 
 **Trigger**: Metadata/citation extraction quality painful  
-**Solution**: Docling + GROBID pipeline  
+**Solution**: pymupdf4llm + GROBID pipeline
 **Integration**: Enhanced bibliographic parsing
 
 ### 9.4 Add Claim Extraction (When Needed)
@@ -625,7 +623,6 @@ pip install pymupdf4llm chromadb openai
 
 # Set API keys
 export OPENROUTER_API_KEY="..."
-export EMBEDDING_API_KEY="..."
 
 # Run ingestion
 python ingest.py --input ./pdfs/ --output ./data/
@@ -647,7 +644,6 @@ services:
       - ./pdfs:/app/pdfs
     environment:
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - EMBEDDING_API_KEY=${EMBEDDING_API_KEY}
 ```
 
 ---
@@ -671,7 +667,7 @@ retrieval:
   similarity_threshold: 0.7
 
 synthesis:
-  model: qwen3-32b
+  model: deepseek-v4-flash
   max_tokens: 2000
   temperature: 0.3
 
@@ -687,8 +683,8 @@ storage:
 | Operation | Model | Tokens/Call | Cost/1000 Calls |
 |-----------|-------|-------------|-----------------|
 | Entity Extraction | Qwen3 8B | ~1000 | ~$0.50 |
-| Query Synthesis | Qwen3 32B | ~3000 | ~$3.00 |
-| Embedding | BGE | ~500 | ~$0.10 |
+| Query Synthesis | deepseek-v4-flash | ~3000 | ~$3.00 |
+| Embedding | qwen3-embedding-8b | ~500 | ~$0.10 |
 
 **Monthly estimate (100 queries/day):**
 - Entity extraction: ~$15/month (during ingestion)
