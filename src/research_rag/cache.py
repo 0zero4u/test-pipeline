@@ -2,12 +2,12 @@
 
 import hashlib
 import logging
+import tempfile
 from typing import Optional
 
 import diskcache
 
 logger = logging.getLogger(__name__)
-
 
 class QueryCache:
     """LRU cache for query results with disk persistence via diskcache."""
@@ -18,15 +18,14 @@ class QueryCache:
         persist_path: Optional[str] = None,
     ):
         self.max_size = max_size
-        cache_dir = persist_path if persist_path else "./cache"
+        directory = persist_path if persist_path else tempfile.mkdtemp(prefix="research_rag_cache_")
         self._cache = diskcache.Cache(
-            directory=cache_dir,
+            directory=directory,
             size_limit=100 * 1024 * 1024,
             eviction_policy="least-recently-used",
         )
-        # Start fresh — diskcache is process-local; this avoids test
-        # isolation issues from a shared on-disk cache directory.
-        self._cache.clear()
+        # No clear() — default mode uses tempdir for test isolation,
+        # persist_path mode provides true disk persistence.
         self._hits = 0
         self._misses = 0
 
@@ -60,16 +59,13 @@ class QueryCache:
         key = self._make_key(query, top_k)
         self._cache.set(key, result, expire=3600)
 
-        # Enforce count-based LRU: evict oldest entry by access_time
-        # when capacity is exceeded.  diskcache's built-in cull is
-        # byte-based (volume relies on PRAGMA page_count), so we
-        # handle count-based eviction directly here.
+        # Enforce count-based LRU when capacity is exceeded. diskcache's
+        # built-in cull is byte-based, so handle count-based eviction here.
         if len(self._cache) > self.max_size:
-            self._cache._sql(
-                "DELETE FROM Cache "
-                "WHERE rowid = (SELECT rowid FROM Cache "
-                "ORDER BY access_time ASC LIMIT 1)"
-            )
+            to_remove = len(self._cache) - self.max_size
+            # diskcache iterates in insertion order; remove oldest entries
+            for old_key in list(self._cache)[:to_remove]:
+                del self._cache[old_key]
 
         logger.debug("Cached result for query: %s", query[:50])
 
