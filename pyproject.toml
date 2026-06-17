@@ -25,7 +25,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "docling>=2.0.0",
+    "pymupdf4llm>=0.3.0",
     "chromadb>=0.4.0",
     "openai>=1.0.0",
     "pydantic>=2.0.0",
@@ -34,7 +34,8 @@ dependencies = [
     "click>=8.0.0",
     "rich>=13.0.0",
     "tqdm>=4.65.0",
-    "torch>=2.2.2",
+    "diskcache>=5.6",
+    "tenacity>=8.0",
 ]
 
 [tool.uv]
