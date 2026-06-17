@@ -1,12 +1,11 @@
-"""PDF parser using Docling."""
+"""PDF parser using pymupdf4llm."""
 
 import logging
 import re
 from pathlib import Path
 from typing import Any
 
-from docling.document_converter import DocumentConverter
-from docling_core.types.doc import DocItemLabel, TextItem
+import pymupdf4llm
 
 from research_rag.logging import get_logger
 
@@ -16,7 +15,7 @@ PAGE_BREAK_MARKER = "<!-- page break -->"
 
 
 class ParsedDocument:
-    """Result of parsing a PDF with Docling."""
+    """Result of parsing a PDF with pymupdf4llm."""
 
     def __init__(
         self,
@@ -53,17 +52,37 @@ def _make_document_id(file_path: Path) -> str:
     return stem[:64]
 
 
-def _extract_sections(doc: Any) -> list[dict[str, Any]]:
-    """Extract section headings from a DoclingDocument."""
+def _extract_sections(pages: list[str]) -> list[dict[str, Any]]:
+    """Extract section headings from markdown pages.
+
+    Parses markdown headings (h1/h2/h3) from each page and returns
+    section metadata with title, level, and page number.
+
+    Args:
+        pages: List of markdown strings, one per page.
+
+    Returns:
+        List of dicts with 'title', 'level', and 'page_no' keys.
+    """
     sections: list[dict[str, Any]] = []
-    for item, level in doc.iterate_items():
-        if isinstance(item, TextItem) and item.label == DocItemLabel.SECTION_HEADER:
-            page_no = item.prov[0].page_no if item.prov else 1
-            sections.append({
-                "title": item.text,
-                "level": item.level if hasattr(item, "level") else level,
-                "page_no": page_no,
-            })
+    seen_headings: set[tuple[str, int]] = set()
+
+    heading_pattern = re.compile(r"^ {0,3}(#{1,3})\s+(.+)$", re.MULTILINE)
+
+    for page_no, page_text in enumerate(pages, 1):
+        for match in heading_pattern.finditer(page_text):
+            level = len(match.group(1))
+            title = match.group(2).strip()
+            # Deduplicate identical headings on the same level
+            key = (title, level)
+            if key not in seen_headings:
+                seen_headings.add(key)
+                sections.append({
+                    "title": title,
+                    "level": level,
+                    "page_no": page_no,
+                })
+
     return sections
 
 
@@ -92,7 +111,7 @@ def _get_page_boundaries(markdown: str) -> list[tuple[int, int, int]]:
 
 
 def parse_pdf(file_path: Path) -> ParsedDocument:
-    """Parse a PDF file using Docling.
+    """Parse a PDF file using pymupdf4llm.
 
     Args:
         file_path: Path to the PDF file.
@@ -102,7 +121,7 @@ def parse_pdf(file_path: Path) -> ParsedDocument:
 
     Raises:
         FileNotFoundError: If the PDF does not exist.
-        RuntimeError: If Docling fails to parse the PDF.
+        RuntimeError: If pymupdf4llm fails to parse the PDF.
     """
     if not file_path.exists():
         raise FileNotFoundError(f"PDF not found: {file_path}")
@@ -112,27 +131,30 @@ def parse_pdf(file_path: Path) -> ParsedDocument:
     logger.info("Parsing PDF: %s", file_path.name)
 
     try:
-        converter = DocumentConverter()
-        result = converter.convert(str(file_path))
-        doc = result.document
+        raw_markdown = pymupdf4llm.to_markdown(str(file_path))
     except Exception as exc:
         raise RuntimeError(
-            f"Docling failed to parse {file_path.name}: {exc}"
+            f"pymupdf4llm failed to parse {file_path.name}: {exc}"
         ) from exc
 
-    # Export markdown with page break placeholders
-    markdown = doc.export_to_markdown(
-        page_break_placeholder=PAGE_BREAK_MARKER,
-    )
+    # pymupdf4llm separates pages with form feed (\f) characters
+    raw_markdown = raw_markdown or ""
+    raw_markdown = raw_markdown.rstrip("\f")
+    pages = raw_markdown.split("\f")
+    if not pages:
+        pages = [""]
 
-    # Extract sections
-    sections = _extract_sections(doc)
+    # Reconstruct markdown with page break markers
+    markdown = PAGE_BREAK_MARKER.join(pages)
+
+    # Extract sections from page markdown
+    sections = _extract_sections(pages)
 
     # Get page boundaries from markdown
     page_boundaries = _get_page_boundaries(markdown)
 
     # Determine page count
-    page_count = max(len(doc.pages), len(page_boundaries))
+    page_count = max(len(pages), len(page_boundaries))
 
     # Extract first page text (for metadata extraction)
     first_page_text = markdown
