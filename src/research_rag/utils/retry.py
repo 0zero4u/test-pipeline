@@ -1,9 +1,14 @@
-"""Retry decorator with exponential backoff and jitter."""
+"""Retry decorator with exponential backoff and jitter (powered by tenacity)."""
 
-import functools
-import random
-import time
 from typing import Any, Callable, Optional, ParamSpec, TypeVar
+
+from tenacity import (
+    retry as tenacity_retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential,
+    wait_random,
+)
 
 from research_rag.utils.errors import APIError, RateLimitError, ServerError
 
@@ -37,30 +42,31 @@ def retry(
     Returns:
         A decorator that wraps the target function with retry logic.
     """
+    max_attempts = max_retries + 1
 
-    def decorator(func: Callable[P, T]) -> Callable[P, T]:
-        @functools.wraps(func)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
-            last_exception: Optional[Exception] = None
-            for attempt in range(max_retries + 1):
-                try:
-                    return func(*args, **kwargs)
-                except retryable_exceptions as exc:
-                    last_exception = exc
-                    if attempt >= max_retries:
-                        raise
-                    delay = base_delay * (2 ** attempt)
-                    jitter = delay * 0.25
-                    delay = delay + random.uniform(-jitter, jitter)
-                    delay = max(0.0, delay)
-                    if on_retry is not None:
-                        on_retry(exc, attempt, delay)
-                    time.sleep(delay)
-            # Defensive fallback — should never be reached.
-            if last_exception is not None:
-                raise last_exception
-            raise RuntimeError("Retry loop exited without result or exception")
+    # Exponential backoff: base_delay * 2^n, same as original formula
+    wait = wait_exponential(
+        multiplier=base_delay,
+        min=base_delay,
+        max=base_delay * (2**max_retries),
+    ) + wait_random(0, base_delay * 0.25)
 
-        return wrapper
+    # Map on_retry callback to tenacity's before_sleep
+    before_sleep_fn = None
+    if on_retry is not None:
 
-    return decorator
+        def _before_sleep(retry_state):
+            exc = retry_state.outcome.exception()
+            attempt = retry_state.attempt_number - 1  # tenacity is 1-based
+            delay = retry_state.idle_for
+            on_retry(exc, attempt, delay)
+
+        before_sleep_fn = _before_sleep
+
+    return tenacity_retry(
+        stop=stop_after_attempt(max_attempts),
+        wait=wait,
+        retry=retry_if_exception_type(retryable_exceptions),
+        before_sleep=before_sleep_fn,
+        reraise=True,
+    )
